@@ -1,0 +1,153 @@
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#74ebd5,#ACB6E5);
+}
+
+.register-container{
+    background:white;
+    padding:30px;
+    width:350px;
+    border-radius:10px;
+    box-shadow:0 0 15px rgba(0,0,0,0.2);
+    text-align:center;
+}
+
+.register-container h2{
+    margin-bottom:20px;
+}
+
+.register-container input{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+.register-container button{
+    width:100%;
+    padding:12px;
+    background:#28a745;
+    color:white;
+    border:none;
+    border-radius:5px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.register-container button:hover{
+    background:#218838;
+}
+
+.google-btn{
+    display:block;
+    margin-top:15px;
+    padding:12px;
+    background:#4285F4;
+    color:white;
+    text-align:center;
+    border-radius:5px;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.google-btn:hover{
+    background:#357ae8;
+}
+
+.login-link{
+    margin-top:15px;
+}
+
+.login-link a{
+    text-decoration:none;
+    color:#28a745;
+    font-weight:bold;
+}
+
+.messages{
+    color:green;
+    margin-bottom:10px;
+}
+
+.error{
+    color:red;
+    margin-top:5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="register-container">
+    <h2>Register</h2>
+
+    <!-- Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <p class="messages">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Register Form -->
+    <form method="POST" onsubmit="return validatePassword()">
+        {% csrf_token %}
+
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="email" name="email" placeholder="Email" required>
+
+        <input type="password" id="password" name="password" placeholder="Password" required>
+        <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+
+        <p id="error-message" class="error"></p>
+
+        <button type="submit">Register</button>
+    </form>
+
+    {% comment %} <!-- Google Login Button -->
+    <a href="{% provider_login_url 'google' %}" class="google-btn">
+        Continue with Google
+    </a> {% endcomment %}
+
+    <p class="login-link">
+        Already have an account? <a href="{% url 'login' %}">Login</a>
+    </p>
+
+</div>
+
+<script>
+function validatePassword() {
+    var password = document.getElementById("password").value;
+    var confirmPassword = document.getElementById("confirm_password").value;
+    var errorMessage = document.getElementById("error-message");
+
+    if (password !== confirmPassword) {
+        errorMessage.innerHTML = "Passwords do not match!";
+        return false;
+    }
+
+    return true;
+}
+</script>
+
+</body>
+</html>

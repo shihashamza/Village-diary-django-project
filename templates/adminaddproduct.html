@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Add Product</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+/* Layout */
+.container{
+    display:flex;
+    min-height:100vh;
+}
+
+/* Sidebar (Same as other pages) */
+.sidebar{
+    width:260px;
+    background:linear-gradient(180deg,#2c3e50,#1a252f);
+    color:white;
+    padding:25px 20px;
+    position:fixed;
+    height:100vh;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:40px;
+    font-size:22px;
+}
+
+.menu{
+    list-style:none;
+}
+
+.menu li{
+    margin-bottom:15px;
+}
+
+.menu li a{
+    display:block;
+    padding:12px 15px;
+    border-radius:8px;
+    text-decoration:none;
+    color:#ecf0f1;
+    transition:0.3s;
+}
+
+.menu li a:hover{
+    background:#1abc9c;
+    padding-left:20px;
+}
+
+.active{
+    background:#1abc9c;
+}
+
+.logout{
+    margin-top:25px;
+    padding:12px;
+    background:#e74c3c;
+    text-align:center;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.logout:hover{
+    background:#c0392b;
+}
+
+/* Main */
+.main{
+    margin-left:260px;
+    padding:40px;
+    width:100%;
+}
+
+/* Form Card */
+.form-box{
+    background:white;
+    padding:35px;
+    border-radius:15px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.05);
+    max-width:750px;
+}
+
+.form-box h2{
+    margin-bottom:25px;
+}
+
+/* Inputs */
+label{
+    font-weight:600;
+}
+
+input, textarea{
+    width:100%;
+    padding:12px;
+    margin:8px 0 18px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    font-size:14px;
+}
+
+textarea{
+    height:120px;
+    resize:none;
+}
+
+input:focus, textarea:focus{
+    outline:none;
+    border:1px solid #1abc9c;
+}
+
+/* Button */
+.btn{
+    background:#1abc9c;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    transition:0.3s;
+}
+
+.btn:hover{
+    background:#16a085;
+}
+.logout{
+    margin-top:25px;
+    padding:12px;
+    background:#e74c3c;
+    text-align:center;
+    border-radius:8px;
+    display:block;
+    color:white;
+}
+
+.logout:hover{
+    background:#c0392b;
+}
+input, textarea, select{
+    width:100%;
+    padding:12px;
+    margin:8px 0 18px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">🥛 Dairy Admin</h2>
+
+        <ul class="menu">
+            <li><a href="{% url 'admindashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'adminproduct' %}">Products</a></li>
+            <li><a href="{% url 'adminaddproduct' %}" class="active">Add Product</a></li>
+            <li><a href="{% url 'admincategories' %}">Category</a></li>
+            <li><a href="{% url 'adminorder' %}">Orders</a></li>
+            <li><a href="{% url 'admincustomer' %}">Customers</a></li>
+            <li><a href="{%url 'admincoupons'%}">Coupons</a></li>
+            <li><a href="{% url 'adminbanner' %}">Banner</a></li>
+            <li><a href="{% url 'adminnotification' %}">Notification</a></li>
+            <li><a href="{% url 'adminlogout' %}" class="logout">Logout</a></li>
+        </ul>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+
+        <div class="form-box">
+            <h2>Add New Product</h2>
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <label>Product Name</label>
+                <input type="text" name="name" placeholder="Enter product name" required>
+
+                <label>Price (₹)</label>
+                <input type="number" name="price" step="0.01" placeholder="Enter price" required>
+
+                <label>Description</label>
+                <textarea name="description" placeholder="Enter product description"></textarea>
+                <label>Category</label>
+                    <select name="category" required>
+                        <option value="">Select Category</option>
+                        <option value="Milk">Milk</option>
+                        <option value="Cheese">Cheese</option>
+                        <option value="Fermented">Fermented</option>
+                        <option value="Fat-based">Fat-based</option>
+                        <option value="Special">Special</option>
+                    </select>
+                <label>Product Image 1</label>
+                <input type="file" name="image1" required>
+
+                <label>Product Image 2</label>
+                <input type="file" name="image2">
+
+                <label>Product Image 3</label>
+                <input type="file" name="image3">
+
+                <label>Product Image 4</label>
+                <input type="file" name="image4">
+
+                <button type="submit" class="btn">Add Product</button>
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
+
+

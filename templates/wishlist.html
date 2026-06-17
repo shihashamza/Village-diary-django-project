@@ -1,0 +1,250 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Wishlist - Village Dairy</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#f6f6f6;}
+
+/* NAVBAR */
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
+background:white;
+position:sticky;
+top:0;
+z-index:1000;
+box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.logo a{
+font-size:32px;
+font-weight:bold;
+color:#2f3e2f;
+text-decoration:none;
+}
+
+.navbar > ul{
+display:flex;
+gap:25px;
+list-style:none;
+align-items:center;
+}
+
+.navbar a{
+text-decoration:none;
+color:black;
+font-weight:bold;
+}
+
+/* DROPDOWN */
+.dropdown{position:relative;}
+
+.dropbtn{
+padding:8px 12px;
+border:1px solid #ccc;
+border-radius:4px;
+background:#fff;
+cursor:pointer;
+}
+
+.dropdown-content{
+display:none;
+position:absolute;
+background:#fff;
+min-width:160px;
+top:100%;
+left:0;
+box-shadow:0 2px 6px rgba(0,0,0,0.15);
+border-radius:4px;
+}
+
+.dropdown-content li{list-style:none;}
+
+.dropdown-content a{
+display:block;
+padding:10px;
+color:#333;
+}
+
+.dropdown-content a:hover{background:#f1f1f1;}
+
+.dropdown:hover .dropdown-content{display:block;}
+
+/* TITLE */
+.section-title{
+text-align:center;
+margin:50px 0 20px;
+}
+
+.section-title h2{
+font-size:40px;
+color:#2f3e2f;
+}
+
+/* WISHLIST BOX */
+.wishlist-container{
+max-width:900px;
+margin:30px auto;
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 0 15px rgba(0,0,0,0.1);
+}
+
+.wish-item{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px;
+border-bottom:1px solid #ddd;
+}
+
+.remove-btn{
+background:red;
+color:white;
+border:none;
+padding:6px 12px;
+border-radius:20px;
+cursor:pointer;
+}
+
+/* EMPTY MESSAGE */
+.empty{
+text-align:center;
+padding:40px;
+color:gray;
+font-size:18px;
+}
+
+/* FOOTER */
+.footer{
+background:#3d4b3d;
+color:white;
+padding:40px;
+margin-top:60px;
+}
+
+.footer-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:40px;
+}
+
+.copyright{
+background:#e6c84f;
+text-align:center;
+padding:15px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+<div class="logo">
+<a href="/">Village Dairy</a>
+</div>
+
+<ul>
+<li><a href="{% url 'milk' %}">Milk</a></li>
+<li><a href="{% url 'cheese' %}">Cheese</a></li>
+<li><a href="{% url 'about' %}">About</a></li>
+
+<li class="dropdown">
+<a href="#" class="dropbtn">Account ▾</a>
+<ul class="dropdown-content">
+<li><a href="{% url 'profile' %}">Profile</a></li>
+<li><a href="{% url 'orders' %}">Orders</a></li>
+<li><a href="{% url 'wishlist' %}">Wishlist</a></li>
+<li><a href="{% url 'logout' %}">Logout</a></li>
+</ul>
+</li>
+</ul>
+</div>
+
+<!-- TITLE -->
+<div class="section-title">
+<h2>My Wishlist</h2>
+</div>
+
+<!-- WISHLIST -->
+<div class="wishlist-container" id="wishlist-box">
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+<div class="footer-grid">
+
+<div>
+<h3>Office</h3>
+<p>123 Street, City</p>
+</div>
+
+<div>
+<h3>Links</h3>
+<p>About</p>
+<p>Services</p>
+</div>
+
+<div>
+<h3>Hours</h3>
+<p>Mon–Fri: 9am–7pm</p>
+</div>
+
+<div>
+<h3>Newsletter</h3>
+<input placeholder="Your Email">
+<button>Sign Up</button>
+</div>
+
+</div>
+</div>
+
+<div class="copyright">
+© 2026 Village Dairy
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+function loadWishlist(){
+let list = JSON.parse(localStorage.getItem("wishlist")) || [];
+let box = document.getElementById("wishlist-box");
+
+box.innerHTML = "";
+
+if(list.length === 0){
+box.innerHTML = "<div class='empty'>Your wishlist is empty</div>";
+return;
+}
+
+list.forEach((item,index)=>{
+box.innerHTML += `
+<div class="wish-item">
+<span>${item}</span>
+<button class="remove-btn" onclick="removeItem(${index})">
+Remove
+</button>
+</div>`;
+});
+}
+
+function removeItem(i){
+let list = JSON.parse(localStorage.getItem("wishlist")) || [];
+list.splice(i,1);
+localStorage.setItem("wishlist", JSON.stringify(list));
+loadWishlist();
+}
+
+loadWishlist();
+</script>
+
+</body>
+</html>

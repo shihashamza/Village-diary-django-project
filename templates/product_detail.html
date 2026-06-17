@@ -1,0 +1,369 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ product.name }}</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+background:#f5f7fa;
+}
+
+/* NAVBAR */
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
+background:#2f3e2f;
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+.logo a{
+font-size:28px;
+font-weight:bold;
+color:#fff;
+text-decoration:none;
+}
+
+.navbar ul li:last-child{
+margin-left:20px;
+margin-right:20px;
+}
+
+.navbar> ul{
+display:flex;
+gap:25px;
+list-style:none;
+align-items:center;
+}
+
+.navbar a{
+text-decoration:none;
+color:#fff;
+font-weight:bold;
+}
+
+.navbar a:hover{
+color:#e6c84f;
+}
+
+.dropdown{position:relative;}
+
+.dropdown-content{
+display:none;
+position:absolute;
+background:white;
+min-width:140px;
+top:100%;
+left:0;
+box-shadow:0 2px 6px rgba(0,0,0,0.2);
+border-radius:4px;
+overflow:hidden;
+}
+
+.dropdown-content a{
+color:black;
+padding:10px;
+display:block;
+}
+
+.dropdown-content a:hover{
+background:#f1f1f1;
+}
+
+.dropdown:hover .dropdown-content{
+display:block;
+}
+
+.badge{
+background:red;
+color:white;
+border-radius:50%;
+padding:2px 7px;
+font-size:12px;
+margin-left:5px;
+}
+
+.search-bar{
+display:flex;
+align-items:center;
+background:white;
+border-radius:25px;
+padding:5px 10px;
+margin-right:20px;
+}
+
+.search-bar input{
+border:none;
+outline:none;
+padding:8px 10px;
+width:180px;
+}
+
+.search-bar button{
+border:none;
+background:#e6c84f;
+padding:8px 14px;
+border-radius:20px;
+cursor:pointer;
+font-weight:bold;
+}
+
+/* PRODUCT CONTAINER */
+.container{
+max-width:1100px;
+margin:50px auto;
+background:white;
+padding:40px;
+border-radius:15px;
+box-shadow:0 10px 25px rgba(0,0,0,0.08);
+display:flex;
+gap:40px;
+}
+
+/* Image Section */
+.product-image{
+flex:1;
+}
+
+.product-image input{
+display:none;
+}
+
+.main-images img{
+width:100%;
+border-radius:12px;
+display:none;
+}
+
+#img1:checked ~ .main-images .image1,
+#img2:checked ~ .main-images .image2,
+#img3:checked ~ .main-images .image3{
+display:block;
+}
+
+.thumbnails{
+display:flex;
+gap:10px;
+margin-top:15px;
+}
+
+.thumbnails label{
+cursor:pointer;
+}
+
+.thumbnails img{
+width:90px;
+height:90px;
+object-fit:cover;
+border-radius:8px;
+border:1px solid #ddd;
+padding:3px;
+background:#fff;
+}
+
+/* Details */
+.product-details{
+flex:1;
+}
+
+.product-details h1{
+font-size:32px;
+margin-bottom:15px;
+}
+
+.price{
+font-size:24px;
+color:#27ae60;
+margin-bottom:15px;
+font-weight:bold;
+}
+
+.category{
+background:#ecf0f1;
+display:inline-block;
+padding:6px 12px;
+border-radius:20px;
+font-size:13px;
+margin-bottom:20px;
+}
+
+.description{
+line-height:1.6;
+margin-bottom:30px;
+color:#555;
+}
+
+/* Buttons */
+.buttons{
+display:flex;
+gap:15px;
+}
+
+.btn{
+padding:12px 20px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:15px;
+text-decoration:none;
+}
+
+.back{
+background:#34495e;
+color:white;
+}
+
+.back:hover{
+background:#2c3e50;
+}
+
+.cart-btn{
+display:inline-block;
+padding:12px 24px;
+font-size:16px;
+font-weight:600;
+border-radius:8px;
+text-decoration:none;
+border:none;
+cursor:pointer;
+transition:0.3s;
+}
+
+.add-cart{
+background:#27ae60;
+color:white;
+}
+
+.add-cart:hover{
+background:#219150;
+transform:scale(1.05);
+}
+
+.go-cart{
+background:#3498db;
+color:white;
+}
+
+.go-cart:hover{
+background:#2c80b4;
+transform:scale(1.05);
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+
+<div class="logo">
+<a href="/">Village Dairy</a>
+</div>
+
+<form method="GET" class="search-bar">
+<input type="text" name="q" placeholder="Search milk products...">
+<button type="submit">Search</button>
+</form>
+
+<ul>
+<li><a href="{% url 'milk' %}">Milk</a></li>
+<li><a href="{% url 'cheese' %}">Cheese</a></li>
+<li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
+<li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
+<li><a href="{% url 'special_items' %}">Special</a></li>
+<li><a href="{% url 'about' %}">About</a></li>
+<li><a href="{% url 'service' %}">Service</a></li>
+
+<li class="dropdown">
+<a>Account ▾</a>
+<div class="dropdown-content">
+{% if user.is_authenticated %}
+  <a href="{% url 'profile' %}">Profile</a>
+  <a href="{% url 'orders' %}">Orders</a>
+  <a href="{% url 'cart' %}">Cart <span class="badge">0</span></a>
+  <a href="{% url 'logout' %}">Logout</a>
+{% else %}
+  <a href="{% url 'login' %}">Login</a>
+{% endif %}
+</div>
+</li>
+
+</ul>
+</div>
+
+<!-- PRODUCT SECTION -->
+<div class="container">
+
+<div class="product-image">
+
+<input type="radio" name="img" id="img1" checked>
+<input type="radio" name="img" id="img2">
+<input type="radio" name="img" id="img3">
+
+<div class="main-images">
+{% if product.image1 %}
+<img src="{{ product.image1.url }}" class="image1">
+{% endif %}
+{% if product.image2 %}
+<img src="{{ product.image2.url }}" class="image2">
+{% endif %}
+{% if product.image3 %}
+<img src="{{ product.image3.url }}" class="image3">
+{% endif %}
+</div>
+
+<div class="thumbnails">
+{% if product.image1 %}
+<label for="img1"><img src="{{ product.image1.url }}"></label>
+{% endif %}
+{% if product.image2 %}
+<label for="img2"><img src="{{ product.image2.url }}"></label>
+{% endif %}
+{% if product.image3 %}
+<label for="img3"><img src="{{ product.image3.url }}"></label>
+{% endif %}
+</div>
+
+</div>
+
+<div class="product-details">
+
+<h1>{{ product.name }}</h1>
+<p class="price">₹ {{ product.price }}</p>
+<p class="category">{{ product.category }}</p>
+
+<p class="description">
+{{ product.description }}
+</p>
+
+<div class="buttons">
+{% if in_cart %}
+<a href="{% url 'cart' %}" class="cart-btn go-cart">Go to Cart</a>
+{% else %}
+<a href="{% url 'add_to_cart' product.id %}" class="cart-btn add-cart">Add to Cart</a>
+{% endif %}
+
+<a href="{% url 'milk' %}" class="btn back">Back to Products</a>
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>

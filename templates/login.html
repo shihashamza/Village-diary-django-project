@@ -1,0 +1,172 @@
+{% load static %}
+{% load socialaccount %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial;
+}
+
+body{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:#f2f2f2;
+}
+
+.login-container{
+    background:white;
+    padding:30px;
+    width:320px;
+    border-radius:10px;
+    box-shadow:0 0 15px rgba(0,0,0,0.2);
+    text-align:center;
+}
+
+.login-container h2{
+    margin-bottom:20px;
+}
+
+.message{
+    color:red;
+    margin-bottom:10px;
+    font-size:14px;
+}
+
+.login-container input{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+.login-container button{
+    width:100%;
+    padding:12px;
+    background:#28a745;
+    color:white;
+    border:none;
+    border-radius:5px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+.login-container button:hover{
+    background:#218838;
+}
+
+/* Forgot password */
+.forgot{
+    text-align:right;
+    margin-top:-5px;
+    margin-bottom:10px;
+}
+
+.forgot a{
+    font-size:13px;
+    text-decoration:none;
+    color:#28a745;
+}
+
+.forgot a:hover{
+    text-decoration:underline;
+}
+
+/* Google Button */
+.google-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    text-decoration:none;
+    color:#444;
+    font-weight:500;
+    background:#fff;
+    margin-top:10px;
+}
+
+.google-btn:hover{
+    background:#f5f5f5;
+}
+
+.google-btn img{
+    width:18px;
+}
+
+.register{
+    margin-top:15px;
+}
+
+.register a{
+    text-decoration:none;
+    color:#28a745;
+}
+</style>    
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <h2>Login</h2>
+
+    <!-- Django Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <!-- Normal Login Form -->
+    <form method="POST">
+        {% csrf_token %}
+
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
+
+        <!-- Forgot Password Link -->
+        <div class="forgot">
+            <a href="{% url 'forgot_password' %}">
+            Forgot Password?
+
+            </a>
+        </div>
+
+        <button type="submit">Login</button>
+    </form>
+
+    <!-- Google Login Button -->
+    <a href="{% provider_login_url 'google' process='login' %}" class="google-btn">
+        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google">
+        Continue with Google
+    </a>
+
+    <!-- REGISTER LINK -->
+    <p class="register">
+        Don't have an account?
+        <a href="{% url 'register' %}">Register</a>
+    </p>
+
+    <!-- HOME LINK -->
+    <p>
+        <a href="{% url 'home' %}">Go Home</a>
+    </p>
+
+</div>
+
+</body>
+</html>

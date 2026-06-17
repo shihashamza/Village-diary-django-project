@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dairy Admin Dashboard</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background: #eef2f7;
+}
+
+/* Layout */
+.container {
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background: #111827;
+    color: #fff;
+    height: 100vh;
+    position: fixed;
+    padding: 25px 20px;
+}
+
+.logo {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 40px;
+}
+
+.menu {
+    list-style: none;
+}
+
+.menu li {
+    margin-bottom: 12px;
+}
+
+.menu li a {
+    display: block;
+    padding: 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #cbd5e1;
+    transition: 0.3s;
+}
+
+.menu li a:hover {
+    background: #1abc9c;
+    color: #fff;
+}
+
+.logout {
+    margin-top: 20px;
+    background: #ef4444;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    display: block;
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Main */
+.main {
+    margin-left: 260px;
+    padding: 30px;
+    width: 100%;
+}
+
+/* Header */
+.header {
+    background: #fff;
+    padding: 18px 25px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+}
+
+.header input {
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+/* Cards */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.card h3 {
+    color: #888;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.card h1 {
+    color: #111827;
+    font-size: 28px;
+}
+
+/* ===== GRAPH ===== */
+.sales-card {
+    background: #fff;
+    padding: 25px;
+    border-radius: 14px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.sales-card h2 {
+    margin-bottom: 20px;
+    color: #111827;
+}
+
+/* Graph wrapper: fixed height, bars grow upward from bottom */
+.graph {
+    display: flex;
+    align-items: flex-end;       /* bars stick to the bottom */
+    justify-content: space-between;
+    height: 250px;               /* total height of chart area */
+    gap: 10px;
+    padding-top: 30px;           /* room for the value label on top of tallest bar */
+    
+    /* CHANGED: Added horizontal padding to push graph content inward from the sides */
+    padding-left: 50px;          
+    padding-right: 50px;
+}
+
+/* Each column: full height so bar can grow from bottom */
+.bar-box {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;   /* push bar to bottom of column */
+    align-items: center;
+    text-align: center;
+}
+
+/* The bar itself — height set inline as % of .bar-box (which = graph height) */
+.bar {
+    /* CHANGED: Overrode width 100% with a fixed smaller width to slim down the bars */
+    width: 32px;                 
+    border-radius: 10px 10px 0 0;
+    background: linear-gradient(180deg, #34d399, #059669);
+    position: relative;
+    transition: height 0.4s ease;
+    min-height: 4px;             /* always visible even if value is 0 */
+}
+
+/* Subtle gloss */
+.bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px 10px 0 0;
+}
+
+/* Hover lift */
+.bar:hover {
+    filter: brightness(1.15);
+    cursor: pointer;
+}
+
+/* Value label sitting above the bar */
+.bar span {
+    position: absolute;
+    top: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: 700;
+    color: #111;
+    white-space: nowrap;
+}
+
+/* Month label below bar */
+.label {
+    margin-top: 8px;
+    font-size: 13px;
+    color: #555;
+    flex-shrink: 0;
+}
+
+/* Table */
+.table-section {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.table-section h2 {
+    margin-bottom: 20px;
+    color: #111827;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #1abc9c;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+}
+
+.status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    color: white;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.delivered  { background: #22c55e; }
+.pending    { background: #f59e0b; }
+.cancelled  { background: #ef4444; }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="sidebar">
+        <h2 class="logo">🥛 Dairy Admin</h2>
+
+        <ul class="menu">
+             <li><a href="{% url 'admindashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'adminproduct' %}">Products</a></li>
+            <li><a href="{% url 'adminaddproduct' %}">Add Product</a></li>
+            <li><a href="#" class="active">Category</a></li>
+            <li><a href="{% url 'adminorder' %}">Orders</a></li>
+            <li><a href="{% url 'admincustomer' %}">Customers</a></li>
+            <li><a href="{% url 'admincoupons' %}">Coupons</a></li>
+            <li><a href="{% url 'adminbanner' %}">Banner</a></li>
+            <li><a href="{% url 'adminnotification' %}">Notification</a></li>
+             <li><a href="{% url 'adminlogout' %}" class="logout">Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="main">
+
+        <div class="header">
+            <h2>Dashboard</h2>
+            <input type="text" placeholder="Search...">
+        </div>
+
+        <div class="cards">
+            <div class="card">
+                <h3>Total Products</h3>
+                <h1>{{ total_products }}</h1>
+            </div>
+            <div class="card">
+                <h3>Total Orders</h3>
+                <h1>{{ total_orders }}</h1>
+            </div>
+            <div class="card">
+                <h3>Customers</h3>
+                <h1>{{ total_customers }}</h1>
+            </div>
+            <div class="card">
+                <h3>Revenue</h3>
+                <h1>₹{{ revenue }}</h1>
+            </div>
+        </div>
+
+        <div class="sales-card">
+            <h2>Monthly Sales</h2>
+
+            <div class="graph">
+                {% for month, total, percent in sales_data %}
+                <div class="bar-box">
+                    <div class="bar" style="height: {{ percent }}%;">
+                        <span>₹{{ total }}</span>
+                    </div>
+                    <div class="label">M{{ month }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div></div></body>
+</html>

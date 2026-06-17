@@ -1,0 +1,395 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Orders</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+.container{
+    display:flex;
+    min-height:100vh;
+}
+
+.sidebar{
+    width:260px;
+    background:linear-gradient(180deg,#2c3e50,#1a252f);
+    color:white;
+    padding:25px 20px;
+    position:fixed;
+    height:100vh;
+    overflow-y:auto;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:40px;
+    font-size:22px;
+}
+
+.menu{
+    list-style:none;
+}
+
+.menu li{
+    margin-bottom:15px;
+}
+
+.menu li a{
+    display:block;
+    padding:12px 15px;
+    border-radius:8px;
+    text-decoration:none;
+    color:#ecf0f1;
+    transition:0.3s;
+}
+
+.menu li a:hover{
+    background:#1abc9c;
+    padding-left:20px;
+}
+
+.menu li a.active{
+    background:#1abc9c;
+}
+
+.logout-link{
+    display:block;
+    margin-top:25px;
+    padding:12px;
+    background:#e74c3c;
+    text-align:center;
+    border-radius:8px;
+    color:white;
+    text-decoration:none;
+}
+
+.logout-link:hover{
+    background:#c0392b;
+}
+
+.main{
+    margin-left:260px;
+    padding:40px;
+    width:100%;
+}
+
+.header{
+    background:white;
+    padding:20px 25px;
+    border-radius:12px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom:30px;
+}
+
+.table-box{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.05);
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#1abc9c;
+    color:white;
+    padding:14px 12px;
+    text-align:left;
+    font-weight:600;
+}
+
+td{
+    padding:12px;
+    border-bottom:1px solid #eee;
+    vertical-align:middle;
+}
+
+.product-cell{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.product-cell img{
+    width:55px;
+    height:55px;
+    object-fit:cover;
+    border-radius:8px;
+    border:1px solid #eee;
+}
+
+.product-cell span{
+    font-size:14px;
+    color:#2c3e50;
+    font-weight:500;
+}
+
+.status{
+    padding:6px 14px;
+    border-radius:20px;
+    color:white;
+    font-size:13px;
+    display:inline-block;
+}
+
+.pending{ background:#f39c12; }
+.delivered{ background:#27ae60; }
+.cancelled{ background:#e74c3c; }
+.processing{ background:#3498db; }
+.shipped{ background:#8e44ad; }
+.order-placed{ background:#f39c12; }
+.out-for-delivery{ background:#16a085; }
+
+.action-cell{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    align-items:flex-start;
+}
+
+.btn-view{
+    background:#3498db;
+    color:white;
+    border:none;
+    padding:6px 14px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13px;
+    text-decoration:none;
+    display:inline-block;
+}
+
+.btn-view:hover{ background:#2980b9; }
+
+.update-dropdown{
+    padding:6px 10px;
+    border-radius:6px;
+    border:1px solid #ddd;
+    background:white;
+    color:#2c3e50;
+    cursor:pointer;
+    font-size:13px;
+    width:100%;
+}
+
+.btn-submit{
+    background:#f39c12;
+    color:white;
+    border:none;
+    padding:6px 14px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13px;
+    width:100%;
+}
+
+.btn-submit:hover{ background:#d68910; }
+
+.btn-delete{
+    background:#e74c3c;
+    color:white;
+    border:none;
+    padding:6px 14px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13px;
+}
+
+.btn-delete:hover{ background:#c0392b; }
+
+.details-row td{
+    background:#f9f9f9;
+    padding:20px 30px;
+}
+
+.details-box{
+    background:#ecf0f1;
+    padding:20px;
+    border-radius:10px;
+}
+
+.details-box h4{
+    margin-bottom:8px;
+    color:#2c3e50;
+}
+
+.details-box p{
+    margin:5px 0;
+    font-size:14px;
+    color:#555;
+}
+
+.details-box hr{
+    margin:15px 0;
+    border:none;
+    border-top:1px solid #ccc;
+}
+
+tr:hover td{
+    background:#fafffe;
+}
+
+.details-row:hover td{
+    background:#f9f9f9;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2 class="logo">🥛 Dairy Admin</h2>
+        <ul class="menu">
+            <li><a href="{% url 'admindashboard' %}">Dashboard</a></li>
+            <li><a href="{% url 'adminproduct' %}">Products</a></li>
+            <li><a href="{% url 'adminaddproduct' %}">Add Product</a></li>
+            <li><a href="{% url 'admincategories' %}">Category</a></li>
+            <li><a href="{% url 'adminorder' %}" class="active">Orders</a></li>
+            <li><a href="{% url 'admincustomer' %}">Customers</a></li>
+            <li><a href="{% url 'admincoupons' %}">Coupons</a></li>
+            <li><a href="{% url 'adminbanner' %}">Banner</a></li>
+            <li><a href="{% url 'adminnotification' %}">Notification</a></li>
+        </ul>
+        <a href="{% url 'adminlogout' %}" class="logout-link">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main">
+
+        <div class="header">
+            <h2>Manage Orders</h2>
+        </div>
+
+        <div class="table-box">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Payment</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if orders %}
+                        {% for order in orders %}
+
+                        <!-- Main order row -->
+                        <tr>
+                            <td>
+                                <div class="product-cell">
+                                    {% if order.product and order.product.image1 %}
+                                        <img src="{{ order.product.image1.url }}" alt="{{ order.product.name }}">
+                                    {% else %}
+                                        <span style="color:#999; font-size:12px;">No image</span>
+                                    {% endif %}
+                                    <span>{% if order.product %}{{ order.product.name }}{% else %}—{% endif %}</span>
+                                </div>
+                            </td>
+
+                            <td>#{{ order.id }}</td>
+                            <td>{{ order.user.email }}</td>
+                            <td>₹{{ order.total_amount }}</td>
+                            <td>{{ order.created_at|date:"d M Y" }}</td>
+                            <td>{{ order.payment_method }}</td>
+
+                            <td>
+                                <span class="status {{ order.status|lower|slugify }}">
+                                    {{ order.status }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="action-cell">
+
+                                    <!-- View button - uses GET param -->
+                                    <a href="?view={{ order.id }}" class="btn-view">View</a>
+
+                                    <!-- Status update - submit button instead of onchange -->
+                                    <form method="POST" action="{% url 'adminorderupdate' order.id %}">
+                                        {% csrf_token %}
+                                        <select name="status" class="update-dropdown">
+                                            <option disabled selected>Update Status</option>
+                                            <option value="Order Placed" {% if order.status == "Order Placed" %}selected{% endif %}>Order Placed</option>
+                                            <option value="Processing" {% if order.status == "Processing" %}selected{% endif %}>Processing</option>
+                                            <option value="Shipped" {% if order.status == "Shipped" %}selected{% endif %}>Shipped</option>
+                                            <option value="Out for delivery" {% if order.status == "Out for delivery" %}selected{% endif %}>Out for Delivery</option>
+                                            <option value="Delivered" {% if order.status == "Delivered" %}selected{% endif %}>Delivered</option>
+                                        </select>
+                                        <button type="submit" class="btn-submit">Update</button>
+                                    </form>
+
+                                    <!-- Delete -->
+                                    <form method="POST" action="{% url 'adminorderdelete' order.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn-delete">Delete</button>
+                                    </form>
+
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- Expandable details row - toggled via GET param, no JS needed -->
+                        <tr class="details-row"
+                            style="display:{% if request.GET.view == order.id|stringformat:'s' %}table-row{% else %}none{% endif %};">
+                            <td colspan="8">
+                                <div class="details-box">
+                                    <h4>📦 {% if order.product %}{{ order.product.name }}{% else %}—{% endif %}</h4>
+                                    <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+                                    <p><strong>Total Price:</strong> ₹{{ order.total_amount }}</p>
+                                    <hr>
+                                    <h4>👤 Customer Details</h4>
+                                    <p><strong>Username:</strong> {{ order.user.username }}</p>
+                                    <p><strong>Email:</strong> {{ order.user.email }}</p>
+                                    <hr>
+                                    <h4>💳 Payment Info</h4>
+                                    <p><strong>Method:</strong> {{ order.payment_method }}</p>
+                                    <p><strong>Status:</strong> {{ order.status }}</p>
+                                </div>
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="8" style="text-align:center; padding:30px; color:#999;">
+                                No Orders Found
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

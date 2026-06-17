@@ -1,0 +1,308 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Village Dairy - Cheese Products</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#f6f6f6;
+overflow-x:hidden;
+}
+
+/* NAVBAR */
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 40px;
+background:#2f3e2f;
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+.logo a{
+font-size:28px;
+font-weight:bold;
+color:#fff;
+text-decoration:none;
+}
+
+.navbar ul li:last-child{
+margin-left: 20px;
+margin-right: 20px;
+}
+
+.navbar> ul{
+display:flex;
+gap:25px;
+list-style:none;
+align-items:center;
+}
+
+.navbar a{
+text-decoration:none;
+color:#fff;
+font-weight:bold;
+}
+
+.navbar a:hover{color:#e6c84f;}
+
+/* DROPDOWN */
+.dropdown{position:relative;}
+
+.dropdown-content{
+display:none;
+position:absolute;
+background:white;
+min-width:170px;
+top:100%;
+left:0;
+box-shadow:0 2px 6px rgba(0,0,0,0.2);
+border-radius:4px;
+overflow:hidden;
+}
+
+.dropdown-content li{list-style:none;}
+
+.dropdown-content a{
+color:black;
+padding:10px;
+display:block;
+}
+
+.dropdown-content a:hover{background:#f1f1f1;}
+
+.dropdown:hover .dropdown-content{
+display:block;
+}
+
+/* BADGE */
+.badge{
+background:red;
+color:white;
+border-radius:50%;
+padding:2px 7px;
+font-size:12px;
+margin-left:5px;
+}
+
+/* TITLE */
+.section-title{
+text-align:center;
+margin:40px 0;
+}
+
+.section-title h2{
+font-size:36px;
+color:#2f3e2f;
+}
+
+/* CARDS */
+.milk-container{
+display:grid;
+grid-template-columns: repeat(4, 1fr);
+gap:30px;
+padding:40px;
+}
+
+.milk-card{
+background:white;
+border-radius:12px;
+overflow:hidden;
+text-align:center;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+transition:0.3s;
+}
+
+.milk-card:hover{transform:translateY(-8px);}
+
+.milk-card img{
+width:100%;
+height:220px;
+object-fit:cover;
+}
+
+.milk-card h3{
+margin:15px 0;
+color:#2f3e2f;
+}
+
+.view-btn{
+display:inline-block;
+padding:10px 18px;
+background:#ff4d6d;
+color:white;
+text-decoration:none;
+border-radius:20px;
+font-size:14px;
+font-weight:600;
+transition:0.3s;
+margin-bottom:12px;
+}
+
+.view-btn:hover{
+background:linear-gradient(135deg,#16a085,#0e6655);
+transform:translateY(-2px);
+box-shadow:0 6px 12px rgba(0,0,0,0.15);
+}
+
+.view-btn:active{
+transform:scale(0.97);
+}
+
+/* FOOTER */
+.footer{
+background:#3d4b3d;
+color:white;
+padding:40px;
+}
+
+.footer-grid{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:40px;
+}
+
+.copyright{
+background:#e6c84f;
+text-align:center;
+padding:15px;
+}
+
+.search-bar{
+display:flex;
+align-items:center;
+background:white;
+border-radius:25px;
+padding:5px 10px;
+margin-right:20px;
+}
+
+.search-bar input{
+border:none;
+outline:none;
+padding:8px 10px;
+width:180px;
+}
+
+.search-bar button{
+border:none;
+background:#e6c84f;
+padding:8px 14px;
+border-radius:20px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.search-bar button:hover{
+background:#d4b73f;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+<div class="logo">
+<a href="/">Village Dairy</a>
+</div>
+
+<form method="GET" class="search-bar">
+<input type="text" name="q" placeholder="Search milk products...">
+<button type="submit">Search</button>
+</form>
+
+<ul>
+<li><a href="{% url 'milk' %}">Milk</a></li>
+<li><a href="{% url 'cheese' %}">Cheese</a></li>
+<li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
+<li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
+<li><a href="{% url 'special_items' %}">Special</a></li>
+<li><a href="{% url 'about' %}">About</a></li>
+<li><a href="{% url 'service' %}">Service</a></li>
+
+<li class="dropdown">
+<a href="#">Account ▾</a>
+<div class="dropdown-content">
+{% if user.is_authenticated %}
+  <a href="{% url 'profile' %}">Profile</a>
+  <a href="{% url 'orders' %}">Orders</a>
+  <a href="{% url 'cart' %}">Cart <span id="wish-count" class="badge">0</span></a>
+  <a href="{% url 'about' %}">About</a>
+  <a href="{% url 'logout' %}">Logout</a>
+{% else %}
+  <a href="{% url 'login' %}">Login</a>
+{% endif %}
+</div>
+</li>
+
+</ul>
+</div>
+
+<!-- TITLE -->
+<div class="section-title">
+<h2>Cheese Products</h2>
+</div>
+
+<!-- CHEESE PRODUCTS -->
+<div class="milk-container">
+
+{% for product in products %}
+<div class="milk-card">
+
+{% if product.image1 %}
+<img src="{{ product.image1.url }}">
+{% endif %}
+
+<h3>{{ product.name }}</h3>
+<p>₹ {{ product.price }}</p>
+
+<a href="{% url 'product_detail' product.id %}" class="view-btn">
+View Product
+</a>
+
+</div>
+{% empty %}
+<p style="text-align:center;">No cheese products available.</p>
+{% endfor %}
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+<div class="footer-grid">
+<div>
+<h3>Office</h3>
+<p>123 Street, City</p>
+</div>
+
+<div>
+<h3>Links</h3>
+<p>About</p>
+<p>Services</p>
+</div>
+
+<div>
+<h3>Hours</h3>
+<p>Mon–Fri: 9am–7pm</p>
+</div>
+
+<div>
+<h3>Newsletter</h3>
+<input placeholder="Your Email">
+<button>Sign Up</button>
+</div>
+</div>
+</div>
+
+<div class="copyright">
+© 2026 Village Dairy
+</div>
+
+</body>
+</html>

@@ -1,0 +1,260 @@
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - Village Dairy</title>
+
+    <style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:Arial;
+    }
+
+    body{
+        background:#f6f6f6;
+    }
+
+    .navbar{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:20px 40px;
+        background:white;
+        position:sticky;
+        top:0;
+        z-index:1000;
+        box-shadow:0 2px 10px rgba(0,0,0,0.08);
+    }
+
+    .logo a{
+        font-size:32px;
+        font-weight:bold;
+        color:#2f3e2f;
+        text-decoration:none;
+    }
+
+    .navbar ul{
+        display:flex;
+        gap:25px;
+        list-style:none;
+        align-items:center;
+    }
+
+    .navbar a{
+        text-decoration:none;
+        color:black;
+        font-weight:bold;
+    }
+
+    .dropdown{
+        position:relative;
+    }
+
+    .dropbtn{
+        cursor:pointer;
+        padding:8px 12px;
+        border:1px solid #ccc;
+        border-radius:4px;
+        background:#fff;
+    }
+
+    .dropdown-content{
+        display:none;
+        position:absolute;
+        background:#fff;
+        min-width:160px;
+        top:100%;
+        left:0;
+        box-shadow:0 4px 12px rgba(0,0,0,0.15);
+        border-radius:4px;
+    }
+
+    .dropdown-content a{
+        display:block;
+        padding:10px;
+        color:#333;
+    }
+
+    .dropdown-content a:hover{
+        background:#f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content{
+        display:block;
+    }
+
+    .page-title{
+        text-align:center;
+        margin:40px 0;
+        font-size:36px;
+        color:#2f3e2f;
+    }
+
+    .orders-container{
+        max-width:1000px;
+        margin:auto;
+        background:white;
+        padding:30px;
+        border-radius:10px;
+        box-shadow:0 0 15px rgba(0,0,0,0.1);
+    }
+
+    /* ✅ Fixed: total box is now a proper div, not inside a <td> */
+    .total-box{
+        text-align:right;
+        font-size:18px;
+        margin-bottom:20px;
+        font-weight:bold;
+        color:#2f3e2f;
+    }
+
+    .empty-orders{
+        text-align:center;
+        padding:60px 20px;
+        color:#888;
+        font-size:18px;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+    }
+
+    th, td{
+        padding:15px;
+        border-bottom:1px solid #ddd;
+        text-align:center;
+    }
+
+    th{
+        background:#2f3e2f;
+        color:white;
+    }
+
+    .product-flex{
+        display:flex;
+        align-items:center;
+        gap:10px;
+        justify-content:flex-start;
+    }
+
+    .product-flex img{
+        width:60px;
+        height:60px;
+        object-fit:cover;
+        border-radius:8px;
+    }
+
+    .status{
+        padding:6px 12px;
+        border-radius:20px;
+        color:white;
+        font-size:14px;
+    }
+
+    .delivered{background:green;}
+    .pending{background:orange;}
+    .cancelled{background:red;}
+    </style>
+    </head>
+
+    <body>
+
+    <div class="navbar">
+        <div class="logo">
+            <a href="/">Village Dairy</a>
+        </div>
+        <ul>
+            <li><a href="{% url 'milk' %}">Milk</a></li>
+            <li><a href="{% url 'cheese' %}">Cheese</a></li>
+            <li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
+            <li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
+            <li><a href="{% url 'special_items' %}">Special</a></li>
+            <li><a href="{% url 'about' %}">About</a></li>
+            <li><a href="{% url 'service' %}">Service</a></li>
+            <li class="dropdown">
+                <a class="dropbtn">Account ▾</a>
+                <div class="dropdown-content">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'profile' %}">Profile</a>
+                        <a href="{% url 'orders' %}">Orders</a>
+                        <a href="{% url 'cart' %}">Cart</a>
+                        <a href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                        <a href="{% url 'login' %}">Login</a>
+                        <a href="{% url 'register' %}">Register</a>
+                    {% endif %}
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <h2 class="page-title">My Orders</h2>
+
+    <div class="orders-container">
+
+        {% if orders %}
+
+            <!-- ✅ Fixed: proper div, not a stray <td> -->
+            <div class="total-box">
+                Total Orders: {{ total_orders }} &nbsp;|&nbsp; Total Spent: ₹{{ total_amount }}
+            </div>
+
+            <table>
+                <tr>
+                    <th>Product</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                </tr>
+
+                {% for item in orders %}
+                <tr>
+                    <td>
+                        <div class="product-flex">
+                            <!-- ✅ Fixed: was order.product, should be item.product -->
+                            {% if item.product and item.product.image1 %}
+                                <img src="{{ item.product.image1.url }}" width="60" height="60">
+                            {% else %}
+                                <img src="{% static 'images/placeholder.png' %}" width="60" height="60">
+                            {% endif %}
+                            <span>
+                                {% if item.product %}
+                                    {{ item.product.name }}
+                                {% else %}
+                                    Product not available
+                                {% endif %}
+                            </span>
+                        </div>
+                    </td>
+
+                    <td>{{ item.created_at|date:"d M Y" }}</td>
+
+                    <!-- ✅ Fixed: model has total_amount and quantity, not price/amount -->
+                    <td>
+                        Qty: {{ item.quantity }}<br>
+                        <strong>₹ {{ item.total_amount }}</strong>
+                    </td>
+
+                <td>
+        {{ item.status|default:"Pending"|title }}
+    </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+        {% else %}
+            <!-- ✅ Added: empty state when user has no orders -->
+            <div class="empty-orders">
+                🛒 You haven't placed any orders yet.
+            </div>
+        {% endif %}
+
+    </div>
+
+    </body>
+    </html>

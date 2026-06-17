@@ -1,0 +1,471 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Village Dairy</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#f6f6f6;
+overflow-x:hidden;
+}
+
+/* NAVBAR */
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 40px;
+  background:white;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+}
+
+.logo a{
+  font-size:32px;
+  font-weight:bold;
+  color:#2f3e2f;
+  text-decoration:none;
+}
+
+.navbar > ul{
+  display:flex;
+  gap:25px;
+  list-style:none;
+  align-items:center;
+}
+
+.navbar a{
+  text-decoration:none;
+  color:black;
+  font-weight:bold;
+}
+/* SEARCH BAR */
+
+.search-bar{
+  display:flex;
+  align-items:center;
+  background:#f1f1f1;
+  border-radius:25px;
+  padding:5px 10px;
+}
+
+.search-bar input{
+  border:none;
+  outline:none;
+  padding:8px 10px;
+  background:transparent;
+  width:200px;
+}
+
+.search-bar button{
+  border:none;
+  background:#e6c84f;
+  padding:8px 14px;
+  border-radius:20px;
+  cursor:pointer;
+}
+
+.search-bar button:hover{
+  background:#d4b73f;
+}
+
+/* DROPDOWN */
+.dropdown{
+  position:relative;
+}
+
+.dropbtn{
+  cursor:pointer;
+  padding:8px 12px;
+  border:1px solid #ccc;
+  border-radius:4px;
+  background:#fff;
+  display:block;
+  font-weight:bold;
+  color:black;
+  text-decoration:none;
+}
+
+/* The key fix: extend the dropdown's hover area using a pseudo-element
+   that bridges the gap between the button and the menu */
+.dropdown::after{
+  content:'';
+  position:absolute;
+  top:100%;
+  left:0;
+  width:100%;
+  height:12px; /* covers the gap */
+  background:transparent;
+}
+
+.dropdown-content{
+  display:none;
+  position:absolute;
+  background:#fff;
+  min-width:160px;
+  top:calc(100% + 12px); /* sits below the pseudo-element bridge */
+  left:0;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  border-radius:4px;
+  overflow:hidden;
+  z-index:100;
+}
+
+.dropdown-content a{
+  color:#333;
+  padding:10px 14px;
+  display:block;
+  font-weight:normal;
+  text-decoration:none;
+  white-space:nowrap;
+}
+
+.dropdown-content a:hover{
+  background:#f1f1f1;
+}
+
+/* Show on hover of the dropdown container (includes pseudo-element bridge) */
+.dropdown:hover .dropdown-content{
+  display:block;
+}
+
+/* Wishlist badge */
+.badge{
+  background:red;
+  color:white;
+  border-radius:50%;
+  padding:2px 7px;
+  font-size:12px;
+  margin-left:5px;
+}
+
+/* HERO */
+.hero{
+  height:90vh;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  display:flex;
+  align-items:center;
+  padding-left:80px;
+  color:white;
+    width:100%;
+    height:100vh;
+    object-fit:cover;
+}
+.hero h1{
+  font-size:60px;
+  max-width:500px;
+  margin:15px 0;
+}
+
+.hero button{
+  padding:12px 25px;
+  background:#e6c84f;
+  border:none;
+  border-radius:25px;
+  cursor:pointer;
+}
+
+/* SECTION TITLE */
+.section-title{text-align:center;margin:60px 0 30px;}
+.section-title h2{font-size:40px;color:#2f3e2f;}
+
+/* SERVICES */
+.services{
+  display:flex;
+  justify-content:center;
+  gap:40px;
+  padding:80px 40px 40px;
+  flex-wrap:nowrap;
+  overflow-x:auto;
+}
+
+.services::-webkit-scrollbar{height:8px;}
+.services::-webkit-scrollbar-thumb{background:#ccc;border-radius:4px;}
+
+.service-box{
+  background:white;
+  border-radius:10px;
+  width:280px;
+  text-align:center;
+  padding:30px 20px 40px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  position:relative;
+  flex:0 0 auto;
+  transition:0.3s;
+}
+
+.service-box:hover{transform:translateY(-5px);}
+
+.service-img{
+  width:100px;
+  height:100px;
+  margin:-60px auto 20px;
+  border-radius:50%;
+  overflow:hidden;
+  border:5px solid white;
+}
+
+.service-img img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.service-box h3{
+  font-size:18px;
+  margin:10px 0 8px;
+  color:#2f3e2f;
+}
+
+.service-box p{
+  font-size:14px;
+  color:#666;
+}
+
+.service-btn{
+  margin-top:15px;
+  padding:10px 14px;
+  border-radius:50%;
+  border:none;
+  background:#e6c84f;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* PRODUCTS */
+.products{
+  display:flex;
+  gap:30px;
+  padding:40px;
+  overflow-x:auto;
+  flex-wrap:nowrap;
+}
+
+.products::-webkit-scrollbar{height:8px;}
+.products::-webkit-scrollbar-thumb{background:#ccc;border-radius:4px;}
+
+.product-card{
+  flex:0 0 auto;
+  background:white;
+  border-radius:10px;
+  text-align:center;
+  box-shadow:0 0 10px rgba(0,0,0,0.1);
+  transition:0.3s;
+  padding:20px;
+}
+
+.product-card:hover{transform:translateY(-5px);}
+
+.product-card img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+  border-radius:10px;
+}
+
+.product-card p{
+  margin-top:10px;
+  font-weight:bold;
+  color:#2f3e2f;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+/* BIG IMAGE */
+.big-image{
+  width:100%;
+  margin:80px 0;
+}
+
+.big-image img{
+  width:100%;
+  height:450px;
+  object-fit:cover;
+  border-radius:10px;
+}
+
+/* FOOTER */
+.footer{background:#3d4b3d;color:white;padding:40px;}
+.footer-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:40px;
+}
+
+.copyright{
+  background:#e6c84f;
+  text-align:center;
+  padding:15px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">
+    <a href="/">Village Dairy</a>
+  </div>
+
+  <ul>
+    <li><a href="{% url 'milk' %}">Milk</a></li>
+    <li><a href="{% url 'cheese' %}">Cheese</a></li>
+    <li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
+    <li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
+    <li><a href="{% url 'special_items' %}">Special</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
+    <li><a href="{% url 'service' %}">Service</a></li>
+
+    <li class="dropdown">
+      <a class="dropbtn">Account ▾</a>
+
+      <div class="dropdown-content">
+        {% if user.is_authenticated %}
+          <a href="{% url 'profile' %}">Profile</a>
+          <a href="{% url 'orders' %}">Orders</a>
+          <a href="{% url 'cart' %}">Cart <span id="wish-count" class="badge">0</span></a>
+          <a href="{% url 'about' %}">About</a>
+          <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+      </div>
+    </li>
+  </ul>
+</div>
+<!-- HERO -->
+{% for banner in banners %}
+<section class="hero" style="background-image: url('{{ banner.image.url }}');">
+  <div>
+    <p>Welcome to our dairy farm</p>
+    <h1>{{ banner.title }}</h1>
+    <a href="{% url 'about' %}">
+      <button>Explore More</button>
+    </a>
+  </div>
+</section>
+{% endfor %}
+<!-- SERVICES -->
+<div class="section-title">
+  <p style="color:#6ca36f;letter-spacing:2px;font-size:12px;">OUR SERVICES</p>
+  <h2 style="font-size:36px;color:#2f3e2f;">Services That We Offer For Entrepreneurs</h2>
+</div>
+
+<div class="services">
+  <div class="service-box">
+    <div class="service-img">
+      <img src="https://images.unsplash.com/photo-1546443046-ed1ce6ffd1ab" alt="Animal Selection">
+    </div>
+    <h3>Best Animal Selection</h3>
+    <p>Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet.</p>
+    <button class="service-btn">&raquo;</button>
+  </div>
+
+  <div class="service-box">
+    <div class="service-img">
+      <img src="https://images.unsplash.com/photo-1560114928-40f1f1eb26a0" alt="Breeding & Veterinary">
+    </div>
+    <h3>Breeding & Veterinary</h3>
+    <p>Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet.</p>
+    <button class="service-btn">&raquo;</button>
+  </div>
+
+  <div class="service-box">
+    <div class="service-img">
+      <img src="https://images.unsplash.com/photo-1500595046743-cd271d694d30" alt="Care & Milking">
+    </div>
+    <h3>Care & Milking</h3>
+    <p>Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet.</p>
+    <button class="service-btn">&raquo;</button>
+  </div>
+</div>
+
+<!-- BIG IMAGE -->
+<section class="big-image">
+  <img src="{% static 'images/farm copy.jpg' %}" alt="Farm Image">
+</section>
+
+<!-- OUR FAMILY -->
+<div class="section-title"><h2>Our Family</h2></div>
+
+<div class="products">
+  <div class="product-card">
+    <img src="{% static 'images/happy-young-man-farm-worker-260nw-2518030243.webp' %}" alt="Farm Worker">
+    <p>Farm Worker</p>
+  </div>
+  <div class="product-card">
+    <img src="{% static 'images/Wisconsin-dairy-farm-Holstein-cows.webp' %}" alt="Holstein Cows">
+    <p>Holstein Cows</p>
+  </div>
+  <div class="product-card">
+    <img src="{% static 'images/veterinary-lab-robe-standing-cowshed_1303-31048.avif' %}" alt="Veterinarian">
+    <p>Veterinarian</p>
+  </div>
+  <div class="product-card">
+    <img src="{% static 'images/istockphoto-1501815024-170667a.jpg' %}" alt="Farm Family">
+    <p>Farm Family</p>
+  </div>
+</div>
+
+<!-- OUR PRODUCTS -->
+<div class="section-title"><h2>Our Products</h2></div>
+
+<div class="products">
+  <div class="product-card">
+    <img src="{% static 'images/istockphoto-1194287257-612x612.jpg' %}" alt="Milk Bottle">
+    <p>Fresh Milk</p>
+  </div>
+  <div class="product-card">
+    <img src="{% static 'images/istockphoto-1222018207-612x612.jpg' %}" alt="Cheese">
+    <p>Cheese</p>
+  </div>
+  <div class="product-card">
+    <img src="{% static 'images/gettyimages-910881428-612x612.jpg' %}" alt="Butter">
+    <p>Butter</p>
+  </div>
+  <div class="product-card">
+    <img src="{% static 'images/istockphoto-544807136-612x612.jpg' %}" alt="Yogurt">
+    <p>Yogurt</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-grid">
+    <div>
+      <h3>Office</h3>
+      <p>123 Street, City</p>
+    </div>
+    <div>
+      <h3>Links</h3>
+      <p>About</p>
+      <p>Services</p>
+    </div>
+    <div>
+      <h3>Hours</h3>
+      <p>Mon–Fri: 9am–7pm</p>
+    </div>
+    <div>
+      <h3>Newsletter</h3>
+      <input placeholder="Your Email">
+      <button>Sign Up</button>
+    </div>
+  </div>
+</div>
+
+<div class="copyright">
+  © 2026 Village Dairy
+</div>
+
+</body>
+</html>

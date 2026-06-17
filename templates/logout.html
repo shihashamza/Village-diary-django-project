@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Logout</title>
+</head>
+<body style="text-align:center; margin-top:50px;">
+
+    <h2>Logout Page</h2>
+
+    <!-- Logout Button 1 -->
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+
+    <br><br>
+
+    <!-- Logout Button 2 (Styled) -->
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" style="
+            background:red;
+            color:white;
+            padding:10px 20px;
+            border:none;
+            border-radius:5px;
+            cursor:pointer;
+        ">
+            Logout
+        </button>
+    </form>
+
+    <br><br>
+
+    <!-- Logout Button 3 -->
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+
+</body>
+</html>

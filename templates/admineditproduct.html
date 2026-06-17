@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Product</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+.container{
+    display:flex;
+    min-height:100vh;
+}
+
+/* Sidebar */
+.sidebar{
+    width:260px;
+    background:linear-gradient(180deg,#2c3e50,#1a252f);
+    color:white;
+    padding:25px 20px;
+    position:fixed;
+    height:100vh;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:40px;
+    font-size:22px;
+}
+
+.menu{
+    list-style:none;
+}
+
+.menu li{
+    margin-bottom:15px;
+}
+
+.menu li a{
+    display:block;
+    padding:12px 15px;
+    border-radius:8px;
+    text-decoration:none;
+    color:#ecf0f1;
+    transition:0.3s;
+}
+
+.menu li a:hover{
+    background:#1abc9c;
+    padding-left:20px;
+}
+
+.active{
+    background:#1abc9c;
+}
+
+/* Main */
+.main{
+    margin-left:260px;
+    padding:40px;
+    width:100%;
+}
+
+/* Form Box */
+.form-box{
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.05);
+    max-width:600px;
+}
+
+.form-box h2{
+    margin-bottom:20px;
+}
+
+.form-group{
+    margin-bottom:20px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:6px;
+    font-weight:bold;
+}
+
+.form-group input,
+.form-group textarea{
+    width:100%;
+    padding:10px;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
+
+.form-group textarea{
+    resize:none;
+    height:100px;
+}
+
+/* Buttons */
+.update-btn{
+    background:#1abc9c;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+}
+
+.update-btn:hover{
+    background:#16a085;
+}
+
+/* Image preview */
+.current-img{
+    margin-top:10px;
+}
+
+.current-img img{
+    width:120px;
+    border-radius:8px;
+    display:block;
+    margin-bottom:10px;
+}
+
+.remove-btn{
+    display:inline-block;
+    background:#e74c3c;
+    color:white;
+    padding:6px 12px;
+    border-radius:6px;
+    text-decoration:none;
+    font-size:14px;
+}
+
+.remove-btn:hover{
+    background:#c0392b;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- Sidebar -->
+<div class="sidebar">
+
+<h2 class="logo">🥛 Dairy Admin</h2>
+
+<ul class="menu">
+<li><a href="{% url 'admindashboard' %}">Dashboard</a></li>
+<li><a href="{% url 'adminproduct' %}" class="active">Products</a></li>
+<li><a href="{% url 'adminaddproduct' %}">Add Product</a></li>
+<li><a href="{% url 'admincategories' %}">Category</a></li>
+<li><a href="{% url 'adminorder' %}">Orders</a></li>
+<li><a href="{% url 'admincustomer' %}">Customers</a></li>
+<li><a href="{% url 'admincoupons' %}">Coupons</a></li>
+<li><a href="{% url 'adminbanner' %}">Banner</a></li>
+<li><a href="{% url 'adminnotification' %}">Notification</a></li>
+</ul>
+
+</div>
+
+
+<!-- Main -->
+<div class="main">
+
+<div class="form-box">
+
+<h2>Edit Product</h2>
+
+<form method="POST" enctype="multipart/form-data">
+
+{% csrf_token %}
+
+<div class="form-group">
+<label>Product Name</label>
+<input type="text" name="name" value="{{ product.name }}" required>
+</div>
+
+<div class="form-group">
+<label>Price</label>
+<input type="number" name="price" value="{{ product.price }}" required>
+</div>
+
+<div class="form-group">
+<label>Description</label>
+<textarea name="description" required>{{ product.description }}</textarea>
+</div>
+
+<!-- Image 1 -->
+<div class="form-group">
+
+<label>Image 1</label>
+<input type="file" name="image1">
+
+{% if product.image1 %}
+<div class="current-img">
+<p><strong>Current Image</strong></p>
+<img src="{{ product.image1.url }}">
+</div>
+{% endif %}
+
+</div>
+
+
+<!-- Image 2 -->
+<div class="form-group">
+
+<label>Image 2</label>
+<input type="file" name="image2">
+
+{% if product.image2 %}
+<div class="current-img">
+<p><strong>Current Image</strong></p>
+<img src="{{ product.image2.url }}">
+</div>
+{% endif %}
+
+</div>
+
+
+<!-- Image 3 -->
+<div class="form-group">
+
+<label>Image 3</label>
+<input type="file" name="image3">
+
+{% if product.image3 %}
+<div class="current-img">
+<p><strong>Current Image</strong></p>
+<img src="{{ product.image3.url }}">
+</div>
+{% endif %}
+
+</div>
+
+
+<button type="submit" class="update-btn">
+Update Product
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+</div>
+
+</body>
+</html>
