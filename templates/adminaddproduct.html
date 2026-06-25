@@ -201,14 +201,12 @@ input, textarea, select{
                 <label>Description</label>
                 <textarea name="description" placeholder="Enter product description"></textarea>
                 <label>Category</label>
-                    <select name="category" required>
-                        <option value="">Select Category</option>
-                        <option value="Milk">Milk</option>
-                        <option value="Cheese">Cheese</option>
-                        <option value="Fermented">Fermented</option>
-                        <option value="Fat-based">Fat-based</option>
-                        <option value="Special">Special</option>
-                    </select>
+                   <select name="category" required>
+    <option value="">Select Category</option>
+    {% for cat in categories %}
+        <option value="{{ cat.id }}">{{ cat.name }}</option>
+    {% endfor %}
+</select>
                 <label>Product Image 1</label>
                 <input type="file" name="image1" required>
 

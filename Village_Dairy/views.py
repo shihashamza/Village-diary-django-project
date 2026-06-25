@@ -12,12 +12,12 @@ from django.views.decorators.cache import never_cache
 from .models import Product, Cart
 from .forms import UserUpdateForm, ProfileUpdateForm
 import stripe
+from django.conf import settings
 from django.http import HttpResponse
 from .models import Cart
 from django.utils import timezone
 from .models import Order
 import os
-stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 from django.db.models.functions import ExtractMonth
 from django.db.models import Sum
 from django.db.models import Count
@@ -40,16 +40,15 @@ def accounts(request):
     return render(request, 'accounts.html')
 
 def milk(request):
-
     query = request.GET.get('q')
 
     if query:
         products = Product.objects.filter(
-            category="Milk",
+            category__name="Milk",
             name__icontains=query
         )
     else:
-        products = Product.objects.filter(category="Milk")
+        products = Product.objects.filter(category__name="Milk")
 
     return render(request, 'milk.html', {'products': products})
 
@@ -59,11 +58,11 @@ def cheese(request):
 
     if query:
         products = Product.objects.filter(
-            category="Cheese",
+            category__name="Cheese",
             name__icontains=query
         )
     else:
-        products = Product.objects.filter(category="Cheese")
+        products = Product.objects.filter(category__name="Cheese")
 
     return render(request, "cheese.html", {"products": products})
 
@@ -73,11 +72,11 @@ def fermented_creamy(request):
 
     if query:
         products = Product.objects.filter(
-            category="Fermented",
+            category__name="Fermented",
             name__icontains=query
         )
     else:
-        products = Product.objects.filter(category="Fermented")
+        products = Product.objects.filter(category__name="Fermented")
 
     return render(request, 'fermented_creamy.html', {"products": products})
 
@@ -87,11 +86,11 @@ def fat_based(request):
 
     if query:
         products = Product.objects.filter(
-            category="Fat-based",
+            category__name="Fat-based",
             name__icontains=query
         )
     else:
-        products = Product.objects.filter(category="Fat-based")
+        products = Product.objects.filter(category__name="Fat-based")
 
     return render(request, 'fat_based.html', {"products": products})
 
@@ -104,11 +103,13 @@ def special_items(request):
 
     if query:
         products = Product.objects.filter(
-            category="Special",
+            category__name="Special",
             name__icontains=query
         )
     else:
-        products = Product.objects.filter(category="Special")
+        products = Product.objects.filter(
+            category__name="Special"
+        )
 
     return render(request, 'special_items.html', {"products": products})
 
@@ -384,24 +385,25 @@ def edit_profile(request):
 
 @login_required
 def payment(request):
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY   # ✅ ADD THIS
+
     cart_items = Cart.objects.filter(user=request.user)
 
     if not cart_items.exists():
         return redirect('cart')
 
     total_amount = 0
-
     for item in cart_items:
         total_amount += item.product.price * item.quantity
 
-    
     order_ids = []
 
     for item in cart_items:
         order = Order.objects.create(
             user=request.user,
-            product=item.product,              
-            quantity=item.quantity,            
+            product=item.product,
+            quantity=item.quantity,
             total_amount=item.product.price * item.quantity,
             payment_method="Online",
             payment_status="Pending",
@@ -409,7 +411,6 @@ def payment(request):
         )
         order_ids.append(order.id)
 
-    
     request.session['order_ids'] = order_ids
 
     session = stripe.checkout.Session.create(
@@ -461,24 +462,23 @@ def payment_method(request):
 
     return render(request, "payment_method.html")
 
+@login_required
 def payment_success(request):
-    order_ids = request.session.get('order_ids')
+
+    order_ids = request.session.get('order_ids', [])
 
     if order_ids:
-        for oid in order_ids:
-            try:
-                order = Order.objects.get(id=oid)
-                order.payment_status = "Paid"
-                order.save()
-            except Order.DoesNotExist:
-                pass
+        orders = Order.objects.filter(id__in=order_ids)
 
-        request.session.pop('order_ids', None)
-
-    
+        for order in orders:
+            order.payment_status = "Paid"
+            order.status = "Processing"
+            order.save()
+            
     Cart.objects.filter(user=request.user).delete()
 
     return redirect('order_success')
+
 def order_success(request):
     return render(request, 'order_success.html')
 
@@ -555,25 +555,39 @@ def adminproduct(request):
     products = Product.objects.all()
     return render(request, 'adminproduct.html', {'products': products})
 
+
 @never_cache
 @staff_member_required(login_url='home')
 def adminaddproduct(request):
-  
 
     if request.method == "POST":
-        Product.objects.create(
-            name=request.POST.get("name"),
-            price=request.POST.get("price"),
-            description=request.POST.get("description"),
-            category=request.POST.get("category"),
-            image1=request.FILES.get("image1"),
-            image2=request.FILES.get("image2"),
-            image3=request.FILES.get("image3"),
-            image4=request.FILES.get("image4"),
-        )
-        return redirect("adminproduct")
+        name = request.POST.get("name")
+        price = request.POST.get("price")
+        description = request.POST.get("description")
+        category_id = request.POST.get("category")
 
-    return render(request, "adminaddproduct.html")
+        category_obj = get_object_or_404(Category, id=category_id)
+
+        image1 = request.FILES.get("image1")
+        image2 = request.FILES.get("image2")
+        image3 = request.FILES.get("image3")
+        image4 = request.FILES.get("image4")
+
+        Product.objects.create(
+            name=name,
+            price=price,
+            description=description,
+            category=category_obj,
+            image1=image1,
+            image2=image2,
+            image3=image3,
+            image4=image4,
+        )
+
+        return redirect("adminproduct")  # IMPORTANT
+
+    categories = Category.objects.all()
+    return render(request, "adminaddproduct.html", {"categories": categories})
 
 @never_cache
 @staff_member_required(login_url='home')
@@ -653,11 +667,10 @@ def delete_banner(request, id):
 
 
 def admincategories(request):
-    categories = [choice[0] for choice in Product.CATEGORY_CHOICES]
+    categories = Category.objects.annotate(product_count=Count('product'))
     return render(request, 'admincategories.html', {
         'categories': categories
     })
-
 @never_cache
 @staff_member_required(login_url='home')
 def admincoupons(request):

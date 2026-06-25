@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{% comment %} <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -162,14 +162,232 @@ td{
     </ul>
 </div>
 
-<!-- Main -->
 <div class="main">
 
     <div class="header">
         <h2>Manage Categories</h2>
         <div>
             <input class="search" type="text" placeholder="Search...">
-            <a href="#" class="add-btn">+ Add</a>
+            <a href="{% url 'add_category' %}" class="add-btn">+ Add</a>
+        </div>
+    </div>
+
+    <div class="table-box">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Category Name</th>
+                    <th>Products</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+      {% for cat in categories %}
+<tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ cat.name }}</td>
+    <td>{{ cat.product_count }}</td>
+    <td>
+        <a href="{% url 'update_category' cat.id %}">
+            <button class="edit">Edit</button>
+        </a>
+
+        <a href="{% url 'delete_category' cat.id %}">
+            <button class="delete">Delete</button>
+        </a>
+    </td>
+</tr>
+
+{% empty %}
+                <tr>
+                    <td colspan="4">No categories found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html> {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Categories</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+/* Layout */
+.container{
+    display:flex;
+}
+
+/* Sidebar */
+.sidebar{
+    width:250px;
+    background:#2c3e50;
+    color:white;
+    height:100vh;
+    position:fixed;
+    padding:20px;
+}
+
+.logo{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.menu{
+    list-style:none;
+}
+
+.menu li{
+    margin:18px 0;
+}
+
+.menu a{
+    color:white;
+    text-decoration:none;
+    padding:12px 14px;
+    display:block;
+    border-radius:6px;
+}
+
+.menu a:hover,
+.menu .active{
+    background:#1abc9c;
+}
+
+.logout{
+    margin-top:20px;
+    background:#e74c3c;
+    text-align:center;
+}
+
+.logout:hover{
+    background:#c0392b;
+}
+
+/* Main */
+.main{
+    margin-left:250px;
+    padding:30px;
+    width:100%;
+}
+
+/* Header */
+.header{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.search{
+    padding:8px;
+    border:1px solid #ccc;
+    border-radius:5px;
+}
+
+.add-btn{
+    background:#1abc9c;
+    color:white;
+    padding:8px 15px;
+    border-radius:5px;
+    text-decoration:none;
+}
+
+/* Table */
+.table-box{
+    background:white;
+    padding:20px;
+    border-radius:10px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    background:#1abc9c;
+    color:white;
+    padding:10px;
+}
+
+td{
+    padding:10px;
+    border-bottom:1px solid #eee;
+}
+
+/* Buttons */
+.edit{
+    background:#f39c12;
+    color:white;
+    border:none;
+    padding:5px 10px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.delete{
+    background:#e74c3c;
+    color:white;
+    border:none;
+    padding:5px 10px;
+    border-radius:5px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <h2 class="logo">🥛 Dairy Admin</h2>
+
+    <ul class="menu">
+        <li><a href="{% url 'admindashboard' %}">Dashboard</a></li>
+        <li><a href="{% url 'adminproduct' %}">Products</a></li>
+        <li><a href="{% url 'adminaddproduct' %}">Add Product</a></li>
+        <li><a href="#" class="active">Category</a></li>
+        <li><a href="{% url 'adminorder' %}">Orders</a></li>
+        <li><a href="{% url 'admincustomer' %}">Customers</a></li>
+        <li><a href="{% url 'admincoupons' %}">Coupons</a></li>
+        <li><a href="{% url 'adminbanner' %}">Banner</a></li>
+        <li><a href="{% url 'adminnotification' %}">Notification</a></li>
+        <li><a href="{% url 'adminlogout' %}" class="logout">Logout</a></li>
+    </ul>
+</div>
+
+<div class="main">
+
+    <div class="header">
+        <h2>Manage Categories</h2>
+        <div>
+            <input class="search" type="text" placeholder="Search...">
+            <a href="{% url 'add_category' %}" class="add-btn">+ Add</a>
         </div>
     </div>
 
@@ -189,7 +407,7 @@ td{
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ cat.name }}</td>
-                    <td>-</td>
+                    <td>{{ cat.product_count }}</td>
                     <td>
                         <a href="{% url 'update_category' cat.id %}">
                             <button class="edit">Edit</button>

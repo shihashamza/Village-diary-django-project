@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Add Category</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#f6f6f6;padding:40px;}
+h2{color:#2f3e2f;margin-bottom:20px;}
+
+.form-box{
+background:white;
+padding:25px;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+max-width:500px;
+margin-bottom:30px;
+}
+
+.form-box input[type="text"]{
+width:100%;
+padding:10px;
+border:1px solid #ccc;
+border-radius:6px;
+margin-bottom:15px;
+}
+
+.form-box button{
+background:#16a085;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:6px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.form-box button:hover{background:#0e6655;}
+
+table{
+width:100%;
+border-collapse:collapse;
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+th{
+background:#2f3e2f;
+color:white;
+padding:12px;
+text-align:left;
+}
+
+td{
+padding:12px;
+border-bottom:1px solid #eee;
+}
+</style>
+</head>
+<body>
+
+<h2>Add Category</h2>
+
+<div class="form-box">
+<form method="POST">
+{% csrf_token %}
+<input type="text" name="category" placeholder="Category name (e.g. Milk)" required>
+<button type="submit">Add Category</button>
+</form>
+</div>
+
+<h2>Existing Categories</h2>
+<table>
+<tr><th>ID</th><th>Category Name</th></tr>
+{% for cat in categories %}
+<tr><td>{{ cat.id }}</td><td>{{ cat.name }}</td></tr>
+{% empty %}
+<tr><td colspan="2">No categories yet</td></tr>
+{% endfor %}
+</table>
+
+</body>
+</html>

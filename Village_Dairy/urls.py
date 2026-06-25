@@ -59,5 +59,6 @@ urlpatterns = [
     path('add-category/', views.add_category, name='add_category'),
     path('update-category/<int:id>/', views.update_category, name='update_category'),
     path('delete-category/<int:id>/', views.delete_category, name='delete_category'),
+    path('add-category/', views.add_category, name='add_category'),
     
     ]
