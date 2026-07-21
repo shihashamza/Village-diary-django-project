@@ -20,6 +20,7 @@ background:#2f3e2f;
 position:sticky;
 top:0;
 z-index:1000;
+flex-wrap:wrap;
 }
 
 .logo a{
@@ -47,6 +48,18 @@ font-weight:bold;
 
 .navbar a:hover{
 color:#e6c84f;
+}
+
+/* Mobile nav toggle (checkbox hack, no JS) */
+.nav-toggle{
+display:none;
+}
+
+.nav-toggle-label{
+display:none;
+font-size:28px;
+cursor:pointer;
+color:#fff;
 }
 
 /* DROPDOWN */
@@ -206,6 +219,127 @@ font-weight:bold;
 background:#d4b73f;
 }
 
+/* ============ RESPONSIVE ============ */
+
+/* Large tablets: 4 -> 3 card columns */
+@media (max-width:1200px){
+.milk-container{
+grid-template-columns:repeat(3,1fr);
+}
+}
+
+/* Navbar switches to mobile menu BEFORE the links have a chance to
+   overflow (7 links + Account dropdown + search bar need this much
+   earlier than a typical 768px breakpoint) */
+@media (max-width:1100px){
+.navbar{
+padding:15px 20px;
+}
+
+.nav-toggle-label{
+display:block;
+order:2;
+}
+
+.search-bar{
+order:3;
+width:100%;
+max-width:400px;
+margin:15px auto 0;
+}
+
+.search-bar input{
+width:100%;
+}
+
+.navbar> ul{
+display:none;
+width:100%;
+flex-direction:column;
+align-items:flex-start;
+gap:0;
+order:4;
+margin-top:15px;
+}
+
+.nav-toggle:checked ~ ul{
+display:flex;
+}
+
+.navbar> ul > li{
+width:100%;
+padding:12px 0;
+border-top:1px solid rgba(255,255,255,0.15);
+}
+
+.navbar ul li:last-child{
+margin-left:0;
+margin-right:0;
+}
+
+.dropdown-content{
+position:static;
+box-shadow:none;
+width:100%;
+}
+}
+
+/* Medium screens: 3 -> 2 card columns */
+@media (max-width:992px){
+.milk-container{
+grid-template-columns:repeat(2,1fr);
+padding:20px;
+}
+
+.footer-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.section-title h2{
+font-size:28px;
+}
+}
+
+/* Small screens: tighten spacing */
+@media (max-width:768px){
+.milk-container{
+padding:20px;
+gap:20px;
+}
+
+.milk-card img{
+height:180px;
+}
+
+.footer-grid{
+gap:25px;
+}
+}
+
+/* Very small screens: 2 -> 1 card column */
+@media (max-width:480px){
+.section-title h2{
+font-size:22px;
+}
+
+.milk-container{
+grid-template-columns:1fr;
+}
+
+.milk-card img{
+height:220px;
+}
+
+.footer{
+padding:25px 20px;
+}
+
+.footer-grid{
+grid-template-columns:1fr;
+gap:20px;
+}
+}
+
 </style>
 </head>
 
@@ -215,8 +349,12 @@ background:#d4b73f;
 <div class="navbar">
 
 <div class="logo">
-<a href="\">Village Dairy</a>
+<a href="/">Village Dairy</a>
 </div>
+
+<input type="checkbox" id="navToggle" class="nav-toggle">
+<label for="navToggle" class="nav-toggle-label">&#9776;</label>
+
 <form method="GET" class="search-bar">
 <input type="text" name="q" placeholder="Search milk products...">
 <button type="submit">Search</button>
@@ -240,12 +378,15 @@ background:#d4b73f;
           <a href="{% url 'orders' %}">Orders</a>
           <a href="{% url 'cart' %}">Cart <span id="wish-count" class="badge">0</span></a>
           <a href="{% url 'about' %}">About</a>
+        <a href="{% url 'user_notifications'%}">Notifications</a>
           <a href="{% url 'logout' %}">Logout</a>
         {% else %}
           <a href="{% url 'login' %}">Login</a>
         {% endif %}
       </div>
 
+</li>
+</ul>
 </div>
 
 <!-- TITLE -->

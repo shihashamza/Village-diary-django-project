@@ -1,4 +1,4 @@
-{% load static %}
+ {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,202 +8,290 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:#f6f6f6;
-overflow-x:hidden;
-}
+body{background:#f6f6f6;overflow-x:hidden;}
 
 /* NAVBAR */
 .navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 40px;
-background:#2f3e2f;
-position:sticky;
-top:0;
-z-index:1000;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 40px;
+  background:#2f3e2f;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  flex-wrap:wrap;
 }
 
 .logo a{
-font-size:32px;
-font-weight:bold;
-color:#fff;
-text-decoration:none;
+  font-size:32px;
+  font-weight:bold;
+  color:#fff;
+  text-decoration:none;
 }
 
-.navbar> ul{
-display:flex;
-gap:25px;
-list-style:none;
-align-items:center;
+.navbar > ul{
+  display:flex;
+  gap:25px;
+  list-style:none;
+  align-items:center;
 }
 
 .navbar a{
-text-decoration:none;
-color:#fff;
-font-weight:bold;
+  text-decoration:none;
+  color:#fff;
+  font-weight:bold;
 }
 
 .navbar a:hover{color:#e6c84f;}
+
+/* Mobile nav toggle (checkbox hack) */
+.nav-toggle{
+  display:none;
+}
+
+.nav-toggle-label{
+  display:none;
+  font-size:28px;
+  cursor:pointer;
+  color:#fff;
+}
 
 /* DROPDOWN */
 .dropdown{position:relative;}
 
 .dropdown-content{
-display:none;
-position:absolute;
-background:white;
-min-width:170px;
-top:100%;
-left:0;
-box-shadow:0 2px 6px rgba(0,0,0,0.2);
-border-radius:4px;
-overflow:hidden;
+  display:none;
+  position:absolute;
+  background:white;
+  min-width:170px;
+  top:100%;
+  left:0;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+  border-radius:4px;
+  overflow:hidden;
 }
 
 .dropdown-content li{list-style:none;}
 
 .dropdown-content a{
-color:black;
-padding:10px;
-display:block;
+  color:black;
+  padding:10px;
+  display:block;
 }
 
 .dropdown-content a:hover{background:#f1f1f1;}
 
 .dropdown:hover .dropdown-content{
-display:block;
+  display:block;
 }
 
 /* BADGE */
 .badge{
-background:red;
-color:white;
-border-radius:50%;
-padding:2px 7px;
-font-size:12px;
-margin-left:5px;
+  background:red;
+  color:white;
+  border-radius:50%;
+  padding:2px 7px;
+  font-size:12px;
+  margin-left:5px;
 }
 
 /* TITLE */
 .section-title{
-text-align:center;
-margin:50px 0 20px;
+  text-align:center;
+  margin:50px 0 20px;
 }
 
 .section-title h2{
-font-size:40px;
-color:#2f3e2f;
+  font-size:40px;
+  color:#2f3e2f;
 }
 
 /* GRID */
 .milk-container{
-display:grid;
-grid-template-columns: repeat(4, 1fr);gap:30px;
-padding:40px;
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:30px;
+  padding:40px;
 }
 
 .milk-card{
-background:white;
-border-radius:12px;
-overflow:hidden;
-text-align:center;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
-transition:0.3s;
+  background:white;
+  border-radius:12px;
+  overflow:hidden;
+  text-align:center;
+  box-shadow:0 0 10px rgba(0,0,0,0.1);
+  transition:0.3s;
 }
 .milk-card:hover{transform:translateY(-8px);}
 
 .milk-card img{
-width:100%;
-height:220px;
-object-fit:cover;
+  width:100%;
+  height:220px;
+  object-fit:cover;
 }
 
 .milk-card h3{
-margin:15px 0;
-color:#2f3e2f;
+  margin:15px 0;
+  color:#2f3e2f;
 }
 
 .view-btn{
-    display:inline-block;
-    padding:10px 18px;
-    background:#ff4d6d;
-    color:white;
-    text-decoration:none;
-    border-radius:20px;
-    font-size:14px;
-    font-weight:600;
-    transition:0.3s;
-    margin-bottom:12px;
+  display:inline-block;
+  padding:10px 18px;
+  background:#ff4d6d;
+  color:white;
+  text-decoration:none;
+  border-radius:20px;
+  font-size:14px;
+  font-weight:600;
+  transition:0.3s;
+  margin-bottom:12px;
 }
 
 .view-btn:hover{
-    background:linear-gradient(135deg,#16a085,#0e6655);
-    transform:translateY(-2px);
-    box-shadow:0 6px 12px rgba(0,0,0,0.15);
+  background:linear-gradient(135deg,#16a085,#0e6655);
+  transform:translateY(-2px);
+  box-shadow:0 6px 12px rgba(0,0,0,0.15);
 }
 
 .view-btn:active{
-    transform:scale(0.97);
+  transform:scale(0.97);
 }
 
 /* FOOTER */
 .footer{
-background:#3d4b3d;
-color:white;
-padding:40px;
-margin-top:60px;
+  background:#3d4b3d;
+  color:white;
+  padding:40px;
+  margin-top:60px;
 }
 
 .footer-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:40px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:40px;
 }
 
 .copyright{
-background:#e6c84f;
-text-align:center;
-padding:15px;
+  background:#e6c84f;
+  text-align:center;
+  padding:15px;
 }
 
-/* MOBILE */
-@media(max-width:900px){
-.milk-container{grid-template-columns:repeat(2,1fr);}
-}
-
-@media(max-width:600px){
-.milk-container{grid-template-columns:1fr;}
-}
 /* SEARCH BAR */
-
 .search-bar{
-display:flex;
-align-items:center;
-background:white;
-border-radius:25px;
-padding:5px 10px;
-margin-right:20px;
+  display:flex;
+  align-items:center;
+  background:white;
+  border-radius:25px;
+  padding:5px 10px;
+  margin-right:20px;
 }
 
 .search-bar input{
-border:none;
-outline:none;
-padding:8px 10px;
-width:180px;
+  border:none;
+  outline:none;
+  padding:8px 10px;
+  width:180px;
 }
 
 .search-bar button{
-border:none;
-background:#e6c84f;
-padding:8px 14px;
-border-radius:20px;
-cursor:pointer;
-font-weight:bold;
+  border:none;
+  background:#e6c84f;
+  padding:8px 14px;
+  border-radius:20px;
+  cursor:pointer;
+  font-weight:bold;
 }
 
 .search-bar button:hover{
-background:#d4b73f;
+  background:#d4b73f;
+}
+
+/* ============ RESPONSIVE ============ */
+
+/* 4 -> 3 columns */
+@media(max-width:1200px){
+  .milk-container{grid-template-columns:repeat(3,1fr);}
+}
+
+/* Mobile navbar breakpoint (same style as milk page model) */
+@media (max-width:1100px){
+  .navbar{
+    padding:15px 20px;
+  }
+
+  .nav-toggle-label{
+    display:block;
+    order:2;
+  }
+
+  .search-bar{
+    order:3;
+    width:100%;
+    max-width:400px;
+    margin:15px auto 0;
+  }
+
+  .search-bar input{
+    width:100%;
+  }
+
+  .navbar > ul{
+    display:none;
+    width:100%;
+    flex-direction:column;
+    align-items:flex-start;
+    gap:0;
+    order:4;
+    margin-top:15px;
+  }
+
+  /* Show menu when checkbox is checked */
+  #navToggle:checked ~ ul{
+    display:flex;
+  }
+
+  .navbar > ul > li{
+    width:100%;
+    padding:12px 0;
+    border-top:1px solid rgba(255,255,255,0.15);
+  }
+
+  .dropdown-content{
+    position:static;
+    box-shadow:none;
+    width:100%;
+  }
+}
+
+/* 3 -> 2 columns */
+@media(max-width:900px){
+  .milk-container{grid-template-columns:repeat(2,1fr);}
+}
+
+/* tighten spacing */
+@media(max-width:768px){
+  .milk-container{padding:20px;gap:20px;}
+  .milk-card img{height:180px;}
+  .footer-grid{gap:25px;}
+}
+
+/* 2 -> 1 column */
+@media(max-width:600px){
+  .milk-container{grid-template-columns:1fr;}
+}
+
+/* very small footer stacking tweak */
+@media(max-width:480px){
+  .footer{
+    padding:25px 20px;
+  }
+  .footer-grid{
+    grid-template-columns:1fr;
+    gap:20px;
+  }
 }
 </style>
 </head>
@@ -212,103 +300,505 @@ background:#d4b73f;
 
 <!-- NAVBAR -->
 <div class="navbar">
-<div class="logo">
-<a href="/">Village Dairy</a>
-</div>
-<form method="GET" class="search-bar">
-<input type="text" name="q" placeholder="Search milk products...">
-<button type="submit">Search</button>
-</form>
-<ul>
-<li><a href="{% url 'milk' %}">Milk</a></li>
-<li><a href="{% url 'cheese' %}">Cheese</a></li>
-<li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
-<li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
-<li><a href="{% url 'special_items' %}">Special</a></li>
-<li><a href="{% url 'about' %}">About</a></li>
-<li><a href="{% url 'service' %}">Service</a></li>
 
-<li class="dropdown">
-<a href="#">Account ▾</a>
- <div class="dropdown-content">
+  <div class="logo">
+    <a href="/">Village Dairy</a>
+  </div>
+
+  <!-- checkbox + label for mobile hamburger -->
+  <input type="checkbox" id="navToggle" class="nav-toggle">
+  <label for="navToggle" class="nav-toggle-label">&#9776;</label>
+
+  <form method="GET" class="search-bar">
+    <input type="text" name="q" placeholder="Search milk products...">
+    <button type="submit">Search</button>
+  </form>
+
+  <ul>
+    <li><a href="{% url 'milk' %}">Milk</a></li>
+    <li><a href="{% url 'cheese' %}">Cheese</a></li>
+    <li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
+    <li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
+    <li><a href="{% url 'special_items' %}">Special</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
+    <li><a href="{% url 'service' %}">Service</a></li>
+
+    <li class="dropdown">
+      <a href="#">Account ▾</a>
+      <div class="dropdown-content">
         {% if user.is_authenticated %}
           <a href="{% url 'profile' %}">Profile</a>
           <a href="{% url 'orders' %}">Orders</a>
           <a href="{% url 'cart' %}">Cart <span id="wish-count" class="badge">0</span></a>
           <a href="{% url 'about' %}">About</a>
+          <a href="{% url 'user_notifications'%}">Notifications</a>
           <a href="{% url 'logout' %}">Logout</a>
         {% else %}
           <a href="{% url 'login' %}">Login</a>
         {% endif %}
       </div>
-</li>
-
-</ul>
+    </li>
+  </ul>
 </div>
 
 <!-- TITLE -->
 <div class="section-title">
-<h2>Yogurt & Curd Products</h2>
+  <h2>Yogurt & Curd Products</h2>
+</div>
+
+<!-- PRODUCTS -->
+<div class="milk-container">
+  {% for product in products %}
+    <div class="milk-card">
+      {% if product.image1 %}
+        <img src="{{ product.image1.url }}" alt="{{ product.name }}">
+      {% endif %}
+      <h3>{{ product.name }}</h3>
+      <p>₹ {{ product.price }}</p>
+      <a href="{% url 'product_detail' product.id %}" class="view-btn">
+        View Product
+      </a>
+    </div>
+  {% empty %}
+    <p style="text-align:center;">No fermented products available.</p>
+  {% endfor %}
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-grid">
+    <div>
+      <h3>Office</h3>
+      <p>123 Street, New York</p>
+    </div>
+    <div>
+      <h3>Links</h3>
+      <p>About</p>
+      <p>Services</p>
+    </div>
+    <div>
+      <h3>Hours</h3>
+      <p>Mon-Fri: 9am–7pm</p>
+    </div>
+    <div>
+      <h3>Newsletter</h3>
+      <input placeholder="Your Email">
+      <button>Sign Up</button>
+    </div>
+  </div>
+</div>
+
+<div class="copyright">
+  © 2026 Milky Dairy
+</div>
+
+</body>
+</html>
+
+
+{% comment %} {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Milky Dairy - Yogurt & Curd</title>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+body { background:#f6f6f6; overflow-x:hidden; }
+
+/* NAVBAR */
+.navbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 20px;
+  background:#2f3e2f;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  flex-wrap:wrap;
+}
+
+.logo a {
+  font-size:28px;
+  font-weight:bold;
+  color:#fff;
+  text-decoration:none;
+}
+
+/* CSS-only mobile menu toggle */
+#nav-checkbox { display:none; }
+
+.nav-toggle {
+  display:none;
+  font-size:24px;
+  color:#fff;
+  cursor:pointer;
+  user-select:none;
+}
+
+.navbar ul {
+  display:flex;
+  gap:20px;
+  list-style:none;
+  align-items:center;
+  margin:0;
+}
+
+.navbar a {
+  text-decoration:none;
+  color:#fff;
+  font-weight:bold;
+}
+.navbar a:hover { color:#e6c84f; }
+
+/* Show menu when checkbox is checked */
+#nav-checkbox:checked ~ .nav-wrapper ul {
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  gap:0;
+  margin-top:10px;
+}
+
+.nav-wrapper {
+  display:flex;
+  flex:1 1 auto;
+  justify-content:flex-end;
+  align-items:center;
+  gap:15px;
+}
+
+/* BADGE */
+.badge {
+  background:red;
+  color:white;
+  border-radius:50%;
+  padding:2px 7px;
+  font-size:12px;
+  margin-left:5px;
+}
+
+/* DROPDOWN */
+.dropdown { position:relative; }
+
+.dropdown-content {
+  display:none;
+  position:absolute;
+  background:white;
+  min-width:170px;
+  top:100%;
+  left:0;
+  box-shadow:0 2px 6px rgba(0,0,0,0.2);
+  border-radius:4px;
+  overflow:hidden;
+}
+
+.dropdown-content li { list-style:none; }
+
+.dropdown-content a {
+  color:black;
+  padding:10px;
+  display:block;
+}
+
+.dropdown-content a:hover { background:#f1f1f1; }
+
+.dropdown:hover .dropdown-content { display:block; }
+
+/* SEARCH BAR */
+.search-bar {
+  display:flex;
+  align-items:center;
+  background:white;
+  border-radius:25px;
+  padding:5px 10px;
+  margin-right:10px;
+}
+
+.search-bar input {
+  border:none;
+  outline:none;
+  padding:8px 10px;
+  width:180px;
+}
+
+.search-bar button {
+  border:none;
+  background:#e6c84f;
+  padding:8px 14px;
+  border-radius:20px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.search-bar button:hover { background:#d4b73f; }
+
+/* TITLE */
+.section-title {
+  text-align:center;
+  margin:40px 0 20px;
+}
+
+.section-title h2 {
+  font-size:36px;
+  color:#2f3e2f;
+}
+
+/* GRID */
+.milk-container {
+  display:grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap:30px;
+  padding:40px;
+}
+
+.milk-card {
+  background:white;
+  border-radius:12px;
+  overflow:hidden;
+  text-align:center;
+  box-shadow:0 0 10px rgba(0,0,0,0.1);
+  transition:0.3s;
+}
+
+.milk-card:hover { transform:translateY(-8px); }
+
+.milk-card img {
+  width:100%;
+  height:220px;
+  object-fit:cover;
+}
+
+.milk-card h3 {
+  margin:15px 0 8px;
+  color:#2f3e2f;
+  font-size:18px;
+}
+
+.milk-card p {
+  margin:0 0 12px;
+  color:#444;
+}
+
+.view-btn {
+  display:inline-block;
+  padding:10px 18px;
+  background:#ff4d6d;
+  color:white;
+  text-decoration:none;
+  border-radius:20px;
+  font-size:14px;
+  font-weight:600;
+  transition:0.3s;
+  margin-bottom:12px;
+}
+
+.view-btn:hover {
+  background:linear-gradient(135deg,#16a085,#0e6655);
+  transform:translateY(-2px);
+  box-shadow:0 6px 12px rgba(0,0,0,0.15);
+}
+
+.view-btn:active { transform:scale(0.97); }
+
+/* FOOTER */
+.footer {
+  background:#3d4b3d;
+  color:white;
+  padding:30px 20px;
+  margin-top:60px;
+}
+
+.footer-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:30px;
+}
+
+.copyright {
+  background:#e6c84f;
+  text-align:center;
+  padding:15px;
+}
+
+/* RESPONSIVE */
+
+/* Medium screens */
+@media (max-width: 992px) {
+  .milk-container {
+    grid-template-columns: repeat(2, 1fr);
+    padding:20px;
+  }
+  .section-title h2 { font-size:30px; }
+}
+
+/* Small screens: mobile menu + responsive layout */
+@media (max-width: 768px) {
+  .navbar {
+    padding:12px 15px;
+  }
+
+  .logo a { font-size:24px; }
+
+  .nav-toggle { display:block; }
+
+  .nav-wrapper {
+    justify-content:flex-start;
+  }
+
+  .navbar ul {
+    display:none;
+  }
+
+  .search-bar {
+    width:100%;
+    margin:10px 0 0;
+  }
+
+  .search-bar input {
+    width:100%;
+  }
+
+  .section-title { margin:30px 0 15px; }
+  .section-title h2 { font-size:26px; }
+
+  .milk-container {
+    grid-template-columns:1fr;
+    padding:15px;
+    gap:20px;
+  }
+
+  .milk-card img { height:180px; }
+  .milk-card h3 { font-size:16px; }
+
+  .footer-grid {
+    grid-template-columns:1fr;
+    gap:20px;
+    text-align:center;
+  }
+
+  .copyright { padding:12px; }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .navbar { padding:10px 12px; }
+  .logo a { font-size:20px; }
+  .section-title h2 { font-size:22px; }
+  .milk-card h3 { font-size:15px; }
+  .view-btn { font-size:12px; padding:8px 14px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- CSS-only mobile menu toggle -->
+<input type="checkbox" id="nav-checkbox">
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">
+    <a href="/">Village Dairy</a>
+  </div>
+
+  <label for="nav-checkbox" class="nav-toggle" aria-label="Toggle navigation">☰</label>
+
+  <div class="nav-wrapper">
+    <form method="GET" class="search-bar">
+      <input type="text" name="q" placeholder="Search products...">
+      <button type="submit">Search</button>
+    </form>
+
+    <ul>
+      <li><a href="{% url 'milk' %}">Milk</a></li>
+      <li><a href="{% url 'cheese' %}">Cheese</a></li>
+      <li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
+      <li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
+      <li><a href="{% url 'special_items' %}">Special</a></li>
+      <li><a href="{% url 'about' %}">About</a></li>
+      <li><a href="{% url 'user_notifications'%}">Notifications</a></li>
+      <li><a href="{% url 'service' %}">Service</a></li>
+
+      <li class="dropdown">
+        <a href="#">Account ▾</a>
+        <div class="dropdown-content">
+          {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}">Profile</a>
+            <a href="{% url 'orders' %}">Orders</a>
+            <a href="{% url 'cart' %}">Cart <span id="wish-count" class="badge">0</span></a>
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'user_notifications'%}">Notifications</a>
+            <a href="{% url 'logout' %}">Logout</a>
+          {% else %}
+            <a href="{% url 'login' %}">Login</a>
+          {% endif %}
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- TITLE -->
+<div class="section-title">
+  <h2>Yogurt & Curd Products</h2>
 </div>
 
 <!-- PRODUCTS -->
 <div class="milk-container">
 
-{% for product in products %}
-<div class="milk-card">
+  {% for product in products %}
+    <div class="milk-card">
+      {% if product.image1 %}
+        <img src="{{ product.image1.url }}" alt="{{ product.name }}">
+      {% endif %}
 
-    {% if product.image1 %}
-        <img src="{{ product.image1.url }}">
-    {% endif %}
+      <h3>{{ product.name }}</h3>
+      <p>₹ {{ product.price }}</p>
 
-    <h3>{{ product.name }}</h3>
-    <p>₹ {{ product.price }}</p>
-
-   <a href="{% url 'product_detail' product.id %}" class="view-btn">
-    View Product
-</a>
-
-
-</div>
-{% empty %}
+      <a href="{% url 'product_detail' product.id %}" class="view-btn">
+        View Product
+      </a>
+    </div>
+  {% empty %}
     <p style="text-align:center;">No fermented products available.</p>
-{% endfor %}
+  {% endfor %}
 
 </div>
 
 <!-- FOOTER -->
 <div class="footer">
-<div class="footer-grid">
+  <div class="footer-grid">
+    <div>
+      <h3>Office</h3>
+      <p>123 Street, New York</p>
+    </div>
 
-<div>
-<h3>Office</h3>
-<p>123 Street, New York</p>
-</div>
+    <div>
+      <h3>Links</h3>
+      <p>About</p>
+      <p>Services</p>
+    </div>
 
-<div>
-<h3>Links</h3>
-<p>About</p>
-<p>Services</p>
-</div>
+    <div>
+      <h3>Hours</h3>
+      <p>Mon-Fri: 9am–7pm</p>
+    </div>
 
-<div>
-<h3>Hours</h3>
-<p>Mon-Fri: 9am–7pm</p>
-</div>
-
-<div>
-<h3>Newsletter</h3>
-<input placeholder="Your Email">
-<button>Sign Up</button>
-</div>
-
-</div>
+    <div>
+      <h3>Newsletter</h3>
+      <input placeholder="Your Email">
+      <button>Sign Up</button>
+    </div>
+  </div>
 </div>
 
 <div class="copyright">
-© 2026 Milky Dairy
+  © 2026 Milky Dairy
 </div>
 
-
 </body>
-</html>
+</html> {% endcomment %}

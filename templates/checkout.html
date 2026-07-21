@@ -402,7 +402,7 @@ background:#e6c84f;
 
 </body>
 </html> {% endcomment %}
-
+{% comment %} 
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -561,6 +561,7 @@ color:white;
 padding:40px;
 margin-top:60px;
 text-align:center;
+
 }
 </style>
 </head>
@@ -696,6 +697,472 @@ text-align:center;
 <!-- FOOTER -->
 <div class="footer">
 © 2026 Village Dairy
+</div>
+
+</body>
+</html> {% endcomment %}
+
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Village Dairy - Checkout</title>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:Arial; }
+body { background:#f6f6f6; }
+
+/* NAVBAR */
+.navbar {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 20px;
+  background:#2f3e2f;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  flex-wrap:wrap;
+}
+
+.logo a {
+  font-size:24px;
+  font-weight:bold;
+  color:#fff;
+  text-decoration:none;
+}
+
+/* CSS-only mobile menu toggle */
+#nav-checkbox { display:none; }
+
+.nav-toggle {
+  display:none;
+  font-size:24px;
+  color:#fff;
+  cursor:pointer;
+  user-select:none;
+}
+
+.navbar ul {
+  display:flex;
+  gap:20px;
+  list-style:none;
+  align-items:center;
+  margin:0;
+}
+
+.navbar a {
+  text-decoration:none;
+  color:#fff;
+  font-weight:bold;
+}
+.navbar a:hover { color:#e6c84f; }
+
+/* Show menu when checkbox is checked */
+#nav-checkbox:checked ~ .nav-wrapper ul {
+  display:flex;
+  flex-direction:column;
+  width:100%;
+  gap:0;
+  margin-top:10px;
+}
+
+.nav-wrapper {
+  display:flex;
+  flex:1 1 auto;
+  justify-content:flex-end;
+  align-items:center;
+}
+
+/* MAIN CONTAINER */
+.checkout-container {
+  width:92%;
+  max-width:1100px;
+  margin:25px auto;
+}
+
+/* CARD STYLE */
+.card {
+  background:#fff;
+  padding:25px;
+  border-radius:12px;
+  margin-bottom:25px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+  color:#2f3e2f;
+  margin-bottom:15px;
+  border-bottom:2px solid #eee;
+  padding-bottom:10px;
+  font-size:18px;
+}
+
+/* ADDRESS TOGGLE */
+.address-toggle {
+  border:2px dashed #cbb98b;
+  padding:12px;
+  border-radius:12px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  color:#6b5b2c;
+  font-weight:bold;
+  background:#f9f7f2;
+  text-align:center;
+}
+
+.address-form {
+  max-height:0;
+  overflow:hidden;
+  transition:0.4s ease;
+}
+
+#toggle-address:checked ~ .address-form {
+  max-height:1200px;
+  margin-top:15px;
+}
+
+/* FORM */
+.form-row {
+  display:flex;
+  gap:15px;
+  margin-bottom:15px;
+  flex-wrap:wrap;
+}
+
+.form-group {
+  display:flex;
+  flex-direction:column;
+  flex:1 1 200px;
+  min-width:140px;
+}
+
+.form-group.full {
+  width:100%;
+  margin-bottom:15px;
+}
+
+.form-group.small {
+  width:160px;
+  flex:0 0 160px;
+}
+
+.form-group label {
+  font-size:12px;
+  color:#8c7a4a;
+  margin-bottom:6px;
+}
+
+.form-group input,
+.form-group textarea {
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  background:#f6f6f6;
+  outline:none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color:#cbb98b;
+  background:#fff;
+}
+
+.save-btn {
+  width:100%;
+  padding:12px;
+  background:#e6c84f;
+  border:none;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+/* ITEMS */
+.item {
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.item-name {
+  font-weight:bold;
+  color:#2f3e2f;
+}
+
+.price {
+  color:#444;
+  text-align:right;
+}
+
+/* TOTAL */
+.total-box {
+  margin-top:15px;
+  border-top:1px solid #eee;
+  padding-top:12px;
+}
+
+.total-row {
+  display:flex;
+  justify-content:space-between;
+  margin:6px 0;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.total {
+  font-size:18px;
+  font-weight:bold;
+  color:#2f3e2f;
+}
+
+/* BUTTON */
+.pay-btn {
+  width:100%;
+  padding:12px;
+  background:#e6c84f;
+  border:none;
+  border-radius:8px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  margin-top:15px;
+}
+.pay-btn:hover { background:#d4b53f; }
+
+/* FOOTER */
+.footer {
+  background:#3d4b3d;
+  color:#fff;
+  padding:30px 20px;
+  margin-top:40px;
+  text-align:center;
+}
+
+/* RESPONSIVE */
+
+/* Medium screens */
+@media (max-width: 900px) {
+  .checkout-container {
+    width:95%;
+    margin:20px auto;
+  }
+  .card {
+    padding:20px;
+  }
+  .card h3 { font-size:16px; }
+}
+
+/* Small screens: mobile menu + responsive checkout */
+@media (max-width: 768px) {
+  .navbar {
+    padding:12px 15px;
+  }
+
+  .logo a { font-size:20px; }
+
+  .nav-toggle { display:block; }
+
+  .navbar ul {
+    display:none;
+  }
+
+  .checkout-container {
+    margin:15px auto;
+  }
+
+  .card {
+    padding:15px;
+  }
+
+  .card h3 { font-size:15px; }
+
+  .form-group.small {
+    width:100%;
+    flex:1 1 100%;
+  }
+
+  .item {
+    flex-direction:column;
+  }
+
+  .price {
+    text-align:left;
+  }
+
+  .total {
+    font-size:16px;
+  }
+
+  .pay-btn, .save-btn {
+    padding:10px;
+    font-size:14px;
+  }
+
+  .footer {
+    padding:20px 15px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 420px) {
+  .navbar { padding:10px 12px; }
+  .logo a { font-size:18px; }
+  .checkout-container { width:98%; margin:12px auto; }
+  .card { padding:12px; }
+  .form-row { gap:10px; }
+  .form-group { min-width:100%; flex:1 1 100%; }
+  .form-group.small { width:100%; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- CSS-only mobile menu toggle -->
+<input type="checkbox" id="nav-checkbox">
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">
+    <a href="/">Village Dairy</a>
+  </div>
+
+  <label for="nav-checkbox" class="nav-toggle" aria-label="Toggle navigation">☰</label>
+
+  <div class="nav-wrapper">
+    <ul>
+      <li><a href="{% url 'milk' %}">Milk</a></li>
+      <li><a href="{% url 'cheese' %}">Cheese</a></li>
+      <li><a href="{% url 'cart' %}">Cart</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="checkout-container">
+
+<!-- ADDRESS -->
+<div class="card">
+  <input type="checkbox" id="toggle-address" hidden>
+
+  <label for="toggle-address" class="address-toggle">
+    + ADD NEW ADDRESS
+  </label>
+
+  <div class="address-form">
+    <form method="POST">
+      {% csrf_token %}
+
+      <div class="form-group full">
+        <label>FULL NAME</label>
+        <input type="text" name="name" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>EMAIL</label>
+          <input type="email" name="email">
+        </div>
+
+        <div class="form-group">
+          <label>PHONE</label>
+          <input type="text" name="phone" required>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label>ADDRESS</label>
+        <textarea name="address" required></textarea>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>CITY</label>
+          <input type="text" name="city" required>
+        </div>
+
+        <div class="form-group">
+          <label>STATE</label>
+          <input type="text" name="state" required>
+        </div>
+      </div>
+
+      <div class="form-group small">
+        <label>PINCODE</label>
+        <input type="text" name="pincode" required>
+      </div>
+
+      <button type="submit" class="save-btn">SAVE ADDRESS</button>
+    </form>
+  </div>
+</div>
+
+<!-- SAVED ADDRESS -->
+<div class="card">
+  <h3>DELIVERY ADDRESS</h3>
+
+  {% if addresses %}
+    {% for addr in addresses %}
+      <p>{{ addr.name }} - {{ addr.address }}</p>
+    {% endfor %}
+  {% else %}
+    <p>No saved addresses</p>
+  {% endif %}
+</div>
+
+<!-- ORDER ITEMS -->
+<div class="card">
+  <h3>ORDER ITEMS</h3>
+
+  {% for item in cart_items %}
+    <div class="item">
+      <div>
+        <p class="item-name">{{ item.product.name }}</p>
+        <p>Qty: {{ item.quantity }}</p>
+      </div>
+      <div class="price">₹ {{ item.total_price }}</div>
+    </div>
+  {% endfor %}
+
+  <!-- TOTAL -->
+  <div class="total-box">
+    <div class="total-row">
+      <span>Subtotal</span>
+      <span>₹ {{ cart_total }}</span>
+    </div>
+
+    <div class="total-row">
+      <span>Shipping</span>
+      <span>Free</span>
+    </div>
+
+    <div class="total-row total">
+      <span>Total</span>
+      <span>₹ {{ cart_total }}</span>
+    </div>
+  </div>
+
+  <!-- PAYMENT BUTTON -->
+  <a href="{% url 'payment_method' %}">
+    <button class="pay-btn">PROCEED TO PAYMENT</button>
+  </a>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  © 2026 Village Dairy
 </div>
 
 </body>

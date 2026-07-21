@@ -115,6 +115,74 @@ body{
     text-decoration:none;
     color:#28a745;
 }
+/* ========================= */
+/* 📱 RESPONSIVE LOGIN FIX */
+/* ========================= */
+
+@media (max-width: 768px){
+
+body{
+    padding:15px;
+}
+
+/* CONTAINER FULL WIDTH */
+.login-container{
+    width:100%;
+    max-width:350px;
+    padding:25px;
+}
+
+/* INPUT SIZE */
+.login-container input{
+    padding:10px;
+}
+
+/* BUTTON */
+.login-container button{
+    padding:10px;
+    font-size:15px;
+}
+
+/* GOOGLE BUTTON */
+.google-btn{
+    padding:10px;
+    font-size:14px;
+}
+
+}
+
+/* SMALL MOBILE */
+@media (max-width: 480px){
+
+.login-container{
+    padding:20px;
+    border-radius:8px;
+}
+
+.login-container h2{
+    font-size:22px;
+}
+
+.message{
+    font-size:13px;
+}
+
+}
+/* Smooth animation */
+*{
+    transition:0.25s ease;
+}
+
+/* Focus effect */
+.login-container input:focus{
+    border-color:#28a745;
+    box-shadow:0 0 5px rgba(40,167,69,0.3);
+}
+
+/* Button press effect */
+.login-container button:active{
+    transform:scale(0.97);
+}
 </style>    
 </head>
 

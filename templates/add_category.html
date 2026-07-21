@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Add Category</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
@@ -33,17 +34,25 @@ padding:10px 20px;
 border-radius:6px;
 font-weight:bold;
 cursor:pointer;
+width:100%;
 }
 
 .form-box button:hover{background:#0e6655;}
+
+/* wrapper allows horizontal scroll on very small screens
+   without breaking the page layout */
+.table-wrap{
+width:100%;
+overflow-x:auto;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
 
 table{
 width:100%;
 border-collapse:collapse;
 background:white;
-border-radius:10px;
-overflow:hidden;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+min-width:320px;
 }
 
 th{
@@ -56,6 +65,81 @@ text-align:left;
 td{
 padding:12px;
 border-bottom:1px solid #eee;
+word-break:break-word;
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width:768px){
+body{
+padding:20px;
+}
+h2{
+font-size:20px;
+}
+.form-box{
+padding:18px;
+max-width:100%;
+}
+}
+
+@media (max-width:480px){
+body{
+padding:12px;
+}
+
+/* stack the table into label:value rows instead of scrolling */
+.table-wrap{
+overflow-x:visible;
+box-shadow:none;
+}
+
+table, thead, tbody, tr, th, td{
+display:block;
+width:100%;
+}
+
+thead{
+display:none;
+}
+
+table{
+box-shadow:none;
+}
+
+tr{
+background:white;
+border-radius:10px;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+margin-bottom:12px;
+overflow:hidden;
+}
+
+td{
+border-bottom:none;
+padding:10px 12px;
+position:relative;
+padding-left:45%;
+}
+
+td::before{
+content:attr(data-label);
+position:absolute;
+left:12px;
+width:40%;
+font-weight:bold;
+color:#2f3e2f;
+white-space:nowrap;
+}
+
+td[colspan]{
+padding-left:12px;
+text-align:center;
+}
+
+td[colspan]::before{
+content:"";
+}
 }
 </style>
 </head>
@@ -66,20 +150,27 @@ border-bottom:1px solid #eee;
 <div class="form-box">
 <form method="POST">
 {% csrf_token %}
-<input type="text" name="category" placeholder="Category name (e.g. Milk)" required>
+<label for="id_category" style="display:block;font-weight:bold;color:#2f3e2f;margin-bottom:6px;">Category Name</label>
+<input type="text" id="id_category" name="category" placeholder="Category name (e.g. Milk)" required>
 <button type="submit">Add Category</button>
 </form>
 </div>
 
 <h2>Existing Categories</h2>
+<div class="table-wrap">
 <table>
+<thead>
 <tr><th>ID</th><th>Category Name</th></tr>
+</thead>
+<tbody>
 {% for cat in categories %}
-<tr><td>{{ cat.id }}</td><td>{{ cat.name }}</td></tr>
+<tr><td data-label="ID">{{ cat.id }}</td><td data-label="Category Name">{{ cat.name }}</td></tr>
 {% empty %}
 <tr><td colspan="2">No categories yet</td></tr>
 {% endfor %}
+</tbody>
 </table>
+</div>
 
 </body>
 </html>

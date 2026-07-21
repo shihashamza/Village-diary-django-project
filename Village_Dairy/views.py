@@ -16,13 +16,19 @@ from django.conf import settings
 from django.http import HttpResponse
 from .models import Cart
 from django.utils import timezone
-from .models import Order
+from .models import Order,Coupon
 import os
+from decimal import Decimal
 from django.db.models.functions import ExtractMonth
 from django.db.models import Sum
 from django.db.models import Count
 from django.contrib.auth import get_user_model
 User = get_user_model()
+from django.utils.timezone import now
+from .models import Notification
+from django.core.mail import send_mail
+from django.conf import settings
+import random
 
 def home(request):
     banners = Banner.objects.filter(page='home', is_active=True)
@@ -133,7 +139,7 @@ def orders(request):
 #     return render(request, 'orders.html', {
 #         'orders': orders
 #     })
-
+@login_required
 def profile(request):
     addresses = Address.objects.filter(user=request.user)
 
@@ -217,6 +223,7 @@ def delete_address(request, id):
         address.delete()
     
     return redirect('profile')
+
 def register(request):
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -242,19 +249,87 @@ def logout_view(request):
 def forgot_password(request):
     if request.method == "POST":
         email = request.POST.get('email')
+
+        if not User.objects.filter(email=email).exists():
+            messages.error(request, "Email not registered")
+            return redirect('forgot_password')
+
+        otp = str(random.randint(100000, 999999))
+
         request.session['reset_email'] = email
+        request.session['reset_otp'] = otp
+        request.session['otp_verified'] = False  # reset this each time
+
+        subject = "Your Password Reset OTP"
+        message = f"Your OTP is: {otp}"
+        from_email = settings.EMAIL_HOST_USER
+        recipient_list = [email]
+
+        send_mail(subject, message, from_email, recipient_list)
+
+        messages.success(request, "OTP sent to your email")
         return redirect('verify_otp')
 
     return render(request, 'forgot_password.html')
 
 
 def verify_otp(request):
+    if request.method == "POST":
+        user_otp = request.POST.get('otp')
+        session_otp = request.session.get('reset_otp')
+
+        if session_otp and user_otp == session_otp:
+            request.session['otp_verified'] = True
+            messages.success(request, "OTP verified successfully")
+            return redirect('password_reset')
+        else:
+            messages.error(request, "Invalid OTP")
+
     return render(request, 'verify_otp.html')
 
 
 def password_reset(request):
-    return render(request,'password_reset.html')
+    email = request.session.get('reset_email')
+    otp_verified = request.session.get('otp_verified')
 
+    # Block access if they didn't go through forgot_password + verify_otp
+    if not email or not otp_verified:
+        messages.error(request, "Please verify your OTP first.")
+        return redirect('forgot_password')
+
+    if request.method == "POST":
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if not password or not confirm_password:
+            messages.error(request, "Both fields are required.")
+            return render(request, 'password_reset.html')
+
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return render(request, 'password_reset.html')
+
+        if len(password) < 8:
+            messages.error(request, "Password must be at least 8 characters long.")
+            return render(request, 'password_reset.html')
+
+        try:
+            user = User.objects.get(email=email)
+            user.set_password(password)
+            user.save()
+        except User.DoesNotExist:
+            messages.error(request, "User not found.")
+            return redirect('forgot_password')
+
+        # Clear session data now that reset is complete
+        del request.session['reset_email']
+        del request.session['reset_otp']
+        del request.session['otp_verified']
+
+        messages.success(request, "Password reset successful. Please log in.")
+        return redirect('login')  # change to your actual login url name
+
+    return render(request, 'password_reset.html')
 
 def product_detail(request, id):
     product = Product.objects.get(id=id)
@@ -332,7 +407,7 @@ def remove_cart(request, cart_id):
     cart_item.delete()
 
     return redirect('cart')
-
+@login_required
 def checkout(request):
     cart_items = Cart.objects.filter(user=request.user)
     addresses = Address.objects.filter(user=request.user)
@@ -386,25 +461,31 @@ def edit_profile(request):
 @login_required
 def payment(request):
 
-    stripe.api_key = settings.STRIPE_SECRET_KEY   # ✅ ADD THIS
+    stripe.api_key = settings.STRIPE_SECRET_KEY
 
     cart_items = Cart.objects.filter(user=request.user)
 
     if not cart_items.exists():
         return redirect('cart')
 
-    total_amount = 0
-    for item in cart_items:
-        total_amount += item.product.price * item.quantity
+    original_total = sum(item.product.price * item.quantity for item in cart_items)
+
+    # ✅ Pull the discounted total set by payment_method, fall back to full total if missing
+    discount = Decimal(request.session.get('discount', '0'))
+    final_amount = Decimal(request.session.get('final_amount', str(original_total)))
 
     order_ids = []
 
     for item in cart_items:
+        item_total = item.product.price * item.quantity
+        item_discount = (discount * item_total / original_total) if discount and original_total else Decimal('0')
+        item_final = item_total - item_discount
+
         order = Order.objects.create(
             user=request.user,
             product=item.product,
             quantity=item.quantity,
-            total_amount=item.product.price * item.quantity,
+            total_amount=item_final,
             payment_method="Online",
             payment_status="Pending",
             status="Order Placed"
@@ -419,7 +500,7 @@ def payment(request):
             'price_data': {
                 'currency': 'inr',
                 'product_data': {'name': 'Cart Payment'},
-                'unit_amount': int(total_amount * 100),
+                'unit_amount': int(final_amount * 100),   # ✅ now uses discounted amount
             },
             'quantity': 1,
         }],
@@ -437,30 +518,105 @@ def payment_method(request):
     if not cart_items.exists():
         return redirect('cart')
 
+    original_total = sum(item.product.price * item.quantity for item in cart_items)
+    total_amount = original_total
+
+    # ✅ Get only valid coupons
+    coupons = Coupon.objects.filter(
+        start_date__lte=now(),
+        end_date__gte=now(),
+        is_active=True,
+        min_order_amount__lte=original_total
+    )
+
+    discount = Decimal('0')
+
     if request.method == "POST":
         method = request.POST.get('payment_method')
+        coupon_id = request.POST.get('coupon')
 
-       
+        # ✅ Apply coupon
+        if coupon_id:
+            try:
+                coupon = Coupon.objects.get(
+                    id=coupon_id,
+                    is_active=True,
+                    start_date__lte=now(),
+                    end_date__gte=now()
+                )
+
+                if original_total < coupon.min_order_amount:
+                    messages.error(
+                        request,
+                        f"Minimum order of ₹{coupon.min_order_amount} required to use coupon '{coupon.code}'."
+                    )
+                elif coupon.used_count >= coupon.usage_limit:
+                    messages.error(request, f"Coupon '{coupon.code}' has reached its usage limit.")
+                else:
+                    if coupon.discount_type == 'flat':
+                        discount = coupon.discount_value
+                    else:  # percent
+                        discount = (coupon.discount_value / Decimal('100')) * original_total
+                        if coupon.max_discount and discount > coupon.max_discount:
+                            discount = coupon.max_discount
+
+                    total_amount -= discount
+
+            except Coupon.DoesNotExist:
+                messages.error(request, "Invalid coupon selected.")
+
+        # If a coupon was attempted but failed validation, re-show the page
+        if coupon_id and discount == 0 and total_amount == original_total:
+            return render(request, "payment_method.html", {
+                "coupons": coupons,
+                "total": original_total
+            })
+
+        # ✅ COD
         if method == "cod":
             for item in cart_items:
-                Order.objects.create(
+                item_total = item.product.price * item.quantity
+                item_discount = (discount * item_total / (total_amount + discount)) if discount else Decimal('0')
+                item_final = item_total - item_discount
+
+                order = Order.objects.create(
                     user=request.user,
                     product=item.product,
                     quantity=item.quantity,
-                    total_amount=item.product.price * item.quantity,
+                    total_amount=item_final,
                     payment_method="COD",
                     payment_status="Pending",
                     status="Order Placed"
                 )
 
+                # 🔔 notify user their order was placed
+                Notification.objects.create(
+                    title="Order Placed",
+                    message=f"Your Order #{order.id} ({order.product.name}) has been placed successfully.",
+                    user=request.user,
+                    notification_type="order",
+                    order_id=order.id
+                )
+
+            if coupon_id and discount:
+                coupon.used_count += 1
+                coupon.save()
+
             cart_items.delete()
             return redirect("order_success")
 
-       
+        # ✅ ONLINE
         elif method == "online":
-            return redirect("pay")   
+            request.session['discount'] = str(discount)
+            request.session['final_amount'] = str(total_amount)
+            if coupon_id and discount:
+                request.session['used_coupon_id'] = coupon.id
+            return redirect("pay")
 
-    return render(request, "payment_method.html")
+    return render(request, "payment_method.html", {
+        "coupons": coupons,
+        "total": total_amount
+    })
 
 @login_required
 def payment_success(request):
@@ -474,13 +630,51 @@ def payment_success(request):
             order.payment_status = "Paid"
             order.status = "Processing"
             order.save()
-            
+
+            # 🔔 notify user
+            Notification.objects.create(
+                title="Order Placed",
+                message=f"Your Order #{order.id} ({order.product.name}) has been placed and payment received.",
+                user=order.user,
+                notification_type="order",
+                order_id=order.id
+            )
+
     Cart.objects.filter(user=request.user).delete()
 
     return redirect('order_success')
-
 def order_success(request):
     return render(request, 'order_success.html')
+
+@login_required(login_url='login')
+def mark_notification_read_user(request, id):
+    notification = Notification.objects.get(id=id, user=request.user)
+    notification.is_read = True
+    notification.save()
+    return redirect('user_notifications.html')
+
+@login_required(login_url='login')
+def delete_user_notification(request, id):
+    notification = get_object_or_404(Notification, id=id, user=request.user)
+    notification.delete()
+    return redirect('user_notifications')
+
+@login_required
+def user_notifications(request):
+    notifications = Notification.objects.filter(
+        user=request.user
+    ).order_by('-created_at')
+
+    print("USER:", request.user)
+    print("NOTIFICATIONS:", notifications)
+
+    return render(request, 'user_notifications.html', {
+        'notifications': notifications
+    })
+@login_required(login_url='login')
+def clear_user_notifications(request):
+    Notification.objects.filter(user=request.user).delete()
+    return redirect('user_notifications')
 
 #############admin panel###################
 @never_cache
@@ -489,15 +683,6 @@ def adminlogout(request):
     return redirect("home")
 
 
-from django.shortcuts import render
-from django.contrib.auth import get_user_model
-from django.contrib.admin.views.decorators import staff_member_required
-from django.views.decorators.cache import never_cache
-
-from django.db.models import Sum
-from django.db.models.functions import ExtractMonth
-
-from .models import Product, Order
 
 
 @never_cache
@@ -584,7 +769,7 @@ def adminaddproduct(request):
             image4=image4,
         )
 
-        return redirect("adminproduct")  # IMPORTANT
+        return redirect("adminproduct")
 
     categories = Category.objects.all()
     return render(request, "adminaddproduct.html", {"categories": categories})
@@ -671,11 +856,41 @@ def admincategories(request):
     return render(request, 'admincategories.html', {
         'categories': categories
     })
+from datetime import date   # ✅ ADD THIS
+
 @never_cache
 @staff_member_required(login_url='home')
 def admincoupons(request):
-   
-    return render(request, 'admincoupons.html')
+
+    if request.method == "POST":
+        code = request.POST.get("code")
+        discount_type = request.POST.get("discount_type")
+        discount_value = request.POST.get("discount_value")
+        min_order_amount = request.POST.get("min_order_amount")
+        start_date = request.POST.get("start_date")
+        end_date = request.POST.get("end_date")
+        max_discount = request.POST.get("max_discount")
+        usage_limit = request.POST.get("usage_limit")
+
+        Coupon.objects.create(
+            code=code,
+            discount_type=discount_type,
+            discount_value=discount_value,
+            min_order_amount=min_order_amount,
+            start_date=start_date,
+            end_date=end_date,
+            max_discount=max_discount if max_discount else None,
+            usage_limit=usage_limit,
+        )
+
+        return redirect("admincoupons")
+
+    coupons = Coupon.objects.all().order_by('-id')
+
+    return render(request, 'admincoupons.html', {
+        'coupons': coupons,
+        'today': date.today()   
+    })
 
 
 
@@ -698,10 +913,16 @@ def admincustomer(request):
     return render(request, 'admincustomer.html', {
         'customers': data
     })
+
+
 @never_cache
 @staff_member_required(login_url='home')
 def adminnotification(request):
-    return render(request, 'adminnotification.html')
+    notifications = Notification.objects.all().order_by('-created_at')
+
+    return render(request, 'adminnotification.html', {
+        'notifications': notifications
+    })
 
 
 @never_cache
@@ -726,9 +947,24 @@ def adminorderview(request, id):
 @staff_member_required(login_url='home')
 def adminorderupdate(request, id):
     order = get_object_or_404(Order, id=id)
+
     if request.method == "POST":
-        order.status = request.POST.get("status")
-        order.save()
+        new_status = request.POST.get("status")
+
+        # 👉 check if status changed
+        if order.status != new_status:
+            order.status = new_status
+            order.save()
+
+            # 🔔 CREATE NOTIFICATION
+            Notification.objects.create(
+                title="Order Update",
+                message=f"Your Order #{order.id} is now {order.status}",
+                user=order.user,
+                notification_type="order",
+                order_id=order.id
+            )
+
     return redirect('adminorder')
 
 
@@ -789,3 +1025,21 @@ def delete_category(request, id):
     category = Category.objects.get(id=id)
     category.delete()
     return redirect('add_category')
+
+@staff_member_required(login_url='home')
+def delete_coupon(request, id):
+    coupon = get_object_or_404(Coupon, id=id)
+    coupon.delete()
+    return redirect('admincoupons')
+
+@staff_member_required(login_url='home')
+def mark_read(request, id):
+    notification = get_object_or_404(Notification, id=id)
+    notification.is_read = True
+    notification.save()
+    return redirect('adminnotification')
+
+@staff_member_required(login_url='home')
+def clear_notifications(request):
+    Notification.objects.update(is_read=True)
+    return redirect('adminnotification')

@@ -23,6 +23,11 @@ body{
     min-height:100vh;
 }
 
+/* hidden checkbox that drives the mobile sidebar, no JS needed */
+#sidebarToggle{
+    display:none;
+}
+
 /* Sidebar (Same as Dashboard) */
 .sidebar{
     width:260px;
@@ -30,7 +35,12 @@ body{
     color:white;
     padding:25px 20px;
     position:fixed;
+    top:0;
+    left:0;
     height:100vh;
+    overflow-y:auto;
+    transition:transform 0.3s ease;
+    z-index:1000;
 }
 
 .logo{
@@ -86,6 +96,33 @@ body{
     width:100%;
 }
 
+/* Mobile top bar (hidden on desktop) */
+.mobile-topbar{
+    display:none;
+    align-items:center;
+    justify-content:space-between;
+    background:#1a252f;
+    color:white;
+    padding:15px 20px;
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.mobile-topbar span{
+    font-size:18px;
+}
+
+.sidebar-toggle-label{
+    font-size:26px;
+    cursor:pointer;
+    line-height:1;
+}
+
+.sidebar-overlay{
+    display:none;
+}
+
 /* Header */
 .header{
     background:white;
@@ -96,6 +133,14 @@ body{
     align-items:center;
     box-shadow:0 4px 10px rgba(0,0,0,0.05);
     margin-bottom:30px;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.header > div{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
 }
 
 .search{
@@ -113,6 +158,7 @@ body{
     border-radius:8px;
     margin-left:10px;
     transition:0.3s;
+    white-space:nowrap;
 }
 
 .add-btn:hover{
@@ -125,11 +171,13 @@ body{
     padding:25px;
     border-radius:12px;
     box-shadow:0 5px 15px rgba(0,0,0,0.05);
+    overflow-x:auto;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
+    min-width:520px;
 }
 
 th{
@@ -176,23 +224,87 @@ img{
 .delete:hover{
     background:#c0392b;
 }
-.logout{
-    margin-top:25px;
-    padding:12px;
-    background:#e74c3c;
-    text-align:center;
-    border-radius:8px;
-    display:block;
-    color:white;
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width:992px){
+
+.mobile-topbar{
+    display:flex;
 }
 
-.logout:hover{
-    background:#c0392b;
+.sidebar{
+    transform:translateX(-100%);
 }
+
+#sidebarToggle:checked ~ .container .sidebar{
+    transform:translateX(0);
+}
+
+#sidebarToggle:checked ~ .container .sidebar-overlay{
+    display:block;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    z-index:900;
+}
+
+.main{
+    margin-left:0;
+    padding:20px;
+}
+
+}
+
+@media (max-width:600px){
+
+.main{
+    padding:15px;
+}
+
+.header{
+    padding:15px 18px;
+}
+
+.search{
+    width:100%;
+}
+
+.header > div{
+    width:100%;
+}
+
+.add-btn{
+    margin-left:0;
+    text-align:center;
+}
+
+.table-box{
+    padding:15px;
+}
+
+td a{
+    display:inline-block;
+    margin-bottom:6px;
+}
+
+}
+
 </style>
 </head>
 
 <body>
+
+<input type="checkbox" id="sidebarToggle">
+
+<!-- Mobile top bar with hamburger, only visible on small/tablet screens -->
+<div class="mobile-topbar">
+    <span>🥛 Dairy Admin</span>
+    <label for="sidebarToggle" class="sidebar-toggle-label">&#9776;</label>
+</div>
 
 <div class="container">
 
@@ -213,6 +325,9 @@ img{
             <li><a href="{% url 'adminlogout' %}" class="logout">Logout</a></li>
         </ul>
     </div>
+
+    <!-- Overlay: tapping it (as a label) closes the sidebar with no JS -->
+    <label for="sidebarToggle" class="sidebar-overlay"></label>
 
     <!-- Main -->
     <div class="main">

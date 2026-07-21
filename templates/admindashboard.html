@@ -22,6 +22,11 @@ body {
     display: flex;
 }
 
+/* hidden checkbox that drives the mobile sidebar, no JS needed */
+#sidebarToggle{
+    display:none;
+}
+
 /* Sidebar */
 .sidebar {
     width: 260px;
@@ -29,7 +34,12 @@ body {
     color: #fff;
     height: 100vh;
     position: fixed;
+    top: 0;
+    left: 0;
     padding: 25px 20px;
+    overflow-y: auto;
+    transition: transform 0.3s ease;
+    z-index: 1000;
 }
 
 .logo {
@@ -76,6 +86,33 @@ body {
     margin-left: 260px;
     padding: 30px;
     width: 100%;
+}
+
+/* Mobile top bar (hidden on desktop) */
+.mobile-topbar{
+    display:none;
+    align-items:center;
+    justify-content:space-between;
+    background:#111827;
+    color:white;
+    padding:15px 20px;
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.mobile-topbar span{
+    font-size:18px;
+}
+
+.sidebar-toggle-label{
+    font-size:26px;
+    cursor:pointer;
+    line-height:1;
+}
+
+.sidebar-overlay{
+    display:none;
 }
 
 /* Header */
@@ -251,10 +288,140 @@ td {
 .delivered  { background: #22c55e; }
 .pending    { background: #f59e0b; }
 .cancelled  { background: #ef4444; }
+/* ===== RESPONSIVE CSS ===== */
+
+/* Tablet + Mobile: off-canvas sidebar (consistent with rest of admin panel) */
+@media (max-width: 992px){
+
+.mobile-topbar{
+    display:flex;
+}
+
+.sidebar{
+    width:260px;
+    transform:translateX(-100%);
+}
+
+#sidebarToggle:checked ~ .container .sidebar{
+    transform:translateX(0);
+}
+
+#sidebarToggle:checked ~ .container .sidebar-overlay{
+    display:block;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    z-index:900;
+}
+
+.main{
+margin-left:0;
+padding:25px;
+}
+
+.header{
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
+}
+
+.header input{
+width:100%;
+}
+
+.cards{
+grid-template-columns: repeat(2, 1fr);
+}
+
+.graph{
+padding-left:20px;
+padding-right:20px;
+}
+
+.bar{
+width:24px;
+}
+
+}
+
+/* Mobile */
+@media (max-width: 768px){
+
+.main{
+padding:20px;
+}
+
+.cards{
+grid-template-columns: 1fr;
+}
+
+.sales-card{
+padding:15px;
+}
+
+.graph{
+height:200px;
+gap:6px;
+padding-left:10px;
+padding-right:10px;
+}
+
+.bar{
+width:18px;
+}
+
+.label{
+font-size:11px;
+}
+
+}
+
+/* Small Mobile */
+@media (max-width: 480px){
+
+.logo{
+font-size:18px;
+}
+
+.menu li a{
+padding:10px;
+font-size:14px;
+}
+
+.card h1{
+font-size:22px;
+}
+
+.card h3{
+font-size:12px;
+}
+
+.graph{
+height:180px;
+}
+
+.bar span{
+font-size:10px;
+top:-20px;
+}
+
+}
+
 </style>
 </head>
 
 <body>
+
+<input type="checkbox" id="sidebarToggle">
+
+<!-- Mobile top bar with hamburger, only visible on small/tablet screens -->
+<div class="mobile-topbar">
+    <span>🥛 Dairy Admin</span>
+    <label for="sidebarToggle" class="sidebar-toggle-label">&#9776;</label>
+</div>
 
 <div class="container">
 
@@ -274,6 +441,9 @@ td {
              <li><a href="{% url 'adminlogout' %}" class="logout">Logout</a></li>
         </ul>
     </div>
+
+    <!-- Overlay: tapping it (as a label) closes the sidebar with no JS -->
+    <label for="sidebarToggle" class="sidebar-overlay"></label>
 
     <div class="main">
 

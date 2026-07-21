@@ -8,168 +8,309 @@
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:#f6f6f6;
-overflow-x:hidden;
-}
+body{background:#f6f6f6;overflow-x:hidden;}
 
 /* NAVBAR */
 .navbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 40px;
-background:#2f3e2f;
-position:sticky;
-top:0;
-z-index:1000;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 40px;
+  background:#2f3e2f;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  flex-wrap:wrap;
 }
 
 .logo a{
-font-size:28px;
-font-weight:bold;
-color:#fff;
-text-decoration:none;
+  font-size:28px;
+  font-weight:bold;
+  color:#fff;
+  text-decoration:none;
 }
 
+/* hidden checkbox driving mobile menu, no JS */
+#navCheckbox{
+  display:none;
+}
+
+/* hamburger icon */
+.nav-toggle{
+  display:none;
+  font-size:28px;
+  color:#fff;
+  cursor:pointer;
+  user-select:none;
+}
+
+/* desktop nav links */
 .navbar> ul{
-display:flex;
-gap:25px;
-list-style:none;
-align-items:center;
+  display:flex;
+  gap:25px;
+  list-style:none;
+  align-items:center;
 }
 
 .navbar a{
-text-decoration:none;
-color:#fff;
-font-weight:bold;
+  text-decoration:none;
+  color:#fff;
+  font-weight:bold;
 }
 
 .navbar a:hover{
-color:#e6c84f;
+  color:#e6c84f;
 }
+
 /* DROPDOWN */
-.dropdown{position:relative;}
+.dropbtn{
+  cursor:pointer;
+  color:#fff;
+  font-weight:bold;
+  display:inline-block;
+}
 
+.dropdown{
+  position:relative;
+}
 
+/* checkbox for Account dropdown on mobile */
+.dropdown input[type="checkbox"]{
+  display:none;
+}
 
 .dropdown-content{
-display:none;
-position:absolute;
-background:#fff;
-min-width:160px;
-top:100%;
-left:0;
-box-shadow:0 2px 6px rgba(0,0,0,0.15);
-border-radius:4px;
+  display:none;
+  position:absolute;
+  background:#fff;
+  min-width:160px;
+  top:100%;
+  left:0;
+  box-shadow:0 2px 6px rgba(0,0,0,0.15);
+  border-radius:4px;
+  z-index:999;
 }
 
 .dropdown-content li{list-style:none;}
 
 .dropdown-content a{
-display:block;
-padding:10px;
-color:#333;
+  display:block;
+  padding:10px;
+  color:#333;
 }
 
 .dropdown-content a:hover{background:#f1f1f1;}
+
+/* Desktop: open on hover */
 .dropdown:hover .dropdown-content{display:block;}
+
+/* Mobile: open on checkbox */
+.dropdown input[type="checkbox"]:checked ~ .dropdown-content{display:block;}
 
 /* SMALL HERO BAR */
 .hero{
-background:#f6f6f6;
-color:#2f3e2f;
-text-align:center;
-padding:40px 20px; /* reduced height */
-
+  background:#f6f6f6;
+  color:#2f3e2f;
+  text-align:center;
+  padding:40px 20px;
 }
 
 .hero h1{
-font-size:36px;
-margin-bottom:8px;
+  font-size:36px;
+  margin-bottom:8px;
 }
 
 .hero p{
-font-size:16px;
-opacity:0.9;
+  font-size:16px;
+  opacity:0.9;
 }
 
 /* SECTION */
 .section{
-max-width:1100px;
-margin:50px auto;
-padding:40px;
-background:white;
-border-radius:12px;
-box-shadow:0 0 15px rgba(0,0,0,0.1);
+  max-width:1100px;
+  margin:50px auto;
+  padding:40px;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 0 15px rgba(0,0,0,0.1);
 }
 
 .about-flex{
-display:flex;
-gap:40px;
-align-items:center;
+  display:flex;
+  gap:40px;
+  align-items:center;
 }
 
 .about-flex img{
-width:380px;
-border-radius:12px;
+  width:380px;
+  max-width:100%;
+  border-radius:12px;
 }
 
 .about-text h2{
-color:#2f3e2f;
-margin-bottom:15px;
+  color:#2f3e2f;
+  margin-bottom:15px;
 }
 
 .about-text p{
-margin-bottom:25px;
-line-height:1.6;
+  margin-bottom:25px;
+  line-height:1.6;
 }
-
 
 /* CARDS */
 .cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:30px;
-margin-top:40px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:30px;
+  margin-top:40px;
 }
 
 .card{
-background:#fff;
-border-radius:10px;
-overflow:hidden;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
-text-align:center;
+  background:#fff;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 0 10px rgba(0,0,0,0.1);
+  text-align:center;
 }
 
 .card img{
-width:100%;
-height:200px;
-object-fit:cover;
+  width:100%;
+  height:200px;
+  object-fit:cover;
 }
 
 .card h3{
-padding:15px;
-color:#2f3e2f;
+  padding:15px;
+  color:#2f3e2f;
 }
 
 /* FOOTER */
 .footer{
-background:#3d4b3d;
-color:white;
-padding:40px;
-margin-top:60px;
+  background:#3d4b3d;
+  color:white;
+  padding:40px;
+  margin-top:60px;
 }
 
 .footer-grid{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:40px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:40px;
 }
 
-.copyright{
-background:#e6c84f;
-text-align:center;
-padding:15px;
+.footer-grid input{
+  width:100%;
+  padding:8px;
+  margin-bottom:10px;
+  border:none;
+  border-radius:4px;
+}
+
+.footer-grid button{
+  padding:8px 16px;
+  border:none;
+  border-radius:4px;
+  background:#e6c84f;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+copyright{
+  background:#e6c84f;
+  text-align:center;
+  padding:15px;
+}
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width:900px){
+  .about-flex{
+    flex-direction:column;
+  }
+  .about-flex img{
+    width:100%;
+    max-width:420px;
+  }
+  .footer-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media (max-width:768px){
+  /* navbar to mobile mode */
+  .navbar{
+    padding:15px 20px;
+  }
+
+  .nav-toggle{
+    display:block;
+  }
+
+  .navbar> ul{
+    display:none;
+    flex-direction:column;
+    width:100%;
+    gap:0;
+    margin-top:15px;
+  }
+
+  /* show menu when navCheckbox checked */
+  #navCheckbox:checked ~ ul{
+    display:flex;
+  }
+
+  .navbar> ul > li{
+    width:100%;
+    border-top:1px solid rgba(255,255,255,0.15);
+  }
+
+  .navbar> ul > li > a,
+  .navbar> ul > li > label{
+    display:block;
+    padding:12px 5px;
+  }
+
+  /* dropdown panel becomes inline */
+  .dropdown-content{
+    position:static;
+    box-shadow:none;
+    border-radius:0;
+  }
+
+  /* disable hover open on mobile */
+  .dropdown:hover .dropdown-content{
+    display:none;
+  }
+
+  .hero h1{
+    font-size:28px;
+  }
+
+  .section{
+    margin:25px 15px;
+    padding:20px;
+  }
+
+  .cards{
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:15px;
+  }
+
+  .card img{
+    height:140px;
+  }
+
+  .footer-grid{
+    grid-template-columns:1fr;
+    gap:25px;
+    text-align:center;
+  }
+}
+
+@media (max-width:480px){
+  .hero h1{
+    font-size:24px;
+  }
 }
 </style>
 </head>
@@ -178,23 +319,27 @@ padding:15px;
 
 <!-- NAVBAR -->
 <div class="navbar">
-<div class="logo">
-<a href="/">Village Dairy</a>
-</div>
+  <div class="logo">
+    <a href="/">Village Dairy</a>
+  </div>
 
-<ul>
+  <!-- checkbox + hamburger (no JS) -->
+  <input type="checkbox" id="navCheckbox">
+  <label for="navCheckbox" class="nav-toggle" aria-label="Toggle navigation">&#9776;</label>
 
-<li><a href="{% url 'milk' %}">Milk</a></li>
-<li><a href="{% url 'cheese' %}">Cheese</a></li>
-<li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
-<li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
-<li><a href="{% url 'special_items' %}">Special</a></li>
-<li><a href="{% url 'about' %}">About</a></li>
-<li><a href="{% url 'service' %}">Service</a></li>
+  <ul>
+    <li><a href="{% url 'milk' %}">Milk</a></li>
+    <li><a href="{% url 'cheese' %}">Cheese</a></li>
+    <li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
+    <li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
+    <li><a href="{% url 'special_items' %}">Special</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
+    <li><a href="{% url 'service' %}">Service</a></li>
 
-<li class="dropdown">
-<a href="#" class="dropbtn">Account ▾</a>
- <div class="dropdown-content">
+    <li class="dropdown">
+      <input type="checkbox" id="accountCheckbox">
+      <label for="accountCheckbox" class="dropbtn">Account ▾</label>
+      <div class="dropdown-content">
         {% if user.is_authenticated %}
           <a href="{% url 'profile' %}">Profile</a>
           <a href="{% url 'orders' %}">Orders</a>
@@ -205,110 +350,105 @@ padding:15px;
           <a href="{% url 'login' %}">Login</a>
         {% endif %}
       </div>
+    </li>
+  </ul>
 </div>
 
 <!-- HERO BAR -->
 <div class="hero">
-<h1>Our Dairy Farm Story</h1>
-<p>Freshness and Quality You Can Trust</p>
+  <h1>Our Dairy Farm Story</h1>
+  <p>Freshness and Quality You Can Trust</p>
 </div>
 
 <!-- ABOUT SECTION -->
 <div class="section">
+  <div class="about-flex">
+    <img src="{% static 'images/gettyimages-1297005217-612x612.jpg' %}" alt="Village Dairy Farm">
 
-<div class="about-flex">
-<img src="{% static 'images/gettyimages-1297005217-612x612.jpg' %}">
+    <div class="about-text">
+      <h2>Who We Are</h2>
 
-<div class="about-text">
-<h2>Who We Are</h2>
+      <p>
+        Village Dairy is dedicated to delivering pure and natural dairy
+        products directly from our farm to your family. Our cows are
+        raised with care in a healthy and clean environment.
+      </p>
 
-<p>
-Village Dairy is dedicated to delivering pure and natural dairy
-products directly from our farm to your family. Our cows are
-raised with care in a healthy and clean environment.
-</p>
+      <p>
+        We follow traditional farming values while maintaining
+        modern hygiene standards to ensure every product is safe,
+        fresh, and nutritious.
+      </p>
 
-<p>
-We follow traditional farming values while maintaining
-modern hygiene standards to ensure every product is safe,
-fresh, and nutritious.
-</p>
+      <p>
+        Our goal is simple — provide farm-fresh goodness every day.
+      </p>
+    </div>
+  </div>
 
-<p>
-Our goal is simple — provide farm-fresh goodness every day.
-</p>
+  <!-- PRODUCT CARDS -->
+  <div class="cards">
+    <div class="card">
+      <img src="{% static 'images/istockphoto-1222018207-612x612.jpg' %}" alt="Fresh Milk">
+      <h3>Fresh Milk</h3>
+    </div>
 
-</div>
-</div>
+    <div class="card">
+      <img src="{% static 'images/download (1).jpg' %}" alt="Cheese">
+      <h3>Cheese</h3>
+    </div>
 
-<!-- PRODUCT CARDS -->
-<div class="cards">
+    <div class="card">
+      <img src="{% static 'images/18YOGURT1-threeByTwoMediumAt2X.jpg' %}" alt="Yogurt">
+      <h3>Yogurt</h3>
+    </div>
 
-<div class="card">
-<img src="{% static 'images/istockphoto-1222018207-612x612.jpg' %}">
-<h3>Fresh Milk</h3>
-</div>
+    <div class="card">
+      <img src="{% static 'images/banana-ice-cream.jpg' %}" alt="Ice Cream">
+      <h3>Ice Cream</h3>
+    </div>
 
-<div class="card">
-<img src="{% static 'images/download (1).jpg' %}">
-<h3>Cheese</h3>
-</div>
+    <div class="card">
+      <img src="{% static 'images/Blog_Images.webp' %}" alt="Butter">
+      <h3>Butter</h3>
+    </div>
 
-<div class="card">
-<img src="{% static 'images/18YOGURT1-threeByTwoMediumAt2X.jpg' %}">
-<h3>Yogurt</h3>
-</div>
-
-<div class="card">
-<img src="{% static 'images/banana-ice-cream.jpg' %}">
-<h3>Ice Cream</h3>
-</div>
-
-<div class="card">
-<img src="{% static 'images/Blog_Images.webp' %}">
-<h3>Butter</h3>
-</div>
-
-<div class="card">
-<img src="{% static 'images/100-pure-cow-ghee-757.jpg' %}">
-<h3>Ghee</h3>
-</div>
-
-</div>
-
+    <div class="card">
+      <img src="{% static 'images/100-pure-cow-ghee-757.jpg' %}" alt="Ghee">
+      <h3>Ghee</h3>
+    </div>
+  </div>
 </div>
 
 <!-- FOOTER -->
 <div class="footer">
-<div class="footer-grid">
+  <div class="footer-grid">
+    <div>
+      <h3>Office</h3>
+      <p>123 Street, City</p>
+    </div>
 
-<div>
-<h3>Office</h3>
-<p>123 Street, City</p>
-</div>
+    <div>
+      <h3>Quick Links</h3>
+      <p>About</p>
+      <p>Services</p>
+    </div>
 
-<div>
-<h3>Quick Links</h3>
-<p>About</p>
-<p>Services</p>
-</div>
+    <div>
+      <h3>Working Hours</h3>
+      <p>Mon–Fri: 9am–7pm</p>
+    </div>
 
-<div>
-<h3>Working Hours</h3>
-<p>Mon–Fri: 9am–7pm</p>
-</div>
-
-<div>
-<h3>Newsletter</h3>
-<input placeholder="Your Email">
-<button>Sign Up</button>
-</div>
-
-</div>
+    <div>
+      <h3>Newsletter</h3>
+      <input placeholder="Your Email">
+      <button>Sign Up</button>
+    </div>
+  </div>
 </div>
 
 <div class="copyright">
-© 2026 Village Dairy
+  © 2026 Village Dairy
 </div>
 
 </body>

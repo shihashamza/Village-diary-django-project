@@ -6,55 +6,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <style>
+        *{box-sizing:border-box;}
+
         body {
             margin: 0;
-            padding: 0;
+            padding: 20px;
             font-family: Arial, sans-serif;
             background: #f4f6f9;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
         }
 
         .box {
             background: #ffffff;
-            padding: 40px;
+            padding: clamp(24px, 6vw, 40px);
             border-radius: 12px;
             text-align: center;
-            width: 350px;
+            width: 100%;
+            max-width: 350px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
         }
 
         .icon {
-            width: 80px;
-            height: 80px;
+            width: clamp(60px, 18vw, 80px);
+            height: clamp(60px, 18vw, 80px);
             background: #28a745;
             color: white;
             border-radius: 50%;
-            line-height: 80px;
-            font-size: 40px;
+            line-height: clamp(60px, 18vw, 80px);
+            font-size: clamp(30px, 8vw, 40px);
             margin: 0 auto 20px;
         }
 
         h2 {
             margin: 10px 0;
             color: #333;
+            font-size: clamp(18px, 4.5vw, 22px);
+            overflow-wrap: break-word;
         }
 
         p {
             color: #666;
-            font-size: 14px;
+            font-size: clamp(13px, 3vw, 14px);
         }
 
         .btn {
-            display: inline-block;
+            display: block;
+            width: 100%;
             margin-top: 20px;
             padding: 10px 20px;
             background: #28a745;
             color: white;
             text-decoration: none;
             border-radius: 20px;
+            font-size: clamp(14px, 3vw, 16px);
         }
 
         .btn:hover {
@@ -62,13 +69,15 @@
         }
 
         .btn-secondary {
-            display: inline-block;
+            display: block;
+            width: 100%;
             margin-top: 10px;
             padding: 8px 18px;
             background: #007bff;
             color: white;
             text-decoration: none;
             border-radius: 20px;
+            font-size: clamp(13px, 2.8vw, 15px);
         }
 
         .btn-secondary:hover {
@@ -85,7 +94,7 @@
     <h2>Order Placed Successfully 🎉</h2>
     <p>Thank you! Your order will be delivered soon.</p>
 
-    <a href="{% url 'home' %}" class="btn">Continue Shopping</a><br>
+    <a href="{% url 'home' %}" class="btn">Continue Shopping</a>
     <a href="{% url 'orders' %}" class="btn-secondary">View Orders</a>
 
 </div>

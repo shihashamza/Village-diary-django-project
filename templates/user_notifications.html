@@ -1,0 +1,351 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notifications - Village Dairy</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
+body{background:#f5f7fb;overflow-x:hidden;}
+
+/* NAVBAR */
+.navbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:20px 40px;
+  background:white;
+  position:sticky;
+  top:0;
+  z-index:1000;
+  box-shadow:0 2px 10px rgba(0,0,0,0.08);
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.logo a{
+  font-size:32px;
+  font-weight:bold;
+  color:#2f3e2f;
+  text-decoration:none;
+}
+
+.navbar > ul{
+  display:flex;
+  gap:25px;
+  list-style:none;
+  align-items:center;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.navbar a{
+  text-decoration:none;
+  color:black;
+  font-weight:bold;
+}
+
+.dropdown{
+  position:relative;
+}
+
+.dropbtn{
+  cursor:pointer;
+  padding:8px 12px;
+  border:1px solid #ccc;
+  border-radius:4px;
+  background:#fff;
+  display:block;
+  font-weight:bold;
+  color:black;
+  text-decoration:none;
+}
+
+.dropdown::after{
+  content:'';
+  position:absolute;
+  top:100%;
+  left:0;
+  width:100%;
+  height:12px;
+  background:transparent;
+}
+
+.dropdown-content{
+  display:none;
+  position:absolute;
+  background:#fff;
+  min-width:160px;
+  top:calc(100% + 12px);
+  left:0;
+  box-shadow:0 4px 12px rgba(0,0,0,0.15);
+  border-radius:4px;
+  overflow:hidden;
+  z-index:100;
+}
+
+.dropdown-content a{
+  color:#333;
+  padding:10px 14px;
+  display:block;
+  font-weight:normal;
+  text-decoration:none;
+  white-space:nowrap;
+}
+
+.dropdown-content a:hover{
+  background:#f1f1f1;
+}
+
+.dropdown:hover .dropdown-content{
+  display:block;
+}
+
+.badge{
+  background:red;
+  color:white;
+  border-radius:50%;
+  padding:2px 7px;
+  font-size:12px;
+  margin-left:5px;
+}
+
+/* PAGE CONTENT */
+.page-content{
+    padding:30px 40px;
+}
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+    flex-wrap:wrap;
+    gap:15px;
+}
+
+.header h2{
+    font-size:24px;
+    color:#333;
+}
+
+.btn{
+    padding:8px 14px;
+    border:none;
+    border-radius:6px;
+    font-size:13px;
+    cursor:pointer;
+    text-decoration:none;
+    color:white;
+    white-space:nowrap;
+}
+
+.clear-btn{
+    background:#e74c3c;
+}
+
+.delete-btn{
+    background:#e74c3c;
+}
+
+.notification-card{
+    background:#fff;
+    padding:18px;
+    border-radius:10px;
+    margin-bottom:15px;
+    box-shadow:0 3px 8px rgba(0,0,0,0.05);
+    transition:0.2s;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+}
+
+.notification-card:hover{
+    transform:translateY(-2px);
+}
+
+.notification-text{
+    flex:1;
+    min-width:0;
+}
+
+.unread{
+    border-left:4px solid #3498db;
+    background:#eef6ff;
+}
+
+.title{
+    font-size:16px;
+    font-weight:600;
+    color:#222;
+    word-wrap:break-word;
+}
+
+.message{
+    font-size:14px;
+    color:#555;
+    margin:6px 0;
+    word-wrap:break-word;
+}
+
+.time{
+    font-size:12px;
+    color:#999;
+}
+
+.empty{
+    text-align:center;
+    margin-top:50px;
+    color:#888;
+    font-size:16px;
+}
+
+/* RESPONSIVE */
+
+/* Tablets */
+@media (max-width: 900px){
+  .navbar{
+    padding:16px 20px;
+  }
+  .navbar > ul{
+    gap:14px;
+  }
+  .page-content{
+    padding:24px 20px;
+  }
+}
+
+/* Small tablets / large phones */
+@media (max-width: 700px){
+  .navbar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+  .navbar > ul{
+    width:100%;
+    justify-content:flex-start;
+    gap:12px;
+  }
+  .header h2{
+    font-size:20px;
+  }
+}
+
+/* Phones */
+@media (max-width: 480px){
+  .logo a{
+    font-size:24px;
+  }
+  .navbar > ul{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .dropdown{
+    width:100%;
+  }
+  .dropdown-content{
+    position:static;
+    box-shadow:none;
+    display:none;
+    width:100%;
+  }
+  .dropdown:hover .dropdown-content,
+  .dropdown:focus-within .dropdown-content{
+    display:block;
+  }
+
+  .page-content{
+    padding:16px;
+  }
+
+  .header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .notification-card{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  .delete-btn{
+    align-self:flex-end;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <div class="logo">
+    <a href="/">Village Dairy</a>
+  </div>
+
+  <ul>
+    <li><a href="{% url 'milk' %}">Milk</a></li>
+    <li><a href="{% url 'cheese' %}">Cheese</a></li>
+    <li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
+    <li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
+    <li><a href="{% url 'special_items' %}">Special</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
+    <li><a href="{% url 'service' %}">Service</a></li>
+
+    <li class="dropdown">
+      <a class="dropbtn">Account ▾</a>
+
+      <div class="dropdown-content">
+        {% if user.is_authenticated %}
+          <a href="{% url 'profile' %}">Profile</a>
+          <a href="{% url 'orders' %}">Orders</a>
+          <a href="{% url 'cart' %}">Cart <span id="wish-count" class="badge">0</span></a>
+          <a href="{% url 'about' %}">About</a>
+          <a href="{% url 'user_notifications'%}">Notifications</a>
+          <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+        {% endif %}
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- NOTIFICATIONS -->
+<div class="page-content">
+
+    <div class="header">
+        <h2>🔔 Notifications</h2>
+        <a href="{% url 'clear_user_notifications' %}" class="btn clear-btn">
+            Clear All
+        </a>
+    </div>
+
+    {% for n in notifications %}
+    <div class="notification-card {% if not n.is_read %}unread{% endif %}">
+
+        <div class="notification-text">
+            <div class="title">{{ n.title }}</div>
+            <div class="message">{{ n.message }}</div>
+            <div class="time">{{ n.created_at|date:"M d, Y - H:i" }}</div>
+        </div>
+
+        <a href="{% url 'delete_user_notification' n.id %}" class="btn delete-btn">
+            Delete
+        </a>
+
+    </div>
+    {% empty %}
+    <div class="empty">
+        No notifications yet 📭
+    </div>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

@@ -1,6 +1,8 @@
 from django.urls import path
 from . import views 
 from .views import payment
+from .views import verify_otp
+from .views import forgot_password, verify_otp, password_reset
 urlpatterns = [
     path('', views.home, name='home'),
     path('about/', views.about, name='about'),
@@ -60,5 +62,16 @@ urlpatterns = [
     path('update-category/<int:id>/', views.update_category, name='update_category'),
     path('delete-category/<int:id>/', views.delete_category, name='delete_category'),
     path('add-category/', views.add_category, name='add_category'),
-    
+    path('admincoupons/', views.admincoupons, name='admincoupons'),
+    path('delete-coupon/<int:id>/', views.delete_coupon, name='delete_coupon'),
+    path('mark-read/<int:id>/', views.mark_read, name='mark_read'),
+    path('clear-notifications/', views.clear_notifications, name='clear_notifications'),
+    path('notifications/', views.user_notifications, name='user_notifications'),
+    path('notifications/read/<int:id>/', views.mark_notification_read_user, name='mark_notification_read_user'),
+    path('notifications/clear/', views.clear_user_notifications, name='clear_user_notifications'),
+    path('notifications/delete/<int:id>/', views.delete_user_notification, name='delete_user_notification'),
+    path('verify-otp/', views.verify_otp, name='verify_otp'),
+    path('forgot-password/', forgot_password, name='forgot_password'),
+    path('verify-otp/', verify_otp, name='verify_otp'),
+    path('password-reset/', password_reset, name='password_reset'),
     ]

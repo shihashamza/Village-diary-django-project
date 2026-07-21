@@ -1,4 +1,4 @@
-    {% load static %}
+{% load static %}
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -14,15 +14,23 @@
         font-family:Arial;
     }
 
+    html{-webkit-text-size-adjust:100%;}
+
     body{
         background:#f6f6f6;
+        overflow-x:hidden;
+        width:100%;
     }
 
+    img{max-width:100%;display:block;}
+
+    /* NAVBAR */
     .navbar{
         display:flex;
         justify-content:space-between;
         align-items:center;
-        padding:20px 40px;
+        flex-wrap:wrap;
+        padding:20px clamp(16px,4vw,40px);
         background:white;
         position:sticky;
         top:0;
@@ -30,16 +38,32 @@
         box-shadow:0 2px 10px rgba(0,0,0,0.08);
     }
 
+    .logo{flex-shrink:0;}
+
     .logo a{
-        font-size:32px;
+        font-size:clamp(22px,4vw,32px);
         font-weight:bold;
         color:#2f3e2f;
         text-decoration:none;
     }
 
+    /* Mobile nav toggle (checkbox hack, no JS) */
+    .nav-toggle{
+        display:none;
+    }
+
+    .nav-toggle-label{
+        display:none;
+        font-size:28px;
+        cursor:pointer;
+        color:#2f3e2f;
+        line-height:1;
+    }
+
     .navbar ul{
         display:flex;
-        gap:25px;
+        flex-wrap:wrap;
+        gap:clamp(10px,2vw,25px);
         list-style:none;
         align-items:center;
     }
@@ -50,8 +74,13 @@
         font-weight:bold;
     }
 
+    /* ACCOUNT DROPDOWN */
     .dropdown{
         position:relative;
+    }
+
+    .acct-toggle{
+        display:none;
     }
 
     .dropbtn{
@@ -60,6 +89,21 @@
         border:1px solid #ccc;
         border-radius:4px;
         background:#fff;
+        display:block;
+        font-weight:bold;
+        color:black;
+        user-select:none;
+    }
+
+    /* Bridges the gap so hover doesn't drop on desktop */
+    .dropdown::after{
+        content:'';
+        position:absolute;
+        top:100%;
+        left:0;
+        width:100%;
+        height:12px;
+        background:transparent;
     }
 
     .dropdown-content{
@@ -67,30 +111,37 @@
         position:absolute;
         background:#fff;
         min-width:160px;
-        top:100%;
+        max-width:80vw;
+        top:calc(100% + 12px);
         left:0;
         box-shadow:0 4px 12px rgba(0,0,0,0.15);
         border-radius:4px;
+        overflow:hidden;
+        z-index:100;
     }
 
     .dropdown-content a{
         display:block;
-        padding:10px;
+        padding:10px 14px;
         color:#333;
+        font-weight:normal;
+        white-space:nowrap;
+        overflow-wrap:break-word;
     }
 
     .dropdown-content a:hover{
         background:#f1f1f1;
     }
 
-    .dropdown:hover .dropdown-content{
-        display:block;
+    /* Desktop: show on hover */
+    @media (min-width:901px){
+        .dropdown:hover .dropdown-content{display:block;}
     }
 
     .page-title{
         text-align:center;
-        margin:40px 0;
-        font-size:36px;
+        margin:clamp(25px,5vw,40px) 16px;
+        font-size:clamp(26px,5vw,36px);
         color:#2f3e2f;
     }
 
@@ -98,15 +149,14 @@
         max-width:1000px;
         margin:auto;
         background:white;
-        padding:30px;
+        padding:clamp(16px,4vw,30px);
         border-radius:10px;
         box-shadow:0 0 15px rgba(0,0,0,0.1);
     }
 
-    /* ✅ Fixed: total box is now a proper div, not inside a <td> */
     .total-box{
         text-align:right;
-        font-size:18px;
+        font-size:clamp(15px,2.5vw,18px);
         margin-bottom:20px;
         font-weight:bold;
         color:#2f3e2f;
@@ -147,9 +197,11 @@
         height:60px;
         object-fit:cover;
         border-radius:8px;
+        flex-shrink:0;
     }
 
     .status{
+        display:inline-block;
         padding:6px 12px;
         border-radius:20px;
         color:white;
@@ -159,6 +211,109 @@
     .delivered{background:green;}
     .pending{background:orange;}
     .cancelled{background:red;}
+
+    /* ============ RESPONSIVE ============ */
+
+    @media (max-width:900px){
+        .nav-toggle-label{
+            display:block;
+        }
+
+        .navbar ul{
+            display:none;
+            width:100%;
+            flex-direction:column;
+            align-items:flex-start;
+            gap:0;
+            order:3;
+            margin-top:15px;
+        }
+
+        .nav-toggle:checked ~ ul{
+            display:flex;
+        }
+
+        .navbar ul > li{
+            width:100%;
+            padding:12px 0;
+            border-top:1px solid #eee;
+        }
+
+        .dropdown-content{
+            position:static;
+            box-shadow:none;
+            width:100%;
+            max-width:100%;
+            margin-top:8px;
+        }
+
+        .dropdown::after{
+            display:none;
+        }
+
+        /* Touch-friendly: tap the Account label to toggle instead of relying on hover */
+        .acct-toggle:checked ~ .dropdown-content{
+            display:block;
+        }
+    }
+
+    @media (max-width:768px){
+        .navbar{
+            padding:15px 20px;
+        }
+
+        .orders-container{
+            padding:20px;
+        }
+    }
+
+    /* Stacked "card" table for narrow screens */
+    @media (max-width:600px){
+        .total-box{
+            text-align:center;
+        }
+
+        table, thead, tbody, th, td, tr{
+            display:block;
+            width:100%;
+        }
+
+        thead{
+            display:none;
+        }
+
+        tr{
+            margin-bottom:15px;
+            border:1px solid #ddd;
+            border-radius:8px;
+            overflow:hidden;
+        }
+
+        td{
+            text-align:left;
+            padding:10px 15px;
+            border-bottom:1px solid #eee;
+            position:relative;
+        }
+
+        td:last-child{
+            border-bottom:none;
+        }
+
+        td::before{
+            content:attr(data-label);
+            display:block;
+            font-weight:bold;
+            font-size:12px;
+            text-transform:uppercase;
+            color:#888;
+            margin-bottom:4px;
+        }
+
+        .product-flex{
+            justify-content:flex-start;
+        }
+    }
     </style>
     </head>
 
@@ -168,6 +323,10 @@
         <div class="logo">
             <a href="/">Village Dairy</a>
         </div>
+
+        <input type="checkbox" id="navToggle" class="nav-toggle">
+        <label for="navToggle" class="nav-toggle-label" aria-label="Toggle navigation menu">&#9776;</label>
+
         <ul>
             <li><a href="{% url 'milk' %}">Milk</a></li>
             <li><a href="{% url 'cheese' %}">Cheese</a></li>
@@ -177,7 +336,8 @@
             <li><a href="{% url 'about' %}">About</a></li>
             <li><a href="{% url 'service' %}">Service</a></li>
             <li class="dropdown">
-                <a class="dropbtn">Account ▾</a>
+                <input type="checkbox" id="acctToggle" class="acct-toggle">
+                <label for="acctToggle" class="dropbtn">Account ▾</label>
                 <div class="dropdown-content">
                     {% if user.is_authenticated %}
                         <a href="{% url 'profile' %}">Profile</a>
@@ -199,7 +359,6 @@
 
         {% if orders %}
 
-            <!-- ✅ Fixed: proper div, not a stray <td> -->
             <div class="total-box">
                 Total Orders: {{ total_orders }} &nbsp;|&nbsp; Total Spent: ₹{{ total_amount }}
             </div>
@@ -214,13 +373,12 @@
 
                 {% for item in orders %}
                 <tr>
-                    <td>
+                    <td data-label="Product">
                         <div class="product-flex">
-                            <!-- ✅ Fixed: was order.product, should be item.product -->
                             {% if item.product and item.product.image1 %}
-                                <img src="{{ item.product.image1.url }}" width="60" height="60">
+                                <img src="{{ item.product.image1.url }}" width="60" height="60" loading="lazy">
                             {% else %}
-                                <img src="{% static 'images/placeholder.png' %}" width="60" height="60">
+                                <img src="{% static 'images/placeholder.png' %}" width="60" height="60" loading="lazy">
                             {% endif %}
                             <span>
                                 {% if item.product %}
@@ -232,23 +390,21 @@
                         </div>
                     </td>
 
-                    <td>{{ item.created_at|date:"d M Y" }}</td>
+                    <td data-label="Date">{{ item.created_at|date:"d M Y" }}</td>
 
-                    <!-- ✅ Fixed: model has total_amount and quantity, not price/amount -->
-                    <td>
+                    <td data-label="Amount">
                         Qty: {{ item.quantity }}<br>
                         <strong>₹ {{ item.total_amount }}</strong>
                     </td>
 
-                <td>
-        {{ item.status|default:"Pending"|title }}
-    </td>
+                    <td data-label="Status">
+                        {{ item.status|default:"Pending"|title }}
+                    </td>
                 </tr>
                 {% endfor %}
             </table>
 
         {% else %}
-            <!-- ✅ Added: empty state when user has no orders -->
             <div class="empty-orders">
                 🛒 You haven't placed any orders yet.
             </div>

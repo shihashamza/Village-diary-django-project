@@ -24,6 +24,11 @@ body{
     min-height:100vh;
 }
 
+/* hidden checkbox that drives the mobile sidebar, no JS needed */
+#sidebarToggle{
+    display:none;
+}
+
 /* Sidebar */
 .sidebar{
     width:260px;
@@ -31,7 +36,12 @@ body{
     color:white;
     padding:25px 20px;
     position:fixed;
+    top:0;
+    left:0;
     height:100vh;
+    overflow-y:auto;
+    transition:transform 0.3s ease;
+    z-index:1000;
 }
 
 .logo{
@@ -66,29 +76,38 @@ body{
     background:#1abc9c;
 }
 
-.logout{
-    margin-top:25px;
-}
-
-.logout a{
-    display:block;
-    padding:12px;
-    background:#e74c3c;
-    text-align:center;
-    border-radius:8px;
-    color:white;
-    text-decoration:none;
-}
-
-.logout a:hover{
-    background:#c0392b;
-}
-
 /* Main */
 .main{
     margin-left:260px;
     padding:40px;
     width:100%;
+}
+
+/* Mobile top bar (hidden on desktop) */
+.mobile-topbar{
+    display:none;
+    align-items:center;
+    justify-content:space-between;
+    background:#1a252f;
+    color:white;
+    padding:15px 20px;
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.mobile-topbar span{
+    font-size:18px;
+}
+
+.sidebar-toggle-label{
+    font-size:26px;
+    cursor:pointer;
+    line-height:1;
+}
+
+.sidebar-overlay{
+    display:none;
 }
 
 /* Header */
@@ -101,6 +120,8 @@ body{
     justify-content:space-between;
     align-items:center;
     margin-bottom:30px;
+    flex-wrap:wrap;
+    gap:12px;
 }
 
 .clear-btn{
@@ -131,6 +152,8 @@ body{
     justify-content:space-between;
     align-items:center;
     box-shadow:0 5px 15px rgba(0,0,0,0.05);
+    flex-wrap:wrap;
+    gap:12px;
 }
 
 .unread{
@@ -165,23 +188,100 @@ body{
 .mark:hover{
     opacity:0.9;
 }
-.logout{
-    margin-top:25px;
+
+.logout-btn{
+    margin-top:20px;
+    display:block;
     padding:12px;
     background:#e74c3c;
     text-align:center;
     border-radius:8px;
-    display:block;
     color:white;
+    text-decoration:none;
 }
 
-.logout:hover{
+.logout-btn:hover{
     background:#c0392b;
 }
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width:992px){
+
+.mobile-topbar{
+    display:flex;
+}
+
+.sidebar{
+    transform:translateX(-100%);
+}
+
+#sidebarToggle:checked ~ .container .sidebar{
+    transform:translateX(0);
+}
+
+#sidebarToggle:checked ~ .container .sidebar-overlay{
+    display:block;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.4);
+    z-index:900;
+}
+
+.main{
+    margin-left:0;
+    padding:20px;
+}
+
+}
+
+@media (max-width:600px){
+
+.main{
+    padding:15px;
+}
+
+.header{
+    padding:15px 18px;
+}
+
+.clear-btn{
+    width:100%;
+}
+
+.note{
+    padding:15px;
+}
+
+.icon{
+    margin-right:12px;
+}
+
+.note-left{
+    align-items:flex-start;
+}
+
+.mark{
+    width:100%;
+}
+
+}
+
 </style>
 </head>
 
 <body>
+
+<input type="checkbox" id="sidebarToggle">
+
+<!-- Mobile top bar with hamburger, only visible on small/tablet screens -->
+<div class="mobile-topbar">
+    <span>🥛 Dairy Admin</span>
+    <label for="sidebarToggle" class="sidebar-toggle-label">&#9776;</label>
+</div>
 
 <div class="container">
 
@@ -199,56 +299,71 @@ body{
             <li><a href="{% url 'admincoupons' %}">Coupons</a></li>
             <li><a href="{% url 'adminbanner' %}">Banners</a></li>
             <li><a href="{% url 'adminnotification' %}" class="active">Notifications</a></li>
-             <li><a href="{% url 'adminlogout' %}" class="logout">Logout</a></li>
-            </li>
         </ul>
+
+        <a href="{% url 'adminlogout' %}" class="logout-btn">Logout</a>
     </div>
+
+    <!-- Overlay: tapping it (as a label) closes the sidebar with no JS -->
+    <label for="sidebarToggle" class="sidebar-overlay"></label>
 
     <!-- Main -->
     <div class="main">
 
         <div class="header">
             <h2>Notifications</h2>
-            <button class="clear-btn">Clear All</button>
+            <a href="{% url 'clear_notifications' %}">
+                <button class="clear-btn">Clear All</button>
+            </a>
         </div>
 
         <div class="notifications">
 
-            <div class="note unread">
+        {% for notification in notifications %}
+
+            <div class="note {% if not notification.is_read %}unread{% endif %}">
+
                 <div class="note-left">
-                    <div class="icon">🛒</div>
-                    <div class="text">
-                        <b>New Order Received</b><br>
-                        Order #245 for Milk & Cheese<br>
-                        <small>2 minutes ago</small>
+
+                    <div class="icon">
+                        {% if notification.notification_type == 'order' %}
+                            🛒
+                        {% elif notification.notification_type == 'customer' %}
+                            👤
+                        {% elif notification.notification_type == 'stock' %}
+                            ⚠️
+                        {% else %}
+                            🔔
+                        {% endif %}
                     </div>
+
+                    <div class="text">
+                        <b>{{ notification.title }}</b><br>
+
+                        {{ notification.message }}<br>
+
+                        {% if notification.user %}
+                            <small>User: {{ notification.user.email }}</small><br>
+                        {% endif %}
+
+                        <small>{{ notification.created_at|date:"d M Y, H:i" }}</small>
+                    </div>
+
                 </div>
-                <button class="mark">Mark Read</button>
+
+                {% if not notification.is_read %}
+                <a href="{% url 'mark_read' notification.id %}">
+                    <button class="mark">Mark Read</button>
+                </a>
+                {% endif %}
+
             </div>
 
-            <div class="note unread">
-                <div class="note-left">
-                    <div class="icon">👤</div>
-                    <div class="text">
-                        <b>New Customer Registered</b><br>
-                        Rahul joined your store<br>
-                        <small>10 minutes ago</small>
-                    </div>
-                </div>
-                <button class="mark">Mark Read</button>
-            </div>
-
-            <div class="note">
-                <div class="note-left">
-                    <div class="icon">⚠️</div>
-                    <div class="text">
-                        <b>Low Stock Alert</b><br>
-                        Butter stock below 10 units<br>
-                        <small>1 hour ago</small>
-                    </div>
-                </div>
-                <button class="mark">Mark Read</button>
-            </div>
+        {% empty %}
+            <p style="text-align:center; color:gray;">
+                No notifications available
+            </p>
+        {% endfor %}
 
         </div>
 

@@ -1,42 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Logout</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Logout - Village Dairy</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial, sans-serif;}
+html{-webkit-text-size-adjust:100%;}
+
+body{
+    background:#f6f6f6;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.logout-card{
+    background:white;
+    width:100%;
+    max-width:380px;
+    padding:clamp(24px,6vw,40px);
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+    text-align:center;
+}
+
+.logout-card h2{
+    font-size:clamp(20px,4vw,26px);
+    color:#2f3e2f;
+    margin-bottom:10px;
+}
+
+.logout-card p{
+    font-size:clamp(14px,2.5vw,16px);
+    color:#666;
+    margin-bottom:25px;
+}
+
+.logout-btn{
+    width:100%;
+    background:#ff4d4d;
+    color:white;
+    padding:12px 20px;
+    border:none;
+    border-radius:6px;
+    font-size:clamp(14px,2.5vw,16px);
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.logout-btn:hover{
+    background:#e03e3e;
+}
+
+.cancel-link{
+    display:inline-block;
+    margin-top:15px;
+    font-size:14px;
+    color:#2f3e2f;
+    text-decoration:none;
+}
+
+.cancel-link:hover{
+    text-decoration:underline;
+}
+</style>
 </head>
-<body style="text-align:center; margin-top:50px;">
 
-    <h2>Logout Page</h2>
+<body>
 
-    <!-- Logout Button 1 -->
+<div class="logout-card">
+    <h2>Log Out</h2>
+    <p>Are you sure you want to log out of Village Dairy?</p>
+
     <form method="POST" action="{% url 'logout' %}">
         {% csrf_token %}
-        <button type="submit">Logout</button>
+        <button type="submit" class="logout-btn">Logout</button>
     </form>
 
-    <br><br>
-
-    <!-- Logout Button 2 (Styled) -->
-    <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit" style="
-            background:red;
-            color:white;
-            padding:10px 20px;
-            border:none;
-            border-radius:5px;
-            cursor:pointer;
-        ">
-            Logout
-        </button>
-    </form>
-
-    <br><br>
-
-    <!-- Logout Button 3 -->
-    <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Logout</button>
-    </form>
+    <a href="{% url 'about' %}" class="cancel-link">Cancel</a>
+</div>
 
 </body>
 </html>

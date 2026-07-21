@@ -6,14 +6,19 @@
 <title>Admin Login</title>
 
 <style>
+*{
+    box-sizing:border-box;
+}
+
 body{
     margin:0;
     font-family:Arial, Helvetica, sans-serif;
-    height:100vh;
+    min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
     background:linear-gradient(135deg,#1abc9c,#2c3e50);
+    padding:20px;
 }
 
 /* Login Card */
@@ -21,6 +26,7 @@ body{
     background:white;
     padding:40px;
     width:350px;
+    max-width:100%;
     border-radius:12px;
     box-shadow:0 5px 15px rgba(0,0,0,0.2);
     text-align:center;
@@ -38,7 +44,7 @@ body{
 }
 
 .input-box input{
-    width:80%;
+    width:100%;
     padding:12px 40px;
     border-radius:6px;
     border:1px solid #ccc;
@@ -56,8 +62,11 @@ body{
 .options{
     display:flex;
     justify-content:space-between;
+    align-items:center;
     font-size:14px;
     margin-bottom:20px;
+    flex-wrap:wrap;
+    gap:8px;
 }
 
 .options a{
@@ -99,6 +108,17 @@ button{
 .logout-btn:hover{
     background:#c0392b;
 }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:480px){
+    .login-box{
+        padding:28px 22px;
+    }
+    .login-box h2{
+        font-size:19px;
+    }
+}
+
 </style>
 </head>
 

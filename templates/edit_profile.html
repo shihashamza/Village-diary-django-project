@@ -58,6 +58,74 @@ button{
 button:hover{
     background:#5e4937;
 }
+/* ============================= */
+/* 📱 MOBILE RESPONSIVE */
+/* ============================= */
+
+@media (max-width: 768px){
+
+.container{
+    width:90%;
+    margin:30px auto;
+    padding:20px;
+}
+
+h2{
+    font-size:20px;
+    text-align:center;
+}
+
+/* INPUT */
+input{
+    font-size:13px;
+    padding:10px;
+}
+
+/* BUTTON */
+button{
+    padding:10px;
+    font-size:14px;
+}
+
+}
+
+/* SMALL MOBILE */
+@media (max-width: 480px){
+
+.container{
+    width:95%;
+    padding:15px;
+}
+
+label{
+    font-size:13px;
+}
+
+input{
+    font-size:12px;
+}
+
+button{
+    font-size:13px;
+}
+
+}
+/* INPUT FOCUS EFFECT */
+input:focus{
+    border-color:#7a614c;
+    outline:none;
+    box-shadow:0 0 5px rgba(122,97,76,0.3);
+}
+
+/* BUTTON CLICK EFFECT */
+button:active{
+    transform:scale(0.97);
+}
+
+/* SMOOTH */
+*{
+    transition:0.2s ease;
+}
 </style>
 </head>
 

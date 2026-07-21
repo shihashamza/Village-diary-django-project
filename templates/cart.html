@@ -352,30 +352,49 @@ Remove
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial;}
-body{background:#f6f6f6;overflow-x:hidden;}
+html{-webkit-text-size-adjust:100%;}
+body{background:#f6f6f6;overflow-x:hidden;width:100%;}
+img{max-width:100%;display:block;}
 
 /* NAVBAR */
 .navbar{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:20px 40px;
+padding:20px clamp(16px,4vw,40px);
 background:#2f3e2f;
 position:sticky;
 top:0;
 z-index:1000;
+flex-wrap:wrap;
 }
 
+.logo{flex-shrink:0;}
+
 .logo a{
-font-size:28px;
+font-size:clamp(22px,4vw,28px);
 font-weight:bold;
 color:#fff;
 text-decoration:none;
 }
 
+/* hidden checkbox that drives the mobile nav, no JS needed */
+#navCheckbox{
+display:none;
+}
+
+.nav-toggle{
+display:none;
+font-size:26px;
+color:#fff;
+cursor:pointer;
+user-select:none;
+}
+
 .navbar> ul{
 display:flex;
-gap:25px;
+flex-wrap:wrap;
+gap:clamp(12px,2.5vw,25px);
 list-style:none;
 align-items:center;
 }
@@ -393,20 +412,22 @@ color:#e6c84f;
 /* TITLE */
 .section-title{
 text-align:center;
-margin:40px 0;
+margin:clamp(25px,5vw,40px) 0;
+padding:0 20px;
 }
 
 .section-title h2{
-font-size:36px;
+font-size:clamp(26px,5vw,36px);
 color:#2f3e2f;
 }
 
 /* CART */
 .cart-container{
 width:90%;
+max-width:1100px;
 margin:auto;
 background:white;
-padding:30px;
+padding:clamp(16px,4vw,30px);
 border-radius:10px;
 box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
@@ -426,6 +447,7 @@ text-align:left;
 .cart-table td{
 padding:15px;
 border-bottom:1px solid #eee;
+overflow-wrap:break-word;
 }
 
 .cart-table img{
@@ -435,19 +457,53 @@ object-fit:cover;
 border-radius:8px;
 }
 
+/* QUANTITY CONTROLS */
+.qty-control{
+display:flex;
+align-items:center;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.qty-btn{
+padding:6px 12px;
+border-radius:5px;
+text-decoration:none;
+display:inline-block;
+min-width:32px;
+text-align:center;
+}
+
+.qty-btn.decrease{
+background:#ccc;
+color:#000;
+}
+
+.qty-btn.increase{
+background:#2f3e2f;
+color:white;
+}
+
 /* BUTTONS */
 .remove-btn{
 background:#ff4d6d;
 color:white;
-padding:6px 12px;
+padding:8px 14px;
 border-radius:15px;
 text-decoration:none;
 font-size:13px;
+display:inline-block;
 }
 
 .total-box{
 margin-top:30px;
 text-align:right;
+}
+
+.total-box h3{
+font-size:clamp(18px,3vw,22px);
+color:#2f3e2f;
+margin-bottom:15px;
 }
 
 .checkout-btn{
@@ -457,15 +513,155 @@ border:none;
 font-weight:bold;
 border-radius:25px;
 cursor:pointer;
+font-size:clamp(14px,2vw,16px);
 }
 
 .checkout-btn:hover{
 background:#d4b53f;
 }
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width:900px){
+
+.cart-container{
+width:95%;
+padding:20px;
+}
+
+}
+
+@media (max-width:768px){
+
+.navbar{
+padding:15px 20px;
+}
+
+.nav-toggle{
+display:block;
+}
+
+.navbar> ul{
+display:none;
+flex-direction:column;
+width:100%;
+gap:0;
+margin-top:15px;
+}
+
+#navCheckbox:checked ~ .navbar > ul,
+#navCheckbox:checked ~ ul{
+display:flex;
+}
+
+.navbar> ul > li{
+width:100%;
+border-top:1px solid rgba(255,255,255,0.15);
+}
+
+.navbar> ul > li > a{
+display:block;
+padding:12px 5px;
+}
+
+.section-title h2{
+font-size:26px;
+}
+
+}
+
+@media (max-width:600px){
+
+.cart-container{
+padding:15px;
+}
+
+/* Stack the cart table into cards instead of squeezing 6 columns */
+.cart-table thead{
+display:none;
+}
+
+.cart-table, .cart-table tbody, .cart-table tr, .cart-table td{
+display:block;
+width:100%;
+}
+
+.cart-table tr{
+margin-bottom:18px;
+border:1px solid #eee;
+border-radius:10px;
+padding:12px;
+}
+
+.cart-table td{
+border-bottom:none;
+padding:8px 4px;
+text-align:left;
+position:relative;
+padding-left:42%;
+min-height:24px;
+}
+
+.cart-table td::before{
+content:attr(data-label);
+position:absolute;
+left:4px;
+width:38%;
+font-weight:bold;
+color:#2f3e2f;
+white-space:nowrap;
+}
+
+.cart-table td:first-child{
+padding-left:4px;
+text-align:center;
+}
+
+.cart-table td:first-child::before{
+content:"";
+}
+
+.cart-table td[colspan]{
+padding-left:4px;
+text-align:center;
+}
+
+.cart-table td[colspan]::before{
+content:"";
+}
+
+.qty-control{
+padding-left:0;
+}
+
+.total-box{
+text-align:center;
+}
+
+.checkout-btn{
+width:100%;
+}
+
+}
+
+@media (max-width:400px){
+
+.qty-control{
+gap:6px;
+}
+
+.qty-btn{
+padding:6px 10px;
+}
+
+}
+
 </style>
 </head>
 
 <body>
+
+<input type="checkbox" id="navCheckbox">
 
 <!-- NAVBAR -->
 <div class="navbar">
@@ -473,10 +669,16 @@ background:#d4b53f;
 <a href="/">Village Dairy</a>
 </div>
 
+<label for="navCheckbox" class="nav-toggle" aria-label="Toggle navigation">&#9776;</label>
+
 <ul>
 <li><a href="{% url 'milk' %}">Milk</a></li>
-<li><a href="{% url 'cheese' %}">Cheese</a></li>
-<li><a href="{% url 'cart' %}">Cart</a></li>
+    <li><a href="{% url 'cheese' %}">Cheese</a></li>
+    <li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
+    <li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
+    <li><a href="{% url 'special_items' %}">Special</a></li>
+    <li><a href="{% url 'about' %}">About</a></li>
+    <li><a href="{% url 'service' %}">Service</a></li>
 </ul>
 </div>
 
@@ -489,7 +691,7 @@ background:#d4b53f;
 <div class="cart-container">
 
 <table class="cart-table">
-
+<thead>
 <tr>
 <th>Product</th>
 <th>Name</th>
@@ -498,40 +700,40 @@ background:#d4b53f;
 <th>Total</th>
 <th>Remove</th>
 </tr>
+</thead>
 
+<tbody>
 {% for item in cart_items %}
 <tr>
 
-<td>
+<td data-label="Product">
 {% if item.product.image1 %}
-<img src="{{ item.product.image1.url }}">
+<img src="{{ item.product.image1.url }}" alt="{{ item.product.name }}" loading="lazy">
 {% endif %}
 </td>
 
-<td>{{ item.product.name }}</td>
+<td data-label="Name">{{ item.product.name }}</td>
 
-<td>₹ {{ item.product.price }}</td>
+<td data-label="Price">₹ {{ item.product.price }}</td>
 
-<td>
-    <div style="display:flex; align-items:center; gap:10px;">
+<td data-label="Quantity">
+    <div class="qty-control">
 
         <!-- DECREASE -->
-        <a href="{% url 'cart_action' 'decrease' item.id %}" 
-           style="padding:5px 10px; background:#ccc; border-radius:5px; text-decoration:none;">−</a>
+        <a href="{% url 'cart_action' 'decrease' item.id %}" class="qty-btn decrease">−</a>
 
         <!-- QUANTITY -->
         <span>{{ item.quantity }}</span>
 
         <!-- INCREASE -->
-        <a href="{% url 'cart_action' 'increase' item.id %}" 
-           style="padding:5px 10px; background:#2f3e2f; color:white; border-radius:5px; text-decoration:none;">+</a>
+        <a href="{% url 'cart_action' 'increase' item.id %}" class="qty-btn increase">+</a>
 
     </div>
 </td>
 
-<td>₹ {{ item.total_price }}</td>
+<td data-label="Total">₹ {{ item.total_price }}</td>
 
-<td>
+<td data-label="Remove">
 <a href="{% url 'remove_cart' item.id %}" class="remove-btn">
 Remove
 </a>
@@ -544,6 +746,7 @@ Remove
 <td colspan="6" style="text-align:center;">Your cart is empty</td>
 </tr>
 {% endfor %}
+</tbody>
 
 </table>
 

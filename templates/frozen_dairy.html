@@ -1,4 +1,4 @@
-{% load static %}
+{% comment %} {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -131,6 +131,7 @@ padding:15px;
 .milk-container{grid-template-columns:1fr;}
 .footer-grid{grid-template-columns:1fr;}
 }
+
 </style>
 </head>
 
@@ -212,6 +213,354 @@ padding:15px;
 <div class="copyright">
 © 2026 Milky Dairy
 </div>
+
+</body>
+</html> {% endcomment %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Milky Dairy - Products</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f6f6f6;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 20px;
+      background: #2f3e2f;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      flex-wrap: wrap;
+    }
+
+    .logo a {
+      font-size: 28px;
+      font-weight: bold;
+      color: #fff;
+      text-decoration: none;
+    }
+
+    /* CSS-only mobile menu toggle */
+    #nav-checkbox {
+      display: none;
+    }
+
+    .nav-toggle {
+      display: none;
+      font-size: 24px;
+      color: #fff;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .navbar ul {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+      margin: 0;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .navbar a:hover {
+      color: #e6c84f;
+    }
+
+    /* Show menu when checkbox is checked */
+    #nav-checkbox:checked ~ .nav-wrapper ul {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      gap: 0;
+      margin-top: 10px;
+    }
+
+    .nav-wrapper {
+      display: flex;
+      flex: 1 1 auto;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    /* TITLE */
+    .section-title {
+      text-align: center;
+      margin: 40px 0 20px;
+    }
+
+    .section-title h2 {
+      font-size: 36px;
+      color: #2f3e2f;
+    }
+
+    /* GRID */
+    .milk-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      padding: 40px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .milk-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+    }
+
+    .milk-card:hover {
+      transform: translateY(-8px);
+    }
+
+    .milk-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .milk-card h3 {
+      margin: 15px 0;
+      color: #2f3e2f;
+      font-size: 18px;
+    }
+
+    /* FOOTER */
+    .footer {
+      background: #3d4b3d;
+      color: white;
+      padding: 30px 20px;
+      margin-top: 60px;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 30px;
+    }
+
+    .footer input {
+      padding: 8px;
+      width: 100%;
+      margin-top: 10px;
+      border: none;
+      border-radius: 4px;
+    }
+
+    .footer button {
+      margin-top: 10px;
+      padding: 10px;
+      background: #e6c84f;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+
+    .footer button:hover {
+      background: #d4b73f;
+    }
+
+    .copyright {
+      background: #e6c84f;
+      text-align: center;
+      padding: 15px;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 992px) {
+      .milk-container {
+        grid-template-columns: repeat(2, 1fr);
+        padding: 20px;
+      }
+      .section-title h2 {
+        font-size: 30px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 12px 15px;
+      }
+
+      .logo a {
+        font-size: 24px;
+      }
+
+      .nav-toggle {
+        display: block;
+      }
+
+      .navbar ul {
+        display: none;
+      }
+
+      .section-title {
+        margin: 30px 0 15px;
+      }
+
+      .section-title h2 {
+        font-size: 26px;
+      }
+
+      .milk-container {
+        grid-template-columns: 1fr;
+        padding: 15px;
+        gap: 20px;
+      }
+
+      .milk-card img {
+        height: 180px;
+      }
+
+      .milk-card h3 {
+        font-size: 16px;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        text-align: center;
+      }
+
+      .copyright {
+        padding: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar {
+        padding: 10px 12px;
+      }
+
+      .logo a {
+        font-size: 20px;
+      }
+
+      .section-title h2 {
+        font-size: 22px;
+      }
+
+      .milk-card h3 {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- CSS-only mobile menu toggle -->
+  <input type="checkbox" id="nav-checkbox">
+
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div class="logo">
+      <a href="#">Village Dairy</a>
+    </div>
+
+    <label for="nav-checkbox" class="nav-toggle" aria-label="Toggle navigation">☰</label>
+
+    <div class="nav-wrapper">
+      <ul>
+        <li><a href="#">Milk</a></li>
+        <li><a href="#">Cheese</a></li>
+        <li><a href="#">Fermented & Creamy</a></li>
+        <li><a href="#">Fat-Based</a></li>
+        <li><a href="#">Frozen Dairy</a></li>
+        <li><a href="#">Special Items</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- TITLE -->
+  <div class="section-title">
+    <h2>Our Products</h2>
+  </div>
+
+  <!-- PRODUCTS -->
+  <div class="milk-container">
+
+    <div class="milk-card">
+      <img src="images/yogurt.jpg" alt="Yogurt">
+      <h3>Yogurt</h3>
+    </div>
+
+    <div class="milk-card">
+      <img src="images/icecream.jpg" alt="Ice Cream">
+      <h3>Ice Cream</h3>
+    </div>
+
+    <div class="milk-card">
+      <img src="images/kulfi.jpg" alt="Kulfi">
+      <h3>Kulfi</h3>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-content">
+
+      <div>
+        <h3>Office</h3>
+        <p>123 Street, New York</p>
+        <p>+012 345 6789</p>
+      </div>
+
+      <div>
+        <h3>Links</h3>
+        <p>About</p>
+        <p>Services</p>
+        <p>Contact</p>
+      </div>
+
+      <div>
+        <h3>Hours</h3>
+        <p>Mon-Fri: 9am–7pm</p>
+        <p>Sun: Closed</p>
+      </div>
+
+      <div>
+        <h3>Newsletter</h3>
+        <input type="email" placeholder="Your Email">
+        <button>Sign Up</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="copyright">
+    © 2026 Milky Dairy
+  </div>
 
 </body>
 </html>

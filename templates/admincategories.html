@@ -241,6 +241,11 @@ body{
     display:flex;
 }
 
+/* hidden checkbox that drives the mobile sidebar, no JS needed */
+#sidebarToggle{
+    display:none;
+}
+
 /* Sidebar */
 .sidebar{
     width:250px;
@@ -249,6 +254,11 @@ body{
     height:100vh;
     position:fixed;
     padding:20px;
+    top:0;
+    left:0;
+    overflow-y:auto;
+    transition:transform 0.3s ease;
+    z-index:1000;
 }
 
 .logo{
@@ -294,11 +304,46 @@ body{
     width:100%;
 }
 
+/* Mobile top bar (hidden on desktop) */
+.mobile-topbar{
+    display:none;
+    align-items:center;
+    justify-content:space-between;
+    background:#2c3e50;
+    color:white;
+    padding:15px 20px;
+    position:sticky;
+    top:0;
+    z-index:999;
+}
+
+.mobile-topbar span{
+    font-size:18px;
+}
+
+.sidebar-toggle-label{
+    font-size:26px;
+    cursor:pointer;
+    line-height:1;
+}
+
+.sidebar-overlay{
+    display:none;
+}
+
 /* Header */
 .header{
     display:flex;
     justify-content:space-between;
+    align-items:center;
     margin-bottom:20px;
+    flex-wrap:wrap;
+    gap:12px;
+}
+
+.header > div{
+    display:flex;
+    gap:10px;
 }
 
 .search{
@@ -313,6 +358,7 @@ body{
     padding:8px 15px;
     border-radius:5px;
     text-decoration:none;
+    white-space:nowrap;
 }
 
 /* Table */
@@ -320,11 +366,13 @@ body{
     background:white;
     padding:20px;
     border-radius:10px;
+    overflow-x:auto;
 }
 
 table{
     width:100%;
     border-collapse:collapse;
+    min-width:480px;
 }
 
 th{
@@ -356,10 +404,87 @@ td{
     border-radius:5px;
     cursor:pointer;
 }
+
+/* ============ RESPONSIVE ============ */
+
+@media (max-width:992px){
+    .mobile-topbar{
+        display:flex;
+    }
+
+    .sidebar{
+        transform:translateX(-100%);
+    }
+
+    #sidebarToggle:checked ~ .container .sidebar{
+        transform:translateX(0);
+    }
+
+    #sidebarToggle:checked ~ .container .sidebar-overlay{
+        display:block;
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.4);
+        z-index:900;
+    }
+
+    .main{
+        margin-left:0;
+        padding:20px;
+    }
+}
+
+@media (max-width:600px){
+    .main{
+        padding:15px;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:stretch;
+    }
+
+    .header > div{
+        flex-direction:column;
+    }
+
+    .search{
+        width:100%;
+    }
+
+    .add-btn{
+        text-align:center;
+    }
+
+    .table-box{
+        padding:12px;
+    }
+
+    .edit, .delete{
+        display:block;
+        width:100%;
+        margin-bottom:6px;
+    }
+
+    td a{
+        display:block;
+    }
+}
 </style>
 </head>
 
 <body>
+
+<input type="checkbox" id="sidebarToggle">
+
+<!-- Mobile top bar with hamburger, only visible on small screens -->
+<div class="mobile-topbar">
+    <span>🥛 Dairy Admin</span>
+    <label for="sidebarToggle" class="sidebar-toggle-label">&#9776;</label>
+</div>
 
 <div class="container">
 
@@ -380,6 +505,9 @@ td{
         <li><a href="{% url 'adminlogout' %}" class="logout">Logout</a></li>
     </ul>
 </div>
+
+<!-- Overlay: tapping it (as a label) closes the sidebar with no JS -->
+<label for="sidebarToggle" class="sidebar-overlay"></label>
 
 <div class="main">
 
