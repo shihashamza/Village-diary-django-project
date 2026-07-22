@@ -355,7 +355,7 @@ gap:20px;
 <input type="checkbox" id="navToggle" class="nav-toggle">
 <label for="navToggle" class="nav-toggle-label">&#9776;</label>
 
-<form method="GET" class="search-bar">
+<form method="GET" action="{% url 'milk' %}" class="search-bar">
 <input type="text" name="q" placeholder="Search milk products...">
 <button type="submit">Search</button>
 </form>
@@ -401,21 +401,24 @@ gap:20px;
 <div class="milk-card">
 
 {% if product.image1 %}
-<img src="{{ product.image1.url }}" alt="{{ product.name }}">
+  <img src="{{ product.image1.url }}" alt="{{ product.name }}">
+{% else %}
+  <img src="{% static 'images/default.jpg' %}" alt="No Image">
 {% endif %}
 
 <h3>{{ product.name }}</h3>
 <p style="margin-bottom:10px;">₹ {{ product.price }}</p>
 
-<a href="{% url 'product_detail' product.id %}" class="view-btn">
+<a href="{% url 'product_detail' product.pk %}" class="view-btn">
 View Product
 </a>
 
 </div>
 {% empty %}
-<p style="text-align:center;">No Products Available</p>
+  <p style="text-align:center; font-size:18px;">
+    No milk products found 🥛
+  </p>
 {% endfor %}
-
 </div>
 
 <!-- FOOTER -->

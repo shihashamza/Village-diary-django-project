@@ -17,14 +17,6 @@ class Category(models.Model):
 
 class Product(models.Model):
 
-    CATEGORY_CHOICES = [
-        ('Milk', 'Milk'),
-        ('Cheese', 'Cheese'),
-        ('Fermented', 'Fermented'),
-        ('Fat-based', 'Fat-based'),
-        ('Special', 'Special'),
-    ]
-
     name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField(blank=True, default="")
