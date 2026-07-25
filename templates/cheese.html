@@ -399,8 +399,10 @@ body{background:#f6f6f6;overflow-x:hidden;}
   {% for product in products %}
     <div class="milk-card">
       {% if product.image1 %}
-        <img src="{{ product.image1.url }}" alt="{{ product.name }}">
-      {% endif %}
+  <img src="{% static 'products/' %}{{ product.image1.name|cut:'products/' }}" alt="{{ product.name }}">
+{% else %}
+  <img src="{% static 'images/default.jpg' %}" alt="No Image">
+{% endif %}
       <h3>{{ product.name }}</h3>
       <p style="margin-bottom:10px;">₹ {{ product.price }}</p>
       <a href="{% url 'product_detail' product.id %}" class="view-btn">
