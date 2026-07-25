@@ -343,7 +343,7 @@ body{background:#f6f6f6;overflow-x:hidden;}
   {% for product in products %}
     <div class="milk-card">
       {% if product.image1 %}
-        <img src="{{ product.image1.url }}" alt="{{ product.name }}">
+        <img src="{% static 'products/' %}{{ product.image1.name|cut:'products/' }}" alt="{{ product.name }}">
       {% endif %}
       <h3>{{ product.name }}</h3>
       <p>₹ {{ product.price }}</p>
