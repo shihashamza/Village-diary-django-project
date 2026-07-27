@@ -391,8 +391,9 @@ td{
                 {% for banner in banners %}
                 <tr>
                     <td>
-                        <img class="banner-img" src="{{ banner.image.url }}">
-                    </td>
+{% load static %}
+
+<section class="hero" style="background-image: url('{% static 'images/hero-banner.jpg' %}');">                    </td>
                     <td>{{ banner.title }}</td>
                     <td>{{ banner.page }}</td>
                     <td>
