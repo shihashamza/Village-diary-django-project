@@ -536,7 +536,7 @@ img{max-width:100%;display:block;}
 <!-- HERO (FIXED) -->
 {% if banners %}
   {% for banner in banners %}
-    <section class="hero" style="background-image: url('{% static "images/hero-banner.jpg" %}');">
+    <section class="hero" style="background-image: url('{{ banner.image.url }}');">
       <div>
         <p>{{ banner.subtitle|default:"Welcome to our dairy farm" }}</p>
         <h1>{{ banner.title|default:"The Farm of Dairy Products" }}</h1>
