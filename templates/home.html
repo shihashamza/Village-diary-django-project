@@ -346,7 +346,21 @@ img{max-width:100%;display:block;}
   margin-bottom:8px;
   display:block;
 }
+.hero {
+  position: relative;
+}
 
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4); /* dark overlay */
+}
+
+.hero > div {
+  position: relative;
+  z-index: 1;
+}
 .footer-grid button{
   padding:8px 16px;
   border:none;
@@ -517,18 +531,32 @@ img{max-width:100%;display:block;}
   </ul>
 </div>
 
-<!-- HERO -->
-{% for banner in banners %}
-<section class="hero" style="background-image: url('{{ banner.image.url }}');">
-  <div>
-    <p>Welcome to our dairy farm</p>
-    <h1>{{ banner.title }}</h1>
-    <a href="{% url 'about' %}">
-      <button>Explore More</button>
-    </a>
-  </div>
-</section>
-{% endfor %}
+
+
+<!-- HERO (FIXED) -->
+{% if banners %}
+  {% for banner in banners %}
+    <section class="hero" style="background-image: url('{{ banner.image.url }}');">
+      <div>
+        <p>{{ banner.subtitle|default:"Welcome to our dairy farm" }}</p>
+        <h1>{{ banner.title|default:"The Farm of Dairy Products" }}</h1>
+        <a href="{% url 'about' %}">
+          <button>Explore More</button>
+        </a>
+      </div>
+    </section>
+  {% endfor %}
+{% else %}
+  <section class="hero" style="background-image: url('{% static 'images/hero-banner.jpg' %}');">
+    <div>
+      <p>Welcome to our dairy farm</p>
+      <h1>The Farm of Dairy Products</h1>
+      <a href="{% url 'about' %}">
+        <button>Explore More</button>
+      </a>
+    </div>
+  </section>
+{% endif %}
 
 <!-- SERVICES -->
 <div class="section-title">
