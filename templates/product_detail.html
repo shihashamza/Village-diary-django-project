@@ -400,7 +400,7 @@ img{
         <input type="radio" name="img" id="img2">
         <input type="radio" name="img" id="img3">
 
-        <div class="main-images">
+ <div class="main-images">
     {% if product.image1 %}
     <img src="{{ product.image1.url }}" class="image1" alt="{{ product.name }}"
          onerror="this.src='/static/images/default.png';">
@@ -415,6 +415,8 @@ img{
     <img src="{{ product.image3.url }}" class="image3" alt="{{ product.name }}"
          onerror="this.src='/static/images/default.png';">
     {% endif %}
+</div> <!-- ✅ IMPORTANT: CLOSE HERE -->
+
 <div class="thumbnails">
     {% if product.image1 %}
     <label for="img1">
