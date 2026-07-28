@@ -396,10 +396,17 @@ img{
 
 <div class="container">
     <div class="product-image">
-        <input type="radio" name="img" id="img1" checked>
-        <input type="radio" name="img" id="img2">
-        <input type="radio" name="img" id="img3">
+       {% if product.image1 %}
+<input type="radio" name="img" id="img1" checked>
+{% endif %}
 
+{% if product.image2 %}
+<input type="radio" name="img" id="img2">
+{% endif %}
+
+{% if product.image3 %}
+<input type="radio" name="img" id="img3">
+{% endif %}
  <div class="main-images">
     {% if product.image1 %}
     <img src="{{ product.image1.url }}" class="image1" alt="{{ product.name }}"
@@ -457,7 +464,7 @@ img{
             <a href="{% url 'add_to_cart' product.id %}" class="cart-btn add-cart">Add to Cart</a>
             {% endif %}
 
-            <a href="{% url 'milk' %}" class="btn back">Back to Products</a>
+            <a href="{% url product.category|lower %}" class="btn back">Back to Products</a>
         </div>
     </div>
 </div>
