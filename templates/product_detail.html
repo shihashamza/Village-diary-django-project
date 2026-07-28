@@ -401,29 +401,42 @@ img{
         <input type="radio" name="img" id="img3">
 
         <div class="main-images">
-            {% if product.image1 %}
-            <img src="{{ product.image1.url }}" class="image1" alt="{{ product.name }}">
-            {% endif %}
-            {% if product.image2 %}
-            <img src="{{ product.image2.url }}" class="image2" alt="{{ product.name }}">
-            {% endif %}
-            {% if product.image3 %}
-            <img src="{{ product.image3.url }}" class="image3" alt="{{ product.name }}">
-            {% endif %}
-        </div>
+    {% if product.image1 %}
+    <img src="{{ product.image1.url }}" class="image1" alt="{{ product.name }}"
+         onerror="this.src='/static/images/default.png';">
+    {% endif %}
 
-        <div class="thumbnails">
-            {% if product.image1 %}
-            <label for="img1"><img src="{{ product.image1.url }}" alt="Thumbnail 1"></label>
-            {% endif %}
-            {% if product.image2 %}
-            <label for="img2"><img src="{{ product.image2.url }}" alt="Thumbnail 2"></label>
-            {% endif %}
-            {% if product.image3 %}
-            <label for="img3"><img src="{{ product.image3.url }}" alt="Thumbnail 3"></label>
-            {% endif %}
-        </div>
-    </div>
+    {% if product.image2 %}
+    <img src="{{ product.image2.url }}" class="image2" alt="{{ product.name }}"
+         onerror="this.src='/static/images/default.png';">
+    {% endif %}
+
+    {% if product.image3 %}
+    <img src="{{ product.image3.url }}" class="image3" alt="{{ product.name }}"
+         onerror="this.src='/static/images/default.png';">
+    {% endif %}
+<div class="thumbnails">
+    {% if product.image1 %}
+    <label for="img1">
+        <img src="{{ product.image1.url }}" alt="Thumbnail 1"
+             onerror="this.src='/static/images/default.png';">
+    </label>
+    {% endif %}
+
+    {% if product.image2 %}
+    <label for="img2">
+        <img src="{{ product.image2.url }}" alt="Thumbnail 2"
+             onerror="this.src='/static/images/default.png';">
+    </label>
+    {% endif %}
+
+    {% if product.image3 %}
+    <label for="img3">
+        <img src="{{ product.image3.url }}" alt="Thumbnail 3"
+             onerror="this.src='/static/images/default.png';">
+    </label>
+    {% endif %}
+</div>
 
     <div class="product-details">
         <h1>{{ product.name }}</h1>
