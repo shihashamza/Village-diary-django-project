@@ -14,19 +14,9 @@
     font-family:Arial, Helvetica, sans-serif;
 }
 
-html{
-    -webkit-text-size-adjust:100%;
-}
-
 body{
     background:#f5f7fa;
     overflow-x:hidden;
-    width:100%;
-}
-
-img{
-    max-width:100%;
-    display:block;
 }
 
 /* NAVBAR */
@@ -35,45 +25,23 @@ img{
     justify-content:space-between;
     align-items:center;
     flex-wrap:wrap;
-    gap:15px;
-    padding:16px clamp(16px,4vw,40px);
+    padding:16px 30px;
     background:#2f3e2f;
     position:sticky;
     top:0;
-    z-index:1000;
-}
-
-.logo{
-    flex-shrink:0;
 }
 
 .logo a{
-    font-size:clamp(22px,4vw,28px);
+    font-size:24px;
     font-weight:bold;
     color:#fff;
     text-decoration:none;
 }
 
-.nav-toggle{
-    display:none;
-}
-
-.nav-toggle-label{
-    display:none;
-    font-size:28px;
-    cursor:pointer;
-    color:#fff;
-    line-height:1;
-    user-select:none;
-}
-
-.navbar > ul{
+.navbar ul{
     display:flex;
-    flex-wrap:wrap;
-    gap:clamp(10px,2vw,22px);
+    gap:20px;
     list-style:none;
-    align-items:center;
-    margin-left:auto;
 }
 
 .navbar a{
@@ -82,83 +50,21 @@ img{
     font-weight:bold;
 }
 
-.navbar a:hover{
-    color:#e6c84f;
-}
-
-/* ACCOUNT DROPDOWN */
-.dropdown{
-    position:relative;
-}
-
-.acct-toggle{
-    display:none;
-}
-
-.dropbtn{
-    cursor:pointer;
-    display:block;
-    font-weight:bold;
-    color:#fff;
-    user-select:none;
-}
-
-.dropdown-content{
-    display:none;
-    position:absolute;
-    background:white;
-    min-width:180px;
-    top:calc(100% + 12px);
-    left:0;
-    box-shadow:0 2px 6px rgba(0,0,0,0.2);
-    border-radius:6px;
-    overflow:hidden;
-    z-index:100;
-}
-
-.dropdown-content a{
-    color:black;
-    padding:10px 14px;
-    display:block;
-    font-weight:normal;
-    white-space:nowrap;
-}
-
-.dropdown-content a:hover{
-    background:#f1f1f1;
-}
-
-@media (min-width:901px){
-    .dropdown:hover .dropdown-content{
-        display:block;
-    }
-}
-
-.badge{
-    background:red;
-    color:white;
-    border-radius:50%;
-    padding:2px 7px;
-    font-size:12px;
-    margin-left:5px;
-}
-
-/* PRODUCT CONTAINER */
+/* PRODUCT */
 .container{
     max-width:1100px;
-    margin:clamp(20px,5vw,50px) auto;
+    margin:40px auto;
     background:white;
-    padding:clamp(18px,4vw,40px);
+    padding:30px;
     border-radius:15px;
     box-shadow:0 10px 25px rgba(0,0,0,0.08);
     display:flex;
     flex-wrap:wrap;
-    gap:clamp(20px,4vw,40px);
+    gap:40px;
 }
 
 .product-image{
-    flex:1 1 320px;
-    min-width:0;
+    flex:1;
 }
 
 .product-image input{
@@ -169,7 +75,6 @@ img{
     width:100%;
     border-radius:12px;
     display:none;
-    object-fit:cover;
 }
 
 #img1:checked ~ .main-images .image1,
@@ -180,179 +85,76 @@ img{
 
 .thumbnails{
     display:flex;
-    flex-wrap:wrap;
     gap:10px;
     margin-top:15px;
 }
 
-.thumbnails label{
-    cursor:pointer;
-}
-
 .thumbnails img{
-    width:88px;
-    height:88px;
+    width:80px;
+    height:80px;
     object-fit:cover;
     border-radius:8px;
     border:1px solid #ddd;
-    padding:3px;
-    background:#fff;
 }
 
+/* DETAILS */
 .product-details{
-    flex:1 1 320px;
-    min-width:0;
+    flex:1;
 }
 
 .product-details h1{
-    font-size:clamp(24px,5vw,32px);
+    font-size:28px;
     margin-bottom:15px;
-    overflow-wrap:break-word;
 }
 
 .price{
-    font-size:clamp(20px,4vw,24px);
+    font-size:22px;
     color:#27ae60;
-    margin-bottom:15px;
-    font-weight:bold;
+    margin-bottom:10px;
 }
 
 .category{
     background:#ecf0f1;
+    padding:5px 10px;
+    border-radius:15px;
     display:inline-block;
-    padding:6px 12px;
-    border-radius:20px;
-    font-size:13px;
     margin-bottom:20px;
 }
 
 .description{
-    line-height:1.6;
-    margin-bottom:30px;
+    margin-bottom:25px;
     color:#555;
-    overflow-wrap:break-word;
 }
 
 .buttons{
     display:flex;
-    flex-wrap:wrap;
     gap:15px;
 }
 
-.btn, .cart-btn{
-    padding:12px 20px;
+.cart-btn{
+    padding:12px 18px;
     border:none;
     border-radius:8px;
     cursor:pointer;
-    font-size:15px;
     text-decoration:none;
-    display:inline-block;
+    color:white;
 }
+
+.add-cart{ background:#27ae60; }
+.go-cart{ background:#3498db; }
 
 .back{
     background:#34495e;
     color:white;
+    padding:12px 18px;
+    border-radius:8px;
+    text-decoration:none;
 }
 
-.back:hover{
-    background:#2c3e50;
-}
-
-.add-cart{
-    background:#27ae60;
-    color:white;
-}
-
-.add-cart:hover{
-    background:#219150;
-}
-
-.go-cart{
-    background:#3498db;
-    color:white;
-}
-
-.go-cart:hover{
-    background:#2c80b4;
-}
-
-/* MOBILE RESPONSIVE */
-@media (max-width: 900px){
-    .navbar{
-        align-items:flex-start;
-    }
-
-    .nav-toggle-label{
-        display:block;
-        margin-left:auto;
-        order:2;
-    }
-
-    .navbar > ul{
-        display:none;
-        width:100%;
-        flex-direction:column;
-        align-items:flex-start;
-        gap:14px;
-        padding-top:10px;
-        margin-left:0;
-    }
-
-    .nav-toggle:checked ~ ul{
-        display:flex;
-    }
-
-    .dropdown-content{
-        position:static;
-        box-shadow:none;
-        border-radius:0;
-        margin-top:8px;
-        width:100%;
-    }
-
-    .dropdown{
-        width:100%;
-    }
-
-    .dropbtn{
-        padding:6px 0;
-    }
-
-    .dropdown-content a{
-        padding:10px 0;
-    }
-
+/* MOBILE */
+@media(max-width:768px){
     .container{
         flex-direction:column;
-    }
-
-    .thumbnails img{
-        width:72px;
-        height:72px;
-    }
-}
-
-@media (max-width: 480px){
-    .navbar{
-        padding:14px 16px;
-    }
-
-    .buttons{
-        flex-direction:column;
-    }
-
-    .btn, .cart-btn{
-        width:100%;
-        text-align:center;
-    }
-
-    .thumbnails{
-        gap:8px;
-    }
-
-    .thumbnails img{
-        width:64px;
-        height:64px;
     }
 }
 </style>
@@ -365,89 +167,73 @@ img{
         <a href="/">Village Dairy</a>
     </div>
 
-    <input type="checkbox" id="navToggle" class="nav-toggle">
-    <label for="navToggle" class="nav-toggle-label" aria-label="Toggle navigation menu">&#9776;</label>
-
     <ul>
         <li><a href="{% url 'milk' %}">Milk</a></li>
         <li><a href="{% url 'cheese' %}">Cheese</a></li>
-        <li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
-        <li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
-        <li><a href="{% url 'special_items' %}">Special</a></li>
         <li><a href="{% url 'about' %}">About</a></li>
-        <li><a href="{% url 'service' %}">Service</a></li>
-
-        <li class="dropdown">
-            <input type="checkbox" id="acctToggle" class="acct-toggle">
-            <label for="acctToggle" class="dropbtn">Account ▾</label>
-            <div class="dropdown-content">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}">Profile</a>
-                    <a href="{% url 'orders' %}">Orders</a>
-                    <a href="{% url 'cart' %}">Cart <span class="badge">0</span></a>
-                    <a href="{% url 'logout' %}">Logout</a>
-                {% else %}
-                    <a href="{% url 'login' %}">Login</a>
-                {% endif %}
-            </div>
-        </li>
     </ul>
 </div>
 
 <div class="container">
+
+    <!-- IMAGE SECTION -->
     <div class="product-image">
-        <input type="radio" name="img" id="img1" checked>
+
+        <input type="radio" name="img" id="img1" {% if product.image1 %}checked{% endif %}>
         <input type="radio" name="img" id="img2">
         <input type="radio" name="img" id="img3">
 
- <div class="main-images">
-    {% if product.image1 %}
-    <img src="{{ product.image1.url }}" class="image1" alt="{{ product.name }}"
-         onerror="this.src='/static/images/default.png';">
-    {% endif %}
+        <div class="main-images">
+            {% if product.image1 %}
+            <img src="{{ product.image1.url }}" class="image1"
+                 onerror="this.src='{% static 'images/default.png' %}'">
+            {% endif %}
 
-    {% if product.image2 %}
-    <img src="{{ product.image2.url }}" class="image2" alt="{{ product.name }}"
-         onerror="this.src='/static/images/default.png';">
-    {% endif %}
+            {% if product.image2 %}
+            <img src="{{ product.image2.url }}" class="image2"
+                 onerror="this.src='{% static 'images/default.png' %}'">
+            {% endif %}
 
-    {% if product.image3 %}
-    <img src="{{ product.image3.url }}" class="image3" alt="{{ product.name }}"
-         onerror="this.src='/static/images/default.png';">
-    {% endif %}
-</div> <!-- ✅ IMPORTANT: CLOSE HERE -->
+            {% if product.image3 %}
+            <img src="{{ product.image3.url }}" class="image3"
+                 onerror="this.src='{% static 'images/default.png' %}'">
+            {% endif %}
+        </div>
 
-<div class="thumbnails">
-    {% if product.image1 %}
-    <label for="img1">
-        <img src="{{ product.image1.url }}" alt="Thumbnail 1"
-             onerror="this.src='/static/images/default.png';">
-    </label>
-    {% endif %}
+        {% if product.image2 or product.image3 %}
+        <div class="thumbnails">
+            {% if product.image1 %}
+            <label for="img1">
+                <img src="{{ product.image1.url }}"
+                     onerror="this.src='{% static 'images/default.png' %}'">
+            </label>
+            {% endif %}
 
-    {% if product.image2 %}
-    <label for="img2">
-        <img src="{{ product.image2.url }}" alt="Thumbnail 2"
-             onerror="this.src='/static/images/default.png';">
-    </label>
-    {% endif %}
+            {% if product.image2 %}
+            <label for="img2">
+                <img src="{{ product.image2.url }}"
+                     onerror="this.src='{% static 'images/default.png' %}'">
+            </label>
+            {% endif %}
 
-    {% if product.image3 %}
-    <label for="img3">
-        <img src="{{ product.image3.url }}" alt="Thumbnail 3"
-             onerror="this.src='/static/images/default.png';">
-    </label>
-    {% endif %}
-</div>
+            {% if product.image3 %}
+            <label for="img3">
+                <img src="{{ product.image3.url }}"
+                     onerror="this.src='{% static 'images/default.png' %}'">
+            </label>
+            {% endif %}
+        </div>
+        {% endif %}
 
+    </div> <!-- ✅ FIXED: CLOSED product-image -->
+
+    <!-- DETAILS -->
     <div class="product-details">
         <h1>{{ product.name }}</h1>
         <p class="price">₹ {{ product.price }}</p>
         <p class="category">{{ product.category }}</p>
 
-        <p class="description">
-            {{ product.description }}
-        </p>
+        <p class="description">{{ product.description }}</p>
 
         <div class="buttons">
             {% if in_cart %}
@@ -456,9 +242,10 @@ img{
             <a href="{% url 'add_to_cart' product.id %}" class="cart-btn add-cart">Add to Cart</a>
             {% endif %}
 
-            <a href="{% url 'milk' %}" class="btn back">Back to Products</a>
+            <a href="{% url 'milk' %}" class="back">Back</a>
         </div>
     </div>
+
 </div>
 
 </body>
