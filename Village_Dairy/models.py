@@ -1,5 +1,4 @@
 from django.db import models
-from cloudinary.models import CloudinaryField
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import AbstractUser
@@ -21,10 +20,10 @@ class Product(models.Model):
     description = models.TextField(blank=True, default="")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
 
-    image1 = CloudinaryField('image')
-    image2 = CloudinaryField('image', blank=True, null=True)
-    image3 = CloudinaryField('image', blank=True, null=True)
-    image4 = CloudinaryField('image', blank=True, null=True)
+    image1 = models.ImageField(upload_to='products/')
+    image2 = models.ImageField(upload_to='products/', blank=True, null=True)
+    image3 = models.ImageField(upload_to='products/', blank=True, null=True)
+    image4 = models.ImageField(upload_to='products/', blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -37,7 +36,7 @@ class Banner(models.Model):
     )
 
     title = models.CharField(max_length=200)
-    image = CloudinaryField('image')   # ✅ FIXED
+    image = models.ImageField(upload_to='banners/')   # ✅ CHANGED
     page = models.CharField(max_length=50, choices=PAGE_CHOICES)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -73,10 +72,11 @@ class Address(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=15, blank=True)
-    image = CloudinaryField('image', default='default')  # ✅ FIXED
+    image = models.ImageField(upload_to='profile_pics/', default='default.jpg')  # ✅ CHANGED
     
     def __str__(self):
         return self.user.username
+    
 class Order(models.Model):
 
     STATUS_CHOICES = [
