@@ -401,11 +401,10 @@ gap:20px;
 <div class="milk-card">
 
 {% if product.image1 %}
-  <img src="{% static 'products/' %}{{ product.image1.name|cut:'products/' }}" alt="{{ product.name }}">
+    <img src="{% static product.image1 %}" alt="{{ product.name }}">
 {% else %}
-  <img src="{% static 'images/default.jpg' %}" alt="No Image">
+    <img src="{% static 'images/default.jpg' %}" alt="No Image">
 {% endif %}
-
 <h3>{{ product.name }}</h3>
 <p style="margin-bottom:10px;">₹ {{ product.price }}</p>
 

@@ -12,7 +12,7 @@ from django.views.decorators.cache import never_cache
 from .models import Product, Cart
 from .forms import UserUpdateForm, ProfileUpdateForm
 import stripe
-from django.conf import settings
+# from django.conf import settings
 from django.http import HttpResponse
 from .models import Cart
 from django.utils import timezone
@@ -29,7 +29,7 @@ from .models import Notification
 from django.core.mail import send_mail
 from django.conf import settings
 import random
-
+from django.urls import reverse
 def home(request):
     banners = Banner.objects.filter(page='home', is_active=True)
     return render(request, 'home.html', {
@@ -332,15 +332,28 @@ def password_reset(request):
     return render(request, 'password_reset.html')
 
 def product_detail(request, id):
-    product = Product.objects.get(id=id)
+    product = get_object_or_404(Product, id=id)
 
     in_cart = False
     if request.user.is_authenticated:
         in_cart = Cart.objects.filter(user=request.user, product=product).exists()
 
+    category_url_map = {
+        'Milk': 'milk',
+        'Cheese': 'cheese',
+        'Fermented': 'fermented_creamy',
+        'Fat-based': 'fat_based',
+        'Special': 'special_items',
+    }
+
+    category_name = product.category.name if product.category else None
+    back_url_name = category_url_map.get(category_name, 'milk')
+    back_url = reverse(back_url_name)
+
     context = {
         'product': product,
-        'in_cart': in_cart
+        'in_cart': in_cart,
+        'back_url': back_url,
     }
 
     return render(request, 'product_detail.html', context)

@@ -392,7 +392,9 @@ copyright{
   {% for product in products %}
     <div class="milk-card">
       {% if product.image1 %}
-        <img src="{% static 'products/' %}{{ product.image1.name|cut:'products/' }}" alt="{{ product.name }}">
+        <img src="{% static product.image1 %}" alt="{{ product.name }}">
+      {% else %}
+        <img src="{% static 'images/default.jpg' %}" alt="No Image">
       {% endif %}
       <h3>{{ product.name }}</h3>
       <p>₹ {{ product.price }}</p>
@@ -401,7 +403,7 @@ copyright{
       </a>
     </div>
   {% empty %}
-    <p style="text-align:center;">No special products available.</p>
+    <p style="text-align:center;">No fermented products available.</p>
   {% endfor %}
 </div>
 
