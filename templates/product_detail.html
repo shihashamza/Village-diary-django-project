@@ -236,10 +236,9 @@ body{
         <h1>{{ product.name }}</h1>
         <p class="price">₹ {{ product.price }}</p>
         <p class="category">{{ product.category }}</p>
-
         <p class="description">{{ product.description }}</p>
-
-        <div class="buttons">
+        <p>{{ product.image1 }}</p>
+        <div class="buttons">   
             {% if in_cart %}
             <a href="{% url 'cart' %}" class="cart-btn go-cart">Go to Cart</a>
             {% else %}
