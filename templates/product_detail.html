@@ -173,12 +173,12 @@ body{
 
     <ul>
         <li><a href="{% url 'milk' %}">Milk</a></li>
-<li><a href="{% url 'cheese' %}">Cheese</a></li>
-<li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
-<li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
-<li><a href="{% url 'special_items' %}">Special</a></li>
-<li><a href="{% url 'about' %}">About</a></li>
-<li><a href="{% url 'service' %}">Service</a></li>
+        <li><a href="{% url 'cheese' %}">Cheese</a></li>
+        <li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
+        <li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
+        <li><a href="{% url 'special_items' %}">Special</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'service' %}">Service</a></li>
     </ul>
 </div>
 
@@ -186,11 +186,11 @@ body{
 
     <!-- IMAGE SECTION -->
     <div class="product-image">
-<input type="radio" name="mainImage" id="img1" checked>
-<input type="radio" name="mainImage" id="img2">
-<input type="radio" name="mainImage" id="img3">
-<div class="main-images">
+            <input type="radio" name="mainImage" id="img1" checked>
+            <input type="radio" name="mainImage" id="img2">
+            <input type="radio" name="mainImage" id="img3">
 
+<div class="main-images">
     {% if product.image1 %}
     <img src="{{ product.image1.url }}" class="image1"
          onerror="this.src='{% static 'images/default.png' %}'">
@@ -234,6 +234,7 @@ body{
 
 </div>
 {% endif %}
+</div>
     <!-- DETAILS -->
     <div class="product-details">
         <h1>{{ product.name }}</h1>
