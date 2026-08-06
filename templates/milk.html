@@ -401,7 +401,7 @@ gap:20px;
 <div class="milk-card">
 
 {% if product.image1 %}
-    <img src="{% static product.image1 %}" alt="{{ product.name }}">
+    <img src="{{ product.image1.url }}" alt="{{ product.name }}">
 {% else %}
     <img src="{% static 'images/default.jpg' %}" alt="No Image">
 {% endif %}

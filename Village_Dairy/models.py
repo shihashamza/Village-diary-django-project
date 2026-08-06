@@ -20,10 +20,10 @@ class Product(models.Model):
     description = models.TextField(blank=True, default="")
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True)
 
-    image1 = models.CharField(max_length=200, blank=True)
-    image2 = models.CharField(max_length=200, blank=True)
-    image3 = models.CharField(max_length=200, blank=True)
-    image4 = models.CharField(max_length=200, blank=True)
+    image1 = models.ImageField(upload_to='products/', blank=True, null=True)
+    image2 = models.ImageField(upload_to='products/', blank=True, null=True)
+    image3 = models.ImageField(upload_to='products/', blank=True, null=True)
+    image4 = models.ImageField(upload_to='products/', blank=True, null=True)
 
     def __str__(self):
         return self.name

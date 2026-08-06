@@ -74,4 +74,4 @@ urlpatterns = [
     path('forgot-password/', forgot_password, name='forgot_password'),
     path('verify-otp/', verify_otp, name='verify_otp'),
     path('password-reset/', password_reset, name='password_reset'),
-]
+]   
