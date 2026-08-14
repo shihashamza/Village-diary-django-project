@@ -350,8 +350,8 @@ body{background:#f6f6f6;overflow-x:hidden;}
 <div class="milk-container">
   {% for product in products %}
     <div class="milk-card">
-   {% if product.image1 %}
-    <img src="{{ product.image1.url }}" alt="{{ product.name }}">
+{% if product.image1 %}
+    <img src="/media/{{ product.image1 }}" alt="{{ product.name }}">
 {% else %}
     <img src="{% static 'images/default.jpg' %}" alt="No Image">
 {% endif %}

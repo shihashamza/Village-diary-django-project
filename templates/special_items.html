@@ -391,11 +391,11 @@ copyright{
 <div class="milk-container">
   {% for product in products %}
     <div class="milk-card">
-      {% if product.image1 %}
-        <img src="{% static product.image1 %}" alt="{{ product.name }}">
-      {% else %}
-        <img src="{% static 'images/default.jpg' %}" alt="No Image">
-      {% endif %}
+   {% if product.image1 %}
+    <img src="/media/{{ product.image1 }}" alt="{{ product.name }}">
+{% else %}
+    <img src="{% static 'images/default.jpg' %}" alt="No Image">
+{% endif %}
       <h3>{{ product.name }}</h3>
       <p>₹ {{ product.price }}</p>
       <a href="{% url 'product_detail' product.id %}" class="view-btn">

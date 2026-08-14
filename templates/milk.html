@@ -401,22 +401,22 @@ gap:20px;
 <div class="milk-card">
 
 {% if product.image1 %}
-    <img src="{{ product.image1.url }}" alt="{{ product.name }}">
+    <img src="/media/{{ product.image1 }}" alt="{{ product.name }}">
 {% else %}
     <img src="{% static 'images/default.jpg' %}" alt="No Image">
 {% endif %}
-<h3>{{ product.name }}</h3>
-<p style="margin-bottom:10px;">₹ {{ product.price }}</p>
+    <h3>{{ product.name }}</h3>
+    <p style="margin-bottom:10px;">₹ {{ product.price }}</p>
 
-<a href="{% url 'product_detail' product.pk %}" class="view-btn">
-View Product
-</a>
+    <a href="{% url 'product_detail' product.pk %}" class="view-btn">
+        View Product
+    </a>
 
 </div>
 {% empty %}
-  <p style="text-align:center; font-size:18px;">
-    No milk products found 🥛
-  </p>
+    <p style="text-align:center; font-size:18px;">
+        No milk products found 🥛
+    </p>
 {% endfor %}
 </div>
 
