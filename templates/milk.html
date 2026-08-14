@@ -406,7 +406,7 @@ gap:20px;
     <img src="{% static 'images/default.jpg' %}" alt="No Image">
 {% endif %}
     <h3>{{ product.name }}</h3>
-    <p style="margin-bottom:10px;">₹ {{ product.price }}</p>
+    <p style="margin-bottom:10px;"> ₹ {{ product.price }}</p>
 
     <a href="{% url 'product_detail' product.pk %}" class="view-btn">
         View Product

@@ -65,7 +65,7 @@ body{
 
 .product-image{
     flex:1;
-    max-width:500px;   /* 👈 stops image from becoming too wide */
+    max-width:500px;   /* stops image from becoming too wide */
 }
 
 .product-image input{
@@ -74,11 +74,10 @@ body{
 
 .main-images img{
     width:100%;
-    height:380px;        /* 👈 controls image size */
-    object-fit:cover;    /* 👈 prevents stretching */
+    height:380px;        /* controls image size */
+    object-fit:cover;    /* prevents stretching */
     border-radius:12px;
     display:none;
-
 }
 
 #img1:checked ~ .main-images .image1,
@@ -91,6 +90,10 @@ body{
     display:flex;
     gap:10px;
     margin-top:15px;
+}
+
+.thumbnails label{
+    cursor:pointer;
 }
 
 .thumbnails img{
@@ -173,119 +176,119 @@ body{
 
     <ul>
         <li><a href="{% url 'milk' %}">Milk</a></li>
-    <li><a href="{% url 'cheese' %}">Cheese</a></li>
-<li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
-<li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
-<li><a href="{% url 'special_items' %}">Special</a></li>
-<li><a href="{% url 'about' %}">About</a></li>
-<li><a href="{% url 'service' %}">Service</a></li>
+        <li><a href="{% url 'cheese' %}">Cheese</a></li>
+        <li><a href="{% url 'fermented_creamy' %}">Fermented</a></li>
+        <li><a href="{% url 'fat_based' %}">Fat-Based</a></li>
+        <li><a href="{% url 'special_items' %}">Special</a></li>
+        <li><a href="{% url 'about' %}">About</a></li>
+        <li><a href="{% url 'service' %}">Service</a></li>
     </ul>
 </div>
 
 <div class="container">
 
-<!-- IMAGE SECTION -->
-<div class="product-image">
+    <!-- IMAGE SECTION -->
+    <div class="product-image">
 
-    <input type="radio" name="mainImage" id="img1" checked>
-    <input type="radio" name="mainImage" id="img2">
-    <input type="radio" name="mainImage" id="img3">
+        <input type="radio" name="mainImage" id="img1" checked>
+        <input type="radio" name="mainImage" id="img2">
+        <input type="radio" name="mainImage" id="img3">
 
-    <div class="main-images">
+        <div class="main-images">
 
-        {% if product.image1 %}
-            <img src="{% get_media_prefix %}{{ product.image1 }}"
-                 class="image1"
-                 alt="{{ product.name }}">
+            {% if product.image1 %}
+                <img src="{{ product.image1.url }}"
+                     class="image1"
+                     alt="{{ product.name }}">
+            {% endif %}
+
+            {% if product.image2 %}
+                <img src="{{ product.image2.url }}"
+                     class="image2"
+                     alt="{{ product.name }}">
+            {% endif %}
+
+            {% if product.image3 %}
+                <img src="{{ product.image3.url }}"
+                     class="image3"
+                     alt="{{ product.name }}">
+            {% endif %}
+
+        </div>
+
+        {% if product.image1 or product.image2 or product.image3 %}
+        <div class="thumbnails">
+
+            {% if product.image1 %}
+            <label for="img1">
+                <img src="{{ product.image1.url }}"
+                     alt="{{ product.name }}">
+            </label>
+            {% endif %}
+
+            {% if product.image2 %}
+            <label for="img2">
+                <img src="{{ product.image2.url }}"
+                     alt="{{ product.name }}">
+            </label>
+            {% endif %}
+
+            {% if product.image3 %}
+            <label for="img3">
+                <img src="{{ product.image3.url }}"
+                     alt="{{ product.name }}">
+            </label>
+            {% endif %}
+
+        </div>
         {% endif %}
 
-        {% if product.image2 %}
-            <img src="{{ product.image2.url }}"
-                 class="image2"
-                 alt="{{ product.name }}">
-        {% endif %}
+    </div> <!-- CLOSE PRODUCT IMAGE -->
 
-        {% if product.image3 %}
-            <img src="{{ product.image3.url }}"
-                 class="image3"
-                 alt="{{ product.name }}">
-        {% endif %}
+    <!-- DETAILS -->
+    <div class="product-details">
 
-    </div>
+        <h1>{{ product.name }}</h1>
 
+        <p class="price">
+            ₹ {{ product.price }}
+        </p>
 
-    {% if product.image1 or product.image2 or product.image3 %}
-    <div class="thumbnails">
+        <p class="category">
+            {{ product.category }}
+        </p>
 
-        {% if product.image1 %}
-        <label for="img1">
-            <img src="{% get_media_prefix %}{{ product.image1 }}"
-                 alt="{{ product.name }}">
-        </label>
-        {% endif %}
+        <p class="description">
+            {{ product.description }}
+        </p>
 
-        {% if product.image2 %}
-        <label for="img2">
-            <img src="{{ product.image2.url }}"
-                 alt="{{ product.name }}">
-        </label>
-        {% endif %}
+        <div class="buttons">
 
-        {% if product.image3 %}
-        <label for="img3">
-            <img src="{{ product.image3.url }}"
-                 alt="{{ product.name }}">
-        </label>
-        {% endif %}
+            {% if in_cart %}
 
-    </div>
-    {% endif %}
+                <a href="{% url 'cart' %}"
+                   class="cart-btn go-cart">
+                    Go to Cart
+                </a>
 
-</div> <!-- CLOSE PRODUCT IMAGE -->
+            {% else %}
 
+                <a href="{% url 'add_to_cart' product.id %}"
+                   class="cart-btn add-cart">
+                    Add to Cart
+                </a>
 
-<!-- DETAILS -->
-<div class="product-details">
+            {% endif %}
 
-    <h1>{{ product.name }}</h1>
-
-    <p class="price">
-        ₹ {{ product.price }}
-    </p>
-
-    <p class="category">
-        {{ product.category }}
-    </p>
-
-    <p class="description">
-        {{ product.description }}
-    </p>
-
-    <div class="buttons">
-
-        {% if in_cart %}
-
-            <a href="{% url 'cart' %}"
-               class="cart-btn go-cart">
-                Go to Cart
+            <a href="{{ back_url }}" class="back">
+                Back
             </a>
 
-        {% else %}
-
-            <a href="{% url 'add_to_cart' product.id %}"
-               class="cart-btn add-cart">
-                Add to Cart
-            </a>
-
-        {% endif %}
-
-        <a href="{{ back_url }}" class="back">
-            Back
-        </a>
+        </div>
 
     </div>
 
 </div>
 
 </body>
-</html> 
+</html>
