@@ -534,17 +534,18 @@ img{max-width:100%;display:block;}
 
 
 <!-- HERO (FIXED) -->
-<!-- HERO (FIXED) -->
-{% if banner %}
-  <section class="hero" style="background-image: url('{{ banner.image.url }}');">
-    <div>
-      <p>{{ banner.subtitle|default:"Welcome to our dairy farm" }}</p>
-      <h1>{{ banner.title|default:"The Farm of Dairy Products" }}</h1>
-      <a href="{% url 'about' %}">
-        <button>Explore More</button>
-      </a>
-    </div>
-  </section>
+{% if banners %}
+  {% for banner in banners %}
+    <section class="hero" style="background-image: url('{{ banner.image.url }}');">
+      <div>
+        <p>{{ banner.subtitle|default:"Welcome to our dairy farm" }}</p>
+        <h1>{{ banner.title|default:"The Farm of Dairy Products" }}</h1>
+        <a href="{% url 'about' %}">
+          <button>Explore More</button>
+        </a>
+      </div>
+    </section>
+  {% endfor %}
 {% else %}
   <section class="hero" style="background-image: url('{% static 'images/hero-banner.jpg' %}');">
     <div>
@@ -556,6 +557,7 @@ img{max-width:100%;display:block;}
     </div>
   </section>
 {% endif %}
+
 <!-- SERVICES -->
 <div class="section-title">
   <p style="color:#6ca36f;letter-spacing:2px;font-size:12px;">OUR SERVICES</p>
