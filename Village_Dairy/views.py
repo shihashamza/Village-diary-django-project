@@ -31,9 +31,9 @@ from django.conf import settings
 import random
 from django.urls import reverse
 def home(request):
-    banners = Banner.objects.filter(page='home', is_active=True)
+    banner = Banner.objects.filter(page='home', is_active=True).order_by('-id').first()
     return render(request, 'home.html', {
-        'banners': banners
+        'banner': banner
     })
 
 def about(request):
