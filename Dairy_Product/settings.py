@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 from dotenv import load_dotenv
-import os
+
 load_dotenv()
 
 
@@ -27,24 +28,30 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-
 ALLOWED_HOSTS = ['village-diary-django-project.onrender.com', 'localhost', '127.0.0.1']
+
+# Needed so Django trusts HTTPS POST requests (login, admin, checkout) coming
+# from your Render domain. Without this you can hit CSRF failures in production.
+CSRF_TRUSTED_ORIGINS = ['https://village-diary-django-project.onrender.com']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # Must be registered before django.contrib.staticfiles per Cloudinary's docs
+    'cloudinary_storage',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
+    'cloudinary',
+
     'Village_Dairy.apps.VillageDairyConfig',
-    
+
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -129,9 +136,8 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-SITE_ID=1
 
-import os
+SITE_ID = 1
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -147,36 +153,58 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+SOCIALACCOUNT_ADAPTER = 'Village_Dairy.adapters.MySocialAccountAdapter'
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
-SOCIALACCOUNT_ADAPTER = 'Village_Dairy.adapters.MySocialAccountAdapter'
-
-
-STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATIC_URL = '/static/'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+
+# Media files (user uploads, e.g. banner images)
+# On Render, disk storage is ephemeral, so DEFAULT storage below points to
+# Cloudinary instead of the local filesystem. MEDIA_URL/MEDIA_ROOT are kept
+# only as harmless fallbacks; Cloudinary generates its own URLs.
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.getenv('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.getenv('CLOUDINARY_API_SECRET'),
+}
+
+# STORAGES (Django 4.2+) is what actually controls where files are saved.
+# "default" = media uploads (Cloudinary), "staticfiles" = CSS/JS (Whitenoise).
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-SOCIALACCOUNT_LOGIN_ON_GET = True
+
 AUTH_USER_MODEL = 'Village_Dairy.User'
 
-LOGIN_REDIRECT_URL = ''
 LOGIN_REDIRECT_URL = 'home'
 
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
-STRIPE_PUBLISHABLE_KEY=os.getenv("STRIPE_PUBLISHABLE_KEY")
-import os
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -188,11 +216,3 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
-STORAGES = {
-    "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
-    },
-    "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
-    },
-}
