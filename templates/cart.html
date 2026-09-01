@@ -708,7 +708,7 @@ padding:6px 10px;
 
 <td data-label="Product">
 {% if item.product.image1 %}
-<img src="{{ item.product.image1.url }}" alt="{{ item.product.name }}" loading="lazy">
+<img src="{% static item.product.image1 %}" alt="{{ item.product.name }}" loading="lazy">
 {% endif %}
 </td>
 
