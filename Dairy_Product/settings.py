@@ -38,9 +38,6 @@ CSRF_TRUSTED_ORIGINS = ['https://village-diary-django-project.onrender.com']
 # Application definition
 
 INSTALLED_APPS = [
-    # Must be registered before django.contrib.staticfiles per Cloudinary's docs
-    'cloudinary_storage',
-
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -48,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'cloudinary_storage',
     'cloudinary',
 
     'Village_Dairy.apps.VillageDairyConfig',
