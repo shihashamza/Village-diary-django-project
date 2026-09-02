@@ -13,6 +13,10 @@
     font-family: 'Segoe UI', sans-serif;
 }
 
+.active {
+    background: #1abc9c;
+    color: #fff !important;
+}
 body {
     background: #eef2f7;
 }
@@ -432,7 +436,7 @@ top:-20px;
              <li><a href="{% url 'admindashboard' %}">Dashboard</a></li>
             <li><a href="{% url 'adminproduct' %}">Products</a></li>
             <li><a href="{% url 'adminaddproduct' %}">Add Product</a></li>
-            <li><a href="#" class="active">Category</a></li>
+            <li><a href="{% url 'admincategories' %}">Category</a></li>
             <li><a href="{% url 'adminorder' %}">Orders</a></li>
             <li><a href="{% url 'admincustomer' %}">Customers</a></li>
             <li><a href="{% url 'admincoupons' %}">Coupons</a></li>

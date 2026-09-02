@@ -410,11 +410,12 @@ tr:hover td{
                         <tr>
                             <td>
                                 <div class="product-cell">
-                                    {% if order.product and order.product.image1 %}
-                                        <img src="{{ order.product.image1.url }}" alt="{{ order.product.name }}">
-                                    {% else %}
-                                        <span style="color:#999; font-size:12px;">No image</span>
-                                    {% endif %}
+                                   {% if order.product and order.product.image1 %}
+    <img src="{% static order.product.image1 %}"
+         alt="{{ order.product.name }}">
+{% else %}
+    <span style="color:#999; font-size:12px;">No image</span>
+{% endif %}
                                     <span>{% if order.product %}{{ order.product.name }}{% else %}—{% endif %}</span>
                                 </div>
                             </td>

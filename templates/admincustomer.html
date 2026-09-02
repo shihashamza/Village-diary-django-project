@@ -332,9 +332,9 @@ img{
     <th>Action</th>
     </tr>
 
-    {% for c in customers %}
+   {% for c in customers %}
 <tr>
-    <td>{{ c.user.id }}</td>
+    <td>{{ forloop.counter }}</td>
     <td>{{ c.user.username }}</td>
     <td>{{ c.user.email }}</td>
 
