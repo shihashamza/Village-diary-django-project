@@ -375,11 +375,19 @@
                 <tr>
                     <td data-label="Product">
                         <div class="product-flex">
-                            {% if item.product and item.product.image1 %}
-                                <img src="{{ item.product.image1.url }}" width="60" height="60" loading="lazy">
-                            {% else %}
-                                <img src="{% static 'images/placeholder.png' %}" width="60" height="60" loading="lazy">
-                            {% endif %}
+                           {% if item.product and item.product.image1 %}
+    <img src="{% static item.product.image1 %}"
+         width="60"
+         height="60"
+         loading="lazy"
+         alt="{{ item.product.name }}">
+{% else %}
+    <img src="{% static 'images/placeholder.png' %}"
+         width="60"
+         height="60"
+         loading="lazy"
+         alt="Product image">
+{% endif %}
                             <span>
                                 {% if item.product %}
                                     {{ item.product.name }}
